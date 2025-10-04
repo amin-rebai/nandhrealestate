@@ -1,0 +1,29 @@
+{
+  "name": "hnrealstate",
+  "version": "1.0.0",
+  "description": "HN Real Estate - Full Stack Application",
+  "main": "index.js",
+  "scripts": {
+    "install-all": "npm install && cd frontend && npm install && cd ../backend && npm install && cd ../admin-panel && npm install",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\" \"npm run admin\"",
+    "backend": "cd backend && npm run dev",
+    "frontend": "cd frontend && npm start",
+    "admin": "cd admin-panel && npm start",
+    "build": "cd frontend && npm run build && cd ../admin-panel && npm run build && cd ../backend && npm run build",
+    "start": "cd backend && npm start"
+  },
+  "keywords": [
+    "real-estate",
+    "react",
+    "typescript",
+    "nodejs",
+    "express",
+    "mongodb",
+    "redux"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

@@ -1,0 +1,78 @@
+.App {
+  text-align: center;
+}
+
+.header {
+  background-color: #282c34;
+  padding: 1rem;
+  color: white;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #61dafb;
+}
+
+main {
+  min-height: calc(100vh - 120px);
+  padding: 2rem;
+}
+
+.footer {
+  background-color: #282c34;
+  color: white;
+  padding: 1rem;
+  margin-top: auto;
+}
+
+.properties-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.property-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.property-card h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.property-card p {
+  margin: 0.5rem 0;
+  color: #666;
+}
