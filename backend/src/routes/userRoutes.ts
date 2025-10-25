@@ -4,13 +4,17 @@ import {
   getUser,
   createUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  getAgents
 } from '../controllers/userController';
 import { protect, authorize } from '../middleware/auth';
 
 const router = express.Router();
 
-// All routes require authentication and admin role
+// Public route for agents
+router.get('/agents', getAgents);
+
+// All other routes require authentication and admin role
 router.use(protect);
 router.use(authorize('admin'));
 

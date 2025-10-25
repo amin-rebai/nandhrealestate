@@ -3,10 +3,15 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User';
 
 // Generate JWT Token
-const generateToken = (id: string) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET || 'fallback_secret', {
-    expiresIn: process.env.JWT_EXPIRE || '30d',
-  });
+const generateToken = (id: string): string => {
+  const secret = process.env.JWT_SECRET || 'fallback_secret';
+  const expiresIn = process.env.JWT_EXPIRE || '30d';
+
+  return jwt.sign(
+    { id },
+    secret,
+    { expiresIn } as any
+  );
 };
 
 // @desc    Register user
@@ -35,7 +40,7 @@ export const register = async (req: Request, res: Response) => {
 
     const token = generateToken(user._id.toString());
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       token,
       user: {
@@ -46,7 +51,7 @@ export const register = async (req: Request, res: Response) => {
       }
     });
   } catch (error: any) {
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
       error: error.message
     });
@@ -88,7 +93,7 @@ export const login = async (req: Request, res: Response) => {
 
     const token = generateToken(user._id.toString());
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       token,
       user: {
@@ -99,7 +104,7 @@ export const login = async (req: Request, res: Response) => {
       }
     });
   } catch (error: any) {
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
       error: error.message
     });
@@ -112,12 +117,12 @@ export const login = async (req: Request, res: Response) => {
 export const getMe = async (req: any, res: Response) => {
   try {
     const user = await User.findById(req.user.id);
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       data: user
     });
   } catch (error: any) {
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
       error: error.message
     });
@@ -127,7 +132,7 @@ export const getMe = async (req: any, res: Response) => {
 // @desc    Forgot password
 // @route   POST /api/auth/forgotpassword
 // @access  Public
-export const forgotPassword = async (req: Request, res: Response) => {
+export const forgotPassword = async (_req: Request, res: Response) => {
   // Implementation for forgot password
   res.status(200).json({
     success: true,
@@ -138,7 +143,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
 // @desc    Reset password
 // @route   PUT /api/auth/resetpassword/:resettoken
 // @access  Public
-export const resetPassword = async (req: Request, res: Response) => {
+export const resetPassword = async (_req: Request, res: Response) => {
   // Implementation for reset password
   res.status(200).json({
     success: true,

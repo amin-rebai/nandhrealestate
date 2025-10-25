@@ -2,9 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import path from 'path';
 import propertyRoutes from './routes/propertyRoutes';
 import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
+import uploadRoutes from './routes/uploadRoutes';
+import contentRoutes from './routes/contentRoutes';
+import blogRoutes from './routes/blogRoutes';
 import { errorHandler } from './middleware/errorHandler';
 
 dotenv.config();
@@ -17,13 +21,19 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Static files
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
+
 // Routes
 app.use('/api/properties', propertyRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/upload', uploadRoutes);
+app.use('/api/content', contentRoutes);
+app.use('/api/blog', blogRoutes);
 
 // Health check endpoint
-app.get('/api/health', (req, res) => {
+app.get('/api/health', (_req, res) => {
   res.status(200).json({ message: 'Server is running!' });
 });
 

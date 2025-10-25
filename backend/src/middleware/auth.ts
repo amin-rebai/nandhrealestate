@@ -23,8 +23,17 @@ export const protect = async (req: AuthRequest, res: Response, next: NextFunctio
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret') as any;
-    req.user = await User.findById(decoded.id);
-    next();
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        error: 'User not found'
+      });
+    }
+
+    req.user = user;
+    return next();
   } catch (error) {
     return res.status(401).json({
       success: false,
@@ -42,6 +51,6 @@ export const authorize = (...roles: string[]) => {
         error: `User role ${req.user?.role} is not authorized to access this route`
       });
     }
-    next();
+    return next();
   };
 };

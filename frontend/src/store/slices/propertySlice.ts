@@ -11,10 +11,23 @@ export interface Property {
   bathrooms: number;
   area: number;
   images: string[];
-  type: 'sale' | 'rent';
+  type: 'sale' | 'rent' | 'off-plan';
   status: 'available' | 'sold' | 'rented';
   createdAt: string;
   updatedAt: string;
+  // Additional fields for compatibility with mock data
+  category?: string;
+  propertyType?: string;
+  country?: string;
+  priceText?: string;
+  yearBuilt?: number;
+  features?: string[];
+  agent?: string;
+  agentPhone?: string;
+  dateAdded?: string;
+  verified?: boolean;
+  completionDate?: string;
+  paymentPlan?: string;
 }
 
 interface PropertyState {
@@ -34,17 +47,28 @@ const initialState: PropertyState = {
 // Async thunks
 export const fetchProperties = createAsyncThunk(
   'properties/fetchProperties',
-  async () => {
-    const response = await axios.get('/api/properties');
-    return response.data;
+  async (params: any = {}, { rejectWithValue }) => {
+    try {
+      const queryString = new URLSearchParams(params).toString();
+      const response = await axios.get(`http://localhost:5000/api/properties?${queryString}`);
+      return response.data.data || response.data;
+    } catch (error: any) {
+      const message = error.response?.data?.error || error.message || 'Failed to fetch properties';
+      return rejectWithValue(message);
+    }
   }
 );
 
 export const fetchPropertyById = createAsyncThunk(
   'properties/fetchPropertyById',
-  async (id: string) => {
-    const response = await axios.get(`/api/properties/${id}`);
-    return response.data;
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/properties/${id}`);
+      return response.data.data || response.data;
+    } catch (error: any) {
+      const message = error.response?.data?.error || error.message || 'Failed to fetch property';
+      return rejectWithValue(message);
+    }
   }
 );
 
@@ -71,7 +95,7 @@ const propertySlice = createSlice({
       })
       .addCase(fetchProperties.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Failed to fetch properties';
+        state.error = action.payload as string || action.error.message || 'Failed to fetch properties';
       })
       .addCase(fetchPropertyById.pending, (state) => {
         state.loading = true;
@@ -83,7 +107,7 @@ const propertySlice = createSlice({
       })
       .addCase(fetchPropertyById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Failed to fetch property';
+        state.error = action.payload as string || action.error.message || 'Failed to fetch property';
       });
   },
 });
