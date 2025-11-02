@@ -20,10 +20,10 @@ import './i18n';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#4B0E14',
+      main: '#000000',
     },
     secondary: {
-      main: '#C5A059',
+      main: '#C1A88A',
     },
     background: {
       default: '#f8f5f0',

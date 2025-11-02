@@ -10,6 +10,39 @@ const Properties: React.FC = () => {
   const navigate = useNavigate();
   const { properties, loading, error } = useSelector((state: RootState) => state.properties);
 
+  // Helper functions for property images
+  const getPropertyImage = (property: any) => {
+    const imageMap: { [key: string]: string } = {
+      "Lusail Marina Heights": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "The Pearl Towers": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "West Bay Executive Suites": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Msheireb Downtown Residences": "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Al Waab Garden Villas": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Doha Festival City Mall": "https://images.unsplash.com/photo-1555636222-cae831e670b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Lusail Business District Tower": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "The Pearl Marina Apartments": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "West Bay Premium Office": "https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Lusail Waterfront Penthouse": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Al Sadd Family Villa": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Doha Sports City Complex": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Msheireb Smart City Towers": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "The Pearl Beachfront Villa": "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "West Bay Financial Center": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+    };
+    return imageMap[property.title] || getDefaultPropertyImage(property.propertyType);
+  };
+
+  const getDefaultPropertyImage = (propertyType: string) => {
+    const defaultImages: { [key: string]: string } = {
+      "Apartment": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Villa": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Office": "https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Commercial": "https://images.unsplash.com/photo-1555636222-cae831e670b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Penthouse": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+    };
+    return defaultImages[propertyType] || "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80";
+  };
+
   // Filter states
   const [activeTab, setActiveTab] = useState<'sale' | 'rent' | 'off-plan'>('sale');
   const [filters, setFilters] = useState({
@@ -327,15 +360,23 @@ const Properties: React.FC = () => {
 
   return (
     <div className="properties-page">
-      {/* Hero Section */}
-      <section className="hero">
+      {/* Enhanced Hero Section */}
+      <section className="properties-hero">
+        <div className="hero-background">
+          <div className="hero-overlay"></div>
+          <img
+            src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+            alt="Properties"
+            className="hero-bg-image"
+          />
+        </div>
         <div className="hero-content">
-          <h1>Find Your Perfect Property</h1>
-          <p className="tagline">Discover Premium Real Estate Opportunities</p>
-          <p>
-            Browse through our extensive collection of properties for sale, rent, and off-plan
-            developments across Qatar, UAE, Egypt, and beyond.
-          </p>
+          <div className="container">
+            <h1 className="hero-title">Premium Properties</h1>
+            <p className="hero-subtitle">
+              Discover exceptional real estate opportunities across multiple markets
+            </p>
+          </div>
         </div>
       </section>
 
@@ -552,33 +593,22 @@ const Properties: React.FC = () => {
             {viewMode === 'grid' ? (
               <div className="properties-grid">
                 {filteredProperties.map((property) => (
-                  <div key={property._id} className="property-card">
-                    <div className="property-image">
-                      <div style={{
-                        position: 'absolute',
-                        top: '1rem',
-                        left: '1rem',
-                        background: property.verified ? 'var(--matte-gold)' : 'var(--charcoal-gray)',
-                        color: property.verified ? 'var(--luxury-burgundy)' : 'white',
-                        padding: '0.3rem 0.8rem',
-                        borderRadius: '20px',
-                        fontSize: '0.8rem',
-                        fontWeight: '600'
-                      }}>
+                  <div key={property._id} className="property-card enhanced-visual">
+                    <div className="property-image-container">
+                      <img
+                        src={getPropertyImage(property)}
+                        alt={property.title}
+                        className="property-main-image"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = getDefaultPropertyImage(property.propertyType);
+                        }}
+                      />
+                      <div className="image-overlay"></div>
+                      <div className={`property-badge ${property.verified ? 'verified' : 'pending'}`}>
                         {property.verified ? '✓ Verified' : 'Pending'}
                       </div>
-                      <div style={{
-                        position: 'absolute',
-                        top: '1rem',
-                        right: '1rem',
-                        background: 'rgba(0,0,0,0.7)',
-                        color: 'white',
-                        padding: '0.5rem 1rem',
-                        borderRadius: '4px',
-                        fontWeight: '600',
-                        fontSize: '0.9rem',
-                        textTransform: 'capitalize'
-                      }}>
+                      <div className={`property-category-badge ${property.category}`}>
                         {property.category === 'off-plan' ? 'Off-Plan' : `For ${property.category}`}
                       </div>
                       {property.category === 'off-plan' && (
@@ -697,15 +727,14 @@ const Properties: React.FC = () => {
                         </div>
                       </div>
 
-                      <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <div className="property-actions">
                         <button
-                          className="btn btn-primary"
-                          style={{ flex: 1, padding: '0.8rem', fontSize: '0.9rem' }}
+                          className="btn-primary-enhanced"
                           onClick={() => navigate(`/property/${property._id}`)}
                         >
                           View Details
                         </button>
-                        <button className="btn btn-secondary" style={{ flex: 1, padding: '0.8rem', fontSize: '0.9rem' }}>
+                        <button className="btn-secondary-enhanced">
                           Contact Agent
                         </button>
                       </div>

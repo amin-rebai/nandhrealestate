@@ -15,34 +15,44 @@ const HeroSlider: React.FC = () => {
   const { t } = useTranslation();
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Sample slide data - in a real app, this would come from props or API
+  // Sample slide data with apartment-focused slogans
   const slides: SlideData[] = [
     {
       id: 1,
-      title: "Work with trusted real estate agents in Lusail",
-      subtitle: "Luxury Properties",
-      description: "Speak to an area expert today and get personalized advice for your next move.",
-      backgroundImage: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-      ctaText: "About us",
-      ctaLink: "/about"
+      title: "Find Your Perfect Apartment",
+      subtitle: "Luxury Living Awaits",
+      description: "Discover premium apartments in Qatar's most prestigious locations. From modern studios to spacious penthouses.",
+      backgroundImage: "/images/hero_1.jpg",
+      ctaText: "Search Apartments",
+      ctaLink: "/properties"
     },
+    //  backgroundImage: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
     {
       id: 2,
-      title: "Premium Real Estate Solutions",
-      subtitle: "Investment Opportunities",
-      description: "Discover exclusive properties across Qatar, UAE, and beyond with our expert guidance.",
-      backgroundImage: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+      title: "Luxury Apartments in Prime Locations",
+      subtitle: "Premium Real Estate",
+      description: "Experience sophisticated living in Lusail, West Bay, and Downtown Doha. Your dream apartment is just a search away.",
+      backgroundImage: "/images/hero_2.jpg",
       ctaText: "View Properties",
       ctaLink: "/properties"
     },
     {
       id: 3,
-      title: "Your Dream Home Awaits",
-      subtitle: "Residential Excellence",
-      description: "From luxury villas to modern apartments, find your perfect home with N&H Real Estate.",
-      backgroundImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-      ctaText: "Contact Us",
-      ctaLink: "/contact"
+      title: "Modern Living, Exceptional Value",
+      subtitle: "Smart Investment",
+      description: "Invest in Qatar's growing real estate market. From rental apartments to luxury penthouses - find your perfect match.",
+      backgroundImage: "/images/hero_3.jpg",
+      ctaText: "Start Your Search",
+      ctaLink: "/properties"
+    },
+    {
+      id: 4,
+      title: "Your Home, Your Future",
+      subtitle: "Apartment Living Redefined",
+      description: "From cozy 1-bedroom apartments to spacious family homes. N&H Real Estate connects you with your ideal living space.",
+      backgroundImage: "/images/hero_3.jpg",
+      ctaText: "Explore Now",
+      ctaLink: "/properties"
     }
   ];
 

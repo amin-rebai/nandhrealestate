@@ -3,15 +3,25 @@ import React from 'react';
 const About: React.FC = () => {
   return (
     <div className="about-page">
-      {/* Hero Section */}
-      <section className="hero">
+      {/* Enhanced Hero Section */}
+      <section className="about-hero">
+        <div className="hero-background">
+          <div className="hero-overlay"></div>
+          <img
+            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+            alt="About N&H Real Estate"
+            className="hero-bg-image"
+          />
+        </div>
         <div className="hero-content">
-          <h1>About N&H Real Estate</h1>
-          <p className="tagline">Building Trust Through Excellence</p>
-          <p>
-            Discover our journey, vision, and commitment to transforming the real estate 
-            landscape across Qatar, the Gulf, MENA, and Europe.
-          </p>
+          <div className="container">
+            <h1 className="hero-title">About N&H Real Estate</h1>
+            <p className="hero-subtitle">Building Trust Through Excellence</p>
+            <p className="hero-description">
+              Discover our journey, vision, and commitment to transforming the real estate
+              landscape across Qatar, the Gulf, MENA, and Europe.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -21,23 +31,43 @@ const About: React.FC = () => {
           <div className="section-header">
             <h2>Vision & Mission</h2>
           </div>
-          <div className="vision-mission-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', marginTop: '2rem' }}>
-            <div className="vision-card" style={{ background: 'var(--pure-white)', padding: '2.5rem', borderRadius: '12px', boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)' }}>
-              <h3 style={{ color: 'var(--luxury-burgundy)', fontSize: '1.5rem', marginBottom: '1rem' }}>Our Vision</h3>
-              <p>
-                To be the region's most trusted and innovative real estate partner, delivering 
-                excellence and sustainable growth through professionalism, technology, and 
-                client-focused solutions.
-              </p>
+          <div className="vision-mission-grid">
+            <div className="vision-card visual-enhanced">
+              <div className="card-image">
+                <img
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                  alt="Our Vision"
+                  className="card-img"
+                />
+                <div className="card-icon">🎯</div>
+              </div>
+              <div className="card-content">
+                <h3>Our Vision</h3>
+                <p>
+                  To be the region's most trusted and innovative real estate partner, delivering
+                  excellence and sustainable growth through professionalism, technology, and
+                  client-focused solutions.
+                </p>
+              </div>
             </div>
-            <div className="mission-card" style={{ background: 'var(--pure-white)', padding: '2.5rem', borderRadius: '12px', boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)' }}>
-              <h3 style={{ color: 'var(--luxury-burgundy)', fontSize: '1.5rem', marginBottom: '1rem' }}>Our Mission</h3>
-              <p>
-                Our mission is to simplify the real estate journey through end-to-end services, 
-                delivering measurable value powered by market insights and modern tools. We build 
-                long-term partnerships grounded in trust and transparency, and we champion sustainable 
-                growth aligned with Qatar National Vision 2030 and global best practices.
-              </p>
+            <div className="mission-card visual-enhanced">
+              <div className="card-image">
+                <img
+                  src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                  alt="Our Mission"
+                  className="card-img"
+                />
+                <div className="card-icon">🚀</div>
+              </div>
+              <div className="card-content">
+                <h3>Our Mission</h3>
+                <p>
+                  Our mission is to simplify the real estate journey through end-to-end services,
+                  delivering measurable value powered by market insights and modern tools. We build
+                  long-term partnerships grounded in trust and transparency, and we champion sustainable
+                  growth aligned with Qatar National Vision 2030 and global best practices.
+                </p>
+              </div>
             </div>
           </div>
         </div>

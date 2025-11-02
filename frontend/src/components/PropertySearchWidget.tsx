@@ -80,7 +80,7 @@ const PropertySearchWidget: React.FC = () => {
             </svg>
             <input
               type="text"
-              placeholder="City, building or community"
+              placeholder="Search apartments by location, building or community"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={handleKeyPress}
@@ -96,35 +96,44 @@ const PropertySearchWidget: React.FC = () => {
           </button>
         </div>
 
-        {/* Quick Filters (Optional) */}
+        {/* Quick Filters for Apartments */}
         <div className="quick-filters">
-          <span className="filter-label">Popular:</span>
-          <button 
+          <span className="filter-label">Popular Locations:</span>
+          <button
             className="quick-filter-btn"
             onClick={() => {
               setSearchQuery('Lusail');
-              setActiveTab('sale');
-            }}
-          >
-            Lusail
-          </button>
-          <button 
-            className="quick-filter-btn"
-            onClick={() => {
-              setSearchQuery('Downtown Doha');
               setActiveTab('rent');
             }}
           >
-            Downtown Doha
+            Lusail Apartments
           </button>
-          <button 
+          <button
             className="quick-filter-btn"
             onClick={() => {
-              setSearchQuery('wes Bay');
+              setSearchQuery('West Bay');
+              setActiveTab('rent');
+            }}
+          >
+            West Bay Towers
+          </button>
+          <button
+            className="quick-filter-btn"
+            onClick={() => {
+              setSearchQuery('Downtown Doha');
               setActiveTab('sale');
             }}
           >
-            wes Bay
+            Downtown Condos
+          </button>
+          <button
+            className="quick-filter-btn"
+            onClick={() => {
+              setSearchQuery('The Pearl');
+              setActiveTab('sale');
+            }}
+          >
+            The Pearl
           </button>
         </div>
       </div>

@@ -1,122 +1,165 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Services: React.FC = () => {
   return (
     <div className="services-page">
-      {/* Hero Section */}
-      <section className="hero">
+      {/* Enhanced Hero Section */}
+      <section className="about-hero">
+        <div className="hero-background">
+          <div className="hero-overlay"></div>
+          <img
+            src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+            alt="Our Services"
+            className="hero-bg-image"
+          />
+        </div>
         <div className="hero-content">
-          <h1>Our Services</h1>
-          <p className="tagline">Comprehensive Real Estate Solutions</p>
-          <p>
-            We deliver a full range of real estate solutions designed to meet the diverse 
-            needs of our clients across residential, commercial, and investment properties.
-          </p>
+          <div className="container">
+            <h1 className="hero-title">Services Overview</h1>
+            <p className="hero-subtitle">Your Complete Real Estate Partner</p>
+            <p className="hero-description">
+              Discover our comprehensive range of services, proven processes, and strategic partnerships
+              that make us the preferred choice for real estate excellence.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Main Services */}
+      {/* Service Categories Navigation */}
       <section className="section section-light">
         <div className="container">
           <div className="section-header">
-            <h2>Core Services</h2>
-            <p>End-to-end real estate solutions tailored to your needs</p>
+            <h2>Explore Our Expertise</h2>
+            <p>Navigate through our comprehensive service offerings</p>
           </div>
-          <div className="services-grid">
-            <div className="service-card">
-              <h3>Sales & Leasing</h3>
-              <p>
-                <strong>Luxury residential, commercial, and retail properties</strong><br/>
-                • Pipeline curation and market analysis<br/>
-                • Professional property viewings<br/>
-                • Expert negotiation and closing<br/>
-                • Legal documentation support<br/>
-                • Post-sale customer service
-              </p>
-            </div>
-            
-            <div className="service-card">
-              <h3>Marketing & CRM-Integrated Promotion</h3>
-              <p>
-                <strong>Professional marketing through our channels</strong><br/>
-                • Targeted digital campaigns<br/>
-                • Qualified lead generation via CRM<br/>
-                • High-quality content creation<br/>
-                • 3D visualization and virtual tours<br/>
-                • Performance reporting and analytics
-              </p>
-            </div>
 
-            <div className="service-card">
-              <h3>Property Management</h3>
-              <p>
-                <strong>Complete property lifecycle management</strong><br/>
-                • Tenant screening and onboarding<br/>
-                • Lease administration and rent collection<br/>
-                • Financial reporting and accounting<br/>
-                • Preventive maintenance and landscaping<br/>
-                • 24/7 helpdesk and emergency support
-              </p>
-            </div>
+          <div className="service-navigation-grid">
+            <Link to="/our-services" className="service-nav-card visual-enhanced">
+              <div className="service-image">
+                <img
+                  src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                  alt="Our Services"
+                  className="service-img"
+                />
+                <div className="service-icon">🏢</div>
+              </div>
+              <div className="service-content">
+                <h3>Our Services</h3>
+                <p className="service-description">
+                  <strong>Complete Real Estate Solutions</strong>
+                </p>
+                <p className="service-summary">
+                  Discover our comprehensive range of services including sales & leasing,
+                  property management, marketing, and investment advisory.
+                </p>
+                <div className="service-cta">
+                  <span>Explore Services →</span>
+                </div>
+              </div>
+            </Link>
 
-            <div className="service-card">
-              <h3>Asset & Portfolio Management</h3>
-              <p>
-                <strong>Maximize NOI and long-term performance</strong><br/>
-                • Hold/sell analysis and strategy<br/>
-                • Property re-positioning and upgrades<br/>
-                • Risk management and mitigation<br/>
-                • Performance optimization<br/>
-                • Investment portfolio diversification
-              </p>
-            </div>
+            <Link to="/our-process" className="service-nav-card visual-enhanced">
+              <div className="service-image">
+                <img
+                  src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                  alt="Our Process"
+                  className="service-img"
+                />
+                <div className="service-icon">⚡</div>
+              </div>
+              <div className="service-content">
+                <h3>Our Process</h3>
+                <p className="service-description">
+                  <strong>Streamlined Excellence in Every Step</strong>
+                </p>
+                <p className="service-summary">
+                  Learn about our proven methodology that ensures seamless transactions
+                  and exceptional results through every phase of your real estate journey.
+                </p>
+                <div className="service-cta">
+                  <span>Discover Process →</span>
+                </div>
+              </div>
+            </Link>
 
-            <div className="service-card">
-              <h3>Development Management</h3>
-              <p>
-                <strong>End-to-end project development</strong><br/>
-                • Feasibility studies and business plans<br/>
-                • Design coordination and planning<br/>
-                • Procurement and contractor selection<br/>
-                • Program and cost control<br/>
-                • Quality assurance and delivery oversight
-              </p>
-            </div>
+            <Link to="/our-partners" className="service-nav-card visual-enhanced">
+              <div className="service-image">
+                <img
+                  src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                  alt="Our Partners"
+                  className="service-img"
+                />
+                <div className="service-icon">🤝</div>
+              </div>
+              <div className="service-content">
+                <h3>Our Partners</h3>
+                <p className="service-description">
+                  <strong>Strategic Alliances for Success</strong>
+                </p>
+                <p className="service-summary">
+                  Explore our network of strategic partners including financial institutions,
+                  technology providers, and industry leaders across global markets.
+                </p>
+                <div className="service-cta">
+                  <span>Meet Partners →</span>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
 
-            <div className="service-card">
-              <h3>Turnkey Furnishing & Interiors</h3>
-              <p>
-                <strong>Ready-to-live or ready-to-rent setups</strong><br/>
-                • Interior design consultation<br/>
-                • Furniture selection and procurement<br/>
-                • Complete setup and styling<br/>
-                • Enhanced market appeal<br/>
-                • Improved rental potential and absorption
-              </p>
+      {/* Why Choose Our Approach */}
+      <section className="section section-dark">
+        <div className="container">
+          <div className="section-header">
+            <h2 style={{ color: 'white' }}>Why Choose Our Approach</h2>
+            <p style={{ color: 'rgba(255,255,255,0.9)' }}>
+              Our integrated approach delivers exceptional results through expertise, innovation, and partnerships
+            </p>
+          </div>
+          <div className="approach-benefits-grid">
+            <div className="benefit-card">
+              <div className="benefit-icon">🎯</div>
+              <h3>Comprehensive Solutions</h3>
+              <p>End-to-end services covering every aspect of real estate</p>
             </div>
-
-            <div className="service-card">
-              <h3>Finance & Mortgage Support</h3>
-              <p>
-                <strong>Comprehensive financing solutions</strong><br/>
-                • Mortgage advisory and applications<br/>
-                • Refinancing options and strategies<br/>
-                • Project funding guidance<br/>
-                • Coordination with lending partners<br/>
-                • Investment financing structures
-              </p>
+            <div className="benefit-card">
+              <div className="benefit-icon">⚡</div>
+              <h3>Proven Process</h3>
+              <p>Streamlined methodology ensuring consistent excellence</p>
             </div>
+            <div className="benefit-card">
+              <div className="benefit-icon">🤝</div>
+              <h3>Strategic Partnerships</h3>
+              <p>Global network of trusted industry leaders</p>
+            </div>
+            <div className="benefit-card">
+              <div className="benefit-icon">🌍</div>
+              <h3>International Reach</h3>
+              <p>Expertise across multiple markets and regions</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-            <div className="service-card">
-              <h3>Valuation & Advisory</h3>
-              <p>
-                <strong>Market-driven property valuations</strong><br/>
-                • Sales and acquisition valuations<br/>
-                • Financing and insurance assessments<br/>
-                • Transparent assumptions and methodology<br/>
-                • Evidence-based comparables<br/>
-                • Investment advisory services
-              </p>
+      {/* Call to Action */}
+      <section className="section section-light">
+        <div className="container">
+          <div className="cta-content" style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
+            <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Ready to Get Started?</h2>
+            <p style={{ fontSize: '1.2rem', marginBottom: '2rem', color: 'var(--gray)' }}>
+              Explore our detailed service offerings, learn about our proven process,
+              or discover our strategic partnerships.
+            </p>
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Link to="/our-services" className="btn-primary-enhanced">
+                Explore All Services
+              </Link>
+              <Link to="/contact" className="btn-secondary-enhanced">
+                Contact Our Team
+              </Link>
             </div>
           </div>
         </div>

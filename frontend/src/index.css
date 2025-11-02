@@ -32,8 +32,8 @@ html {
 
 /* Selection colors */
 ::selection {
-  background: #C5A059;
-  color: #4B0E14;
+  background: #C1A88A;
+  color: #000000;
 }
 
 ::-moz-selection {

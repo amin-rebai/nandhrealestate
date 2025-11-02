@@ -38,7 +38,9 @@ button {
 }
 
 /* Remove default input styles */
-input, textarea, select {
+input,
+textarea,
+select {
   font-family: inherit;
 }
 
@@ -82,23 +84,45 @@ a {
 }
 
 /* Spacing utilities */
-.m-0 { margin: 0; }
-.m-1 { margin: 8px; }
-.m-2 { margin: 16px; }
-.m-3 { margin: 24px; }
+.m-0 {
+  margin: 0;
+}
 
-.p-0 { padding: 0; }
-.p-1 { padding: 8px; }
-.p-2 { padding: 16px; }
-.p-3 { padding: 24px; }
+.m-1 {
+  margin: 8px;
+}
+
+.m-2 {
+  margin: 16px;
+}
+
+.m-3 {
+  margin: 24px;
+}
+
+.p-0 {
+  padding: 0;
+}
+
+.p-1 {
+  padding: 8px;
+}
+
+.p-2 {
+  padding: 16px;
+}
+
+.p-3 {
+  padding: 24px;
+}
 
 /* Color utilities */
 .text-primary {
-  color: #4B0E14;
+  color: #000000;
 }
 
 .text-secondary {
-  color: #C5A059;
+  color: #C1A88A;
 }
 
 .text-success {

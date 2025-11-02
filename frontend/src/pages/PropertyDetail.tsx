@@ -280,48 +280,65 @@ const PropertyDetail: React.FC = () => {
       </Helmet>
 
       <div className="property-detail-modern">
-        {/* Hero Section with Image Gallery */}
-        <section className="property-hero-section">
-          <div className="property-hero-container">
-            {/* Main Image */}
-            <div className="property-main-image">
-              {property.images && property.images.length > 0 && (
-                <img
-                  src={property.images[currentImageIndex]}
-                  alt={property.title}
-                  className="hero-image"
-                />
-              )}
+        {/* Hero Section with Same Style as Other Pages */}
+        <section className="property-hero-section visual-enhanced">
+          <div className="hero-background">
+            <div className="hero-overlay"></div>
+            {property.images && property.images.length > 0 && (
+              <img
+                src={property.images[currentImageIndex]}
+                alt={property.title}
+                className="hero-bg-image"
+              />
+            )}
+          </div>
 
-              {/* Image Navigation */}
+          <div className="hero-content">
+            <div className="container">
+              <div className="hero-text">
+                <div className="property-status-badge">
+                  {property.type === 'sale' ? 'For Sale' : property.type === 'rent' ? 'For Rent' : 'Off Plan'}
+                </div>
+                <h1 className="hero-title">{property.title}</h1>
+                <div className="property-location-hero">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M21 10C21 17 12 23 12 23S3 17 3 10C3 5.02944 7.02944 1 12 1C16.9706 1 21 5.02944 21 10Z" stroke="currentColor" strokeWidth="2"/>
+                    <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="2"/>
+                  </svg>
+                  <span>{property.location}</span>
+                </div>
+                <div className="property-price-hero">
+                  QAR {property.price?.toLocaleString()}
+                  {property.type === 'rent' && <span className="price-period">/month</span>}
+                </div>
+              </div>
+
+              {/* Image Navigation Controls */}
               {property.images && property.images.length > 1 && (
-                <>
+                <div className="image-navigation-controls">
                   <button className="image-nav-btn prev-btn" onClick={handlePrevImage}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                       <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </button>
+                  <div className="image-counter">
+                    {currentImageIndex + 1} / {property.images?.length || 1}
+                  </div>
                   <button className="image-nav-btn next-btn" onClick={handleNextImage}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                       <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </button>
-                </>
+                </div>
               )}
-
-              {/* Image Counter */}
-              <div className="image-counter">
-                {currentImageIndex + 1} / {property.images?.length || 1}
-              </div>
-
-              {/* Property Status Badge */}
-              <div className="property-status-badge">
-                {property.type === 'sale' ? 'For Sale' : property.type === 'rent' ? 'For Rent' : 'Off Plan'}
-              </div>
             </div>
+          </div>
+        </section>
 
-            {/* Thumbnail Gallery */}
-            {property.images && property.images.length > 1 && (
+        {/* Thumbnail Gallery Section */}
+        {property.images && property.images.length > 1 && (
+          <section className="property-gallery-section">
+            <div className="container">
               <div className="property-thumbnails">
                 {property.images.map((image, index) => (
                   <div
@@ -333,9 +350,9 @@ const PropertyDetail: React.FC = () => {
                   </div>
                 ))}
               </div>
-            )}
-          </div>
-        </section>
+            </div>
+          </section>
+        )}
 
         {/* Property Information Section */}
         <section className="property-info-section">
@@ -581,36 +598,93 @@ const PropertyDetail: React.FC = () => {
           min-height: 100vh;
         }
 
-        .property-hero-section {
-          background: white;
-          margin-bottom: 2rem;
-        }
-
-        .property-hero-container {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 0;
-        }
-
-        .property-main-image {
+        .property-hero-section.visual-enhanced {
           position: relative;
-          height: 500px;
+          height: 70vh;
+          min-height: 500px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           overflow: hidden;
+          margin-bottom: 0;
         }
 
-        .hero-image {
+        .property-hero-section .hero-background {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: 1;
+        }
+
+        .property-hero-section .hero-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4));
+          z-index: 2;
+        }
+
+        .property-hero-section .hero-bg-image {
           width: 100%;
           height: 100%;
           object-fit: cover;
         }
 
-        .image-nav-btn {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          background: rgba(0, 0, 0, 0.7);
+        .property-hero-section .hero-content {
+          position: relative;
+          z-index: 3;
+          text-align: center;
           color: white;
-          border: none;
+          width: 100%;
+        }
+
+        .property-hero-section .hero-title {
+          font-size: 3rem;
+          font-weight: 700;
+          margin-bottom: 1rem;
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .property-location-hero {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          font-size: 1.2rem;
+          margin-bottom: 1rem;
+          color: var(--champagne-taupe);
+        }
+
+        .property-price-hero {
+          font-size: 2.5rem;
+          font-weight: 700;
+          color: var(--champagne-taupe);
+          margin-bottom: 2rem;
+        }
+
+        .property-price-hero .price-period {
+          font-size: 1.2rem;
+          color: rgba(255, 255, 255, 0.8);
+          font-weight: 400;
+        }
+
+        .image-navigation-controls {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 2rem;
+          margin-top: 2rem;
+        }
+
+        .image-nav-btn {
+          background: rgba(255, 255, 255, 0.2);
+          backdrop-filter: blur(10px);
+          color: white;
+          border: 2px solid rgba(255, 255, 255, 0.3);
           border-radius: 50%;
           width: 50px;
           height: 50px;
@@ -619,46 +693,42 @@ const PropertyDetail: React.FC = () => {
           align-items: center;
           justify-content: center;
           transition: all 0.3s ease;
-          z-index: 2;
         }
 
         .image-nav-btn:hover {
-          background: rgba(0, 0, 0, 0.9);
-          transform: translateY(-50%) scale(1.1);
-        }
-
-        .prev-btn {
-          left: 20px;
-        }
-
-        .next-btn {
-          right: 20px;
+          background: rgba(255, 255, 255, 0.3);
+          border-color: rgba(255, 255, 255, 0.5);
+          transform: scale(1.1);
         }
 
         .image-counter {
-          position: absolute;
-          bottom: 20px;
-          right: 20px;
-          background: rgba(0, 0, 0, 0.8);
+          background: rgba(255, 255, 255, 0.2);
+          backdrop-filter: blur(10px);
           color: white;
-          padding: 8px 16px;
-          border-radius: 20px;
-          font-size: 14px;
+          padding: 12px 20px;
+          border-radius: 25px;
+          font-size: 16px;
           font-weight: 500;
+          border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .property-status-badge {
-          position: absolute;
-          top: 20px;
-          left: 20px;
-          background: var(--luxury-burgundy);
-          color: white;
+          display: inline-block;
+          background: var(--champagne-taupe);
+          color: var(--black);
           padding: 8px 16px;
-          border-radius: 6px;
+          border-radius: 25px;
           font-weight: 600;
           font-size: 14px;
           text-transform: uppercase;
           letter-spacing: 0.5px;
+          margin-bottom: 1rem;
+        }
+
+        .property-gallery-section {
+          background: white;
+          padding: 2rem 0;
+          border-bottom: 1px solid #e0e0e0;
         }
 
         .property-thumbnails {

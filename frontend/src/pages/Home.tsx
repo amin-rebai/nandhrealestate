@@ -9,33 +9,13 @@ const Home: React.FC = () => {
 
   return (
     <div className="home">
-      {/* Hero Section with Modern Design */}
-      <section className="modern-hero-section">
-        <div className="hero-background">
-          <div className="hero-overlay"></div>
-          <img
-            src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
-            alt="Luxury Real Estate"
-            className="hero-bg-image"
-          />
-        </div>
+      {/* Hero Slider Section */}
+      <section className="hero-slider-section">
+        <HeroSlider />
 
-        <div className="hero-content">
-          <div className="container">
-            <div className="hero-text">
-              <h1 className="hero-title">
-                Find Your Perfect
-                <span className="hero-title-accent"> Luxury Property</span>
-              </h1>
-              <p className="hero-subtitle">
-                Discover exceptional real estate opportunities across Qatar, UAE, and beyond.
-                Your dream property awaits with N&H Real Estate's expert guidance.
-              </p>
-            </div>
-
-            {/* Keep the search widget */}
-            <PropertySearchWidget />
-          </div>
+        {/* Property Search Widget positioned below slider */}
+        <div className="search-widget-overlay">
+          <PropertySearchWidget />
         </div>
       </section>
 
@@ -114,6 +94,81 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* Visual Showcase Section */}
+      <section className="visual-showcase-section">
+        <div className="container">
+          <div className="section-header-modern">
+            <div className="section-badge">Our Portfolio</div>
+            <h2 className="section-title-modern">Luxury Living Redefined</h2>
+            <p className="section-subtitle-modern">
+              Experience the finest properties across our global network
+            </p>
+          </div>
+
+          <div className="showcase-grid">
+            <div className="showcase-item large">
+              <img
+                src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                alt="Luxury Villa"
+                className="showcase-image"
+              />
+              <div className="showcase-overlay">
+                <div className="showcase-content">
+                  <h3>Luxury Villas</h3>
+                  <p>Exclusive waterfront properties with premium amenities</p>
+                  <Link to="/properties" className="showcase-link">Explore Villas →</Link>
+                </div>
+              </div>
+            </div>
+
+            <div className="showcase-item">
+              <img
+                src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                alt="Modern Apartments"
+                className="showcase-image"
+              />
+              <div className="showcase-overlay">
+                <div className="showcase-content">
+                  <h3>Modern Apartments</h3>
+                  <p>Contemporary living in prime locations</p>
+                  <Link to="/properties" className="showcase-link">View Apartments →</Link>
+                </div>
+              </div>
+            </div>
+
+            <div className="showcase-item">
+              <img
+                src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                alt="Commercial Properties"
+                className="showcase-image"
+              />
+              <div className="showcase-overlay">
+                <div className="showcase-content">
+                  <h3>Commercial Spaces</h3>
+                  <p>Prime office and retail opportunities</p>
+                  <Link to="/properties" className="showcase-link">Discover Commercial →</Link>
+                </div>
+              </div>
+            </div>
+
+            <div className="showcase-item">
+              <img
+                src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                alt="Penthouse Living"
+                className="showcase-image"
+              />
+              <div className="showcase-overlay">
+                <div className="showcase-content">
+                  <h3>Penthouse Collection</h3>
+                  <p>Sky-high luxury with panoramic views</p>
+                  <Link to="/properties" className="showcase-link">View Penthouses →</Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* About Section with Modern Design */}
       <section className="about-section-modern">
         <div className="container">
@@ -161,7 +216,7 @@ const Home: React.FC = () => {
             </div>
 
             <div className="about-image">
-              <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Modern Architecture" />
+              <img src="/images/about.png" alt="Modern Architecture" />
               <div className="about-image-overlay">
                 <div className="about-stat">
                   <span className="stat-number">1000+</span>
