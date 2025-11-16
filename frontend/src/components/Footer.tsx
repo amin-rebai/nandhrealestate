@@ -27,7 +27,7 @@ const Footer: React.FC = () => {
             </p>
             <p>
               <strong>{t('contact.emailUs')}:</strong> info@nhrealestate.qa<br />
-              <strong>{t('contact.callUs')}:</strong> +974 XXXX XXXX
+              <strong>{t('contact.callUs')}:</strong> +974 7070 4504
             </p>
           </div>
 
