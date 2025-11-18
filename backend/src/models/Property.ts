@@ -20,6 +20,7 @@ export interface IProperty extends Document {
   area: number;
   yearBuilt: number;
   images: string[];
+  video?: string;
   type: 'sale' | 'rent' | 'off-plan';
   status: 'available' | 'sold' | 'rented';
   features: {
@@ -28,8 +29,15 @@ export interface IProperty extends Document {
   };
   agent: mongoose.Types.ObjectId;
   verified: boolean;
+  // Off-plan specific fields
   completionDate?: string;
   paymentPlan?: string;
+  developer?: string;
+  projectName?: string;
+  handoverDate?: string;
+  startingPrice?: number;
+  downPayment?: string;
+  installmentPlan?: string;
   propertyType: string;
   createdAt: Date;
   updatedAt: Date;
@@ -109,6 +117,10 @@ const PropertySchema: Schema = new Schema({
     type: String,
     required: true
   }],
+  video: {
+    type: String,
+    trim: true
+  },
   type: {
     type: String,
     enum: ['sale', 'rent', 'off-plan'],
@@ -149,6 +161,30 @@ const PropertySchema: Schema = new Schema({
     required: function (this: IProperty) {
       return this.type === 'off-plan';
     }
+  },
+  developer: {
+    type: String,
+    trim: true
+  },
+  projectName: {
+    type: String,
+    trim: true
+  },
+  handoverDate: {
+    type: String,
+    trim: true
+  },
+  startingPrice: {
+    type: Number,
+    min: [0, 'Starting price cannot be negative']
+  },
+  downPayment: {
+    type: String,
+    trim: true
+  },
+  installmentPlan: {
+    type: String,
+    trim: true
   },
   propertyType: {
     type: String,

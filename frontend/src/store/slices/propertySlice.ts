@@ -1,12 +1,19 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+
+export interface Agent {
+  _id: string;
+  name: string;
+  email: string;
+  phone: string;
+}
 
 export interface Property {
   _id: string;
-  title: string;
-  description: string;
+  title: string | { en: string; ar: string };
+  description: string | { en: string; ar: string };
   price: number;
-  location: string;
+  location: string | { en: string; ar: string };
   bedrooms: number;
   bathrooms: number;
   area: number;
@@ -21,13 +28,20 @@ export interface Property {
   country?: string;
   priceText?: string;
   yearBuilt?: number;
-  features?: string[];
-  agent?: string;
+  features?: string[] | { en: string[]; ar: string[] };
+  agent?: string | Agent;
   agentPhone?: string;
   dateAdded?: string;
   verified?: boolean;
   completionDate?: string;
   paymentPlan?: string;
+  video?: string;
+  developer?: string;
+  projectName?: string;
+  handoverDate?: string;
+  startingPrice?: number;
+  downPayment?: string;
+  installmentPlan?: string;
 }
 
 interface PropertyState {

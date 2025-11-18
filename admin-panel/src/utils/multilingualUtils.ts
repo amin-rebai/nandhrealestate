@@ -7,11 +7,11 @@ export const ensureMultilingual = (value: string | MultilingualValue | undefined
   if (!value) {
     return { en: '', ar: '' };
   }
-  
+
   if (typeof value === 'string') {
     return { en: value, ar: value };
   }
-  
+
   return value;
 };
 
@@ -19,11 +19,11 @@ export const getMultilingualValue = (value: string | MultilingualValue | undefin
   if (!value) {
     return '';
   }
-  
+
   if (typeof value === 'string') {
     return value;
   }
-  
+
   return value[language] || value.en || '';
 };
 

@@ -1,7 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
+import axios from 'axios';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+interface ContactInfo {
+  title: { en: string; ar: string };
+  description: { en: string; ar: string };
+  phone: string;
+  email: string;
+  address: { en: string; ar: string };
+  businessHours: { en: string; ar: string };
+}
 
 const Contact: React.FC = () => {
+  const { i18n } = useTranslation();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -11,6 +25,44 @@ const Contact: React.FC = () => {
     propertyType: '',
     budget: ''
   });
+
+  const [contactInfo, setContactInfo] = useState<ContactInfo>({
+    title: { en: 'Contact N&H Real Estate', ar: 'اتصل بـ N&H العقارية' },
+    description: { en: 'Get in touch with our expert team', ar: 'تواصل مع فريقنا المتخصص' },
+    phone: '+974 7070 4504',
+    email: 'info@nhrealestate.qa',
+    address: { en: 'Doha, Qatar', ar: 'الدوحة، قطر' },
+    businessHours: { en: 'Sun - Thu: 8:00 AM - 6:00 PM', ar: 'الأحد - الخميس: 8:00 صباحاً - 6:00 مساءً' }
+  });
+
+  useEffect(() => {
+    const fetchContactInfo = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/api/content/section/contact?active=true`);
+        if (response.data && response.data.length > 0) {
+          const data = response.data[0];
+          setContactInfo({
+            title: data.title || { en: 'Contact N&H Real Estate', ar: 'اتصل بـ N&H العقارية' },
+            description: data.description || { en: 'Get in touch with our expert team', ar: 'تواصل مع فريقنا المتخصص' },
+            phone: data.metadata?.phone || '+974 7070 4504',
+            email: data.metadata?.email || 'info@nhrealestate.qa',
+            address: data.metadata?.address || { en: 'Doha, Qatar', ar: 'الدوحة، قطر' },
+            businessHours: data.metadata?.businessHours || { en: 'Sun - Thu: 8:00 AM - 6:00 PM', ar: 'الأحد - الخميس: 8:00 صباحاً - 6:00 مساءً' }
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching contact info:', error);
+      }
+    };
+
+    fetchContactInfo();
+  }, []);
+
+  const getText = (field: string | { en: string; ar: string } | undefined): string => {
+    if (!field) return '';
+    if (typeof field === 'string') return field;
+    return field[i18n.language as 'en' | 'ar'] || field.en || '';
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -49,10 +101,9 @@ const Contact: React.FC = () => {
         <div className="hero-content">
           <div className="container">
             <div className="hero-text">
-              <h1 className="hero-title">Contact <span className="hero-title-accent">N&H Real Estate</span></h1>
+              <h1 className="hero-title">{getText(contactInfo.title)}</h1>
               <p className="hero-subtitle">
-                Get in touch with our expert team for personalized real estate solutions
-                across Qatar, the Gulf, MENA, and Europe.
+                {getText(contactInfo.description)}
               </p>
               <div className="hero-cta">
                 <div className="contact-quick-info">
@@ -60,13 +111,13 @@ const Contact: React.FC = () => {
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
                     </svg>
-                    <span>+974 7070 4504</span>
+                    <span>{contactInfo.phone}</span>
                   </div>
                   <div className="quick-contact-item">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
                     </svg>
-                    <span>info@nhrealestate.qa</span>
+                    <span>{contactInfo.email}</span>
                   </div>
                 </div>
               </div>
@@ -95,7 +146,7 @@ const Contact: React.FC = () => {
                   </div>
                   <div className="contact-details">
                     <h4>Head Office</h4>
-                    <p>Doha, Qatar</p>
+                    <p>{getText(contactInfo.address)}</p>
                     <span className="contact-description">Visit our main office for in-person consultations</span>
                   </div>
                 </div>
@@ -108,7 +159,7 @@ const Contact: React.FC = () => {
                   </div>
                   <div className="contact-details">
                     <h4>Phone</h4>
-                    <p>+974 7070 4504</p>
+                    <p>{contactInfo.phone}</p>
                     <span className="contact-description">Call us for immediate assistance</span>
                   </div>
                 </div>
@@ -121,7 +172,7 @@ const Contact: React.FC = () => {
                   </div>
                   <div className="contact-details">
                     <h4>Email</h4>
-                    <p>info@nhrealestate.qa</p>
+                    <p>{contactInfo.email}</p>
                     <span className="contact-description">Send us your inquiries anytime</span>
                   </div>
                 </div>
@@ -134,7 +185,7 @@ const Contact: React.FC = () => {
                   </div>
                   <div className="contact-details">
                     <h4>Business Hours</h4>
-                    <p>Sun - Thu: 8:00 AM - 6:00 PM</p>
+                    <p>{getText(contactInfo.businessHours)}</p>
                     <span className="contact-description">We're available during business hours</span>
                   </div>
                 </div>

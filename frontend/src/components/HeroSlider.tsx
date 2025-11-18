@@ -1,60 +1,98 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 
 interface SlideData {
-  id: number;
-  title: string;
-  subtitle: string;
-  description: string;
-  backgroundImage: string;
-  ctaText: string;
-  ctaLink: string;
+  _id: string;
+  title: string | { en: string; ar: string };
+  subtitle?: string | { en: string; ar: string };
+  description?: string | { en: string; ar: string };
+  backgroundImage?: string;
+  videoUrl?: string;
+  mediaType?: 'image' | 'video';
+  ctaText?: string | { en: string; ar: string };
+  ctaLink?: string;
+  isActive: boolean;
+  order?: number;
 }
 
 const HeroSlider: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [slides, setSlides] = useState<SlideData[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Sample slide data with apartment-focused slogans
-  const slides: SlideData[] = [
-    {
-      id: 1,
-      title: "Find Your Perfect Apartment",
-      subtitle: "Luxury Living Awaits",
-      description: "Discover premium apartments in Qatar's most prestigious locations. From modern studios to spacious penthouses.",
-      backgroundImage: "/images/hero_1.jpg",
-      ctaText: "Search Apartments",
-      ctaLink: "/properties"
-    },
-    //  backgroundImage: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-    {
-      id: 2,
-      title: "Luxury Apartments in Prime Locations",
-      subtitle: "Premium Real Estate",
-      description: "Experience sophisticated living in Lusail, West Bay, and Downtown Doha. Your dream apartment is just a search away.",
-      backgroundImage: "/images/hero_2.jpg",
-      ctaText: "View Properties",
-      ctaLink: "/properties"
-    },
-    {
-      id: 3,
-      title: "Modern Living, Exceptional Value",
-      subtitle: "Smart Investment",
-      description: "Invest in Qatar's growing real estate market. From rental apartments to luxury penthouses - find your perfect match.",
-      backgroundImage: "/images/hero_3.jpg",
-      ctaText: "Start Your Search",
-      ctaLink: "/properties"
-    },
-    {
-      id: 4,
-      title: "Your Home, Your Future",
-      subtitle: "Apartment Living Redefined",
-      description: "From cozy 1-bedroom apartments to spacious family homes. N&H Real Estate connects you with your ideal living space.",
-      backgroundImage: "/images/hero_3.jpg",
-      ctaText: "Explore Now",
-      ctaLink: "/properties"
-    }
-  ];
+  // Helper function to display multilingual content
+  const displayMultilingual = (value: string | { en: string; ar: string } | undefined): string => {
+    if (!value) return '';
+    if (typeof value === 'string') return value;
+    return value[i18n.language as 'en' | 'ar'] || value.en || '';
+  };
+
+  // Fetch slider data from API
+  useEffect(() => {
+    const fetchSliderData = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/content/section/slider?active=true`);
+
+        if (response.data.success && response.data.data.length > 0) {
+          // Sort by order
+          const sortedSlides = response.data.data.sort((a: SlideData, b: SlideData) => (a.order || 0) - (b.order || 0));
+          setSlides(sortedSlides);
+        } else {
+          // Fallback to default slides if no slider content found
+          setSlides([
+            {
+              _id: '1',
+              title: { en: "Find Your Perfect Apartment", ar: "ابحث عن شقتك المثالية" },
+              subtitle: { en: "Luxury Living Awaits", ar: "الحياة الفاخرة في انتظارك" },
+              description: { en: "Discover premium apartments in Qatar's most prestigious locations. From modern studios to spacious penthouses.", ar: "اكتشف الشقق المميزة في أرقى المواقع في قطر. من الاستوديوهات الحديثة إلى البنتهاوس الواسعة." },
+              backgroundImage: "/images/hero_1.jpg",
+              mediaType: 'image',
+              ctaText: { en: "Search Apartments", ar: "البحث عن الشقق" },
+              ctaLink: "/properties",
+              isActive: true,
+              order: 1
+            },
+            {
+              _id: '2',
+              title: { en: "Luxury Apartments in Prime Locations", ar: "شقق فاخرة في مواقع مميزة" },
+              subtitle: { en: "Premium Real Estate", ar: "عقارات مميزة" },
+              description: { en: "Experience sophisticated living in Lusail, West Bay, and Downtown Doha. Your dream apartment is just a search away.", ar: "اختبر الحياة المتطورة في لوسيل والخليج الغربي ووسط الدوحة. شقة أحلامك على بعد بحث واحد." },
+              backgroundImage: "/images/hero_2.jpg",
+              mediaType: 'image',
+              ctaText: { en: "View Properties", ar: "عرض العقارات" },
+              ctaLink: "/properties",
+              isActive: true,
+              order: 2
+            }
+          ]);
+        }
+      } catch (error) {
+        console.error('Error fetching slider data:', error);
+        // Fallback to default slides on error
+        setSlides([
+          {
+            _id: '1',
+            title: { en: "Find Your Perfect Apartment", ar: "ابحث عن شقتك المثالية" },
+            subtitle: { en: "Luxury Living Awaits", ar: "الحياة الفاخرة في انتظارك" },
+            description: { en: "Discover premium apartments in Qatar's most prestigious locations.", ar: "اكتشف الشقق المميزة في أرقى المواقع في قطر." },
+            backgroundImage: "/images/hero_1.jpg",
+            mediaType: 'image',
+            ctaText: { en: "Search Apartments", ar: "البحث عن الشقق" },
+            ctaLink: "/properties",
+            isActive: true,
+            order: 1
+          }
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSliderData();
+  }, []);
 
   // Auto-advance slides
   useEffect(() => {
@@ -77,25 +115,96 @@ const HeroSlider: React.FC = () => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
+  if (loading) {
+    return (
+      <div className="hero-slider" style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div>Loading...</div>
+      </div>
+    );
+  }
+
+  if (slides.length === 0) {
+    return (
+      <div className="hero-slider" style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div>No slides available</div>
+      </div>
+    );
+  }
+
   return (
     <div className="hero-slider">
       <div className="slider-container">
         {slides.map((slide, index) => (
           <div
-            key={slide.id}
+            key={slide._id}
             className={`slide ${index === currentSlide ? 'active' : ''}`}
-            style={{
-              backgroundImage: `linear-gradient(rgba(75, 14, 20, 0.4), rgba(75, 14, 20, 0.4)), url(${slide.backgroundImage})`
-            }}
           >
-            <div className="slide-content">
+            {/* Background Media */}
+            {slide.mediaType === 'video' && slide.videoUrl ? (
+              <video
+                className="slide-video"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  zIndex: 1
+                }}
+              >
+                <source src={slide.videoUrl.startsWith('http') ? slide.videoUrl : `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${slide.videoUrl}`} type="video/mp4" />
+                <source src={slide.videoUrl.startsWith('http') ? slide.videoUrl : `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${slide.videoUrl}`} type="video/webm" />
+                Your browser does not support the video tag.
+              </video>
+            ) : (
+              <div
+                className="slide-background"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  backgroundImage: `url(${slide.backgroundImage})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                  zIndex: 1
+                }}
+              />
+            )}
+
+            {/* Overlay */}
+            <div
+              className="slide-overlay"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                background: 'linear-gradient(rgba(75, 14, 20, 0.4), rgba(75, 14, 20, 0.4))',
+                zIndex: 2
+              }}
+            />
+
+            {/* Content */}
+            <div className="slide-content" style={{ position: 'relative', zIndex: 3 }}>
               <div className="slide-text">
-                <p className="slide-subtitle">{slide.subtitle}</p>
-                <h1 className="slide-title">{slide.title}</h1>
-                <p className="slide-description">{slide.description}</p>
-                <a href={slide.ctaLink} className="slide-cta">
-                  {slide.ctaText}
-                </a>
+                <p className="slide-subtitle">{displayMultilingual(slide.subtitle)}</p>
+                <h1 className="slide-title">{displayMultilingual(slide.title)}</h1>
+                <p className="slide-description">{displayMultilingual(slide.description)}</p>
+                {slide.ctaLink && slide.ctaText && (
+                  <a href={slide.ctaLink} className="slide-cta">
+                    {displayMultilingual(slide.ctaText)}
+                  </a>
+                )}
               </div>
             </div>
           </div>

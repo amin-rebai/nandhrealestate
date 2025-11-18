@@ -1,7 +1,96 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import axios from 'axios';
+
+interface ProcessStep {
+  _id: string;
+  title: string | { en: string; ar: string };
+  description: string | { en: string; ar: string };
+  image?: string;
+  order?: number;
+}
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 const OurProcess: React.FC = () => {
+  const { i18n } = useTranslation();
+  const [processSteps, setProcessSteps] = useState<ProcessStep[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Helper function to get text from multilingual field
+  const getText = (value: string | { en: string; ar: string } | undefined): string => {
+    if (!value) return '';
+    if (typeof value === 'string') return value;
+    return value[i18n.language as 'en' | 'ar'] || value.en || '';
+  };
+
+  // Helper function to get image URL
+  const getImageUrl = (image: string | undefined): string => {
+    if (!image) return 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+    if (image.startsWith('http')) return image;
+    return `${API_URL}${image}`;
+  };
+
+  // Helper function to get step icon
+  const getStepIcon = (index: number): string => {
+    const icons = ['🤝', '📋', '⚡', '📊', '🎯', '✅'];
+    return icons[index % icons.length];
+  };
+
+  // Default process steps
+  const defaultSteps: ProcessStep[] = [
+    {
+      _id: '1',
+      title: { en: 'Initial Consultation', ar: 'الاستشارة الأولية' },
+      description: { en: 'We begin with a comprehensive consultation to understand your specific needs, goals, and preferences.', ar: 'نبدأ باستشارة شاملة لفهم احتياجاتك وأهدافك وتفضيلاتك المحددة.' },
+      image: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      order: 1
+    },
+    {
+      _id: '2',
+      title: { en: 'Strategy Development', ar: 'تطوير الاستراتيجية' },
+      description: { en: 'Based on your consultation, we develop a customized strategy that aligns with your objectives.', ar: 'بناءً على استشارتك، نطور استراتيجية مخصصة تتماشى مع أهدافك.' },
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      order: 2
+    },
+    {
+      _id: '3',
+      title: { en: 'Implementation & Execution', ar: 'التنفيذ والتطبيق' },
+      description: { en: 'Our experienced team executes the strategy with precision and attention to detail.', ar: 'ينفذ فريقنا ذو الخبرة الاستراتيجية بدقة واهتمام بالتفاصيل.' },
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      order: 3
+    },
+    {
+      _id: '4',
+      title: { en: 'Monitoring & Ongoing Support', ar: 'المراقبة والدعم المستمر' },
+      description: { en: 'We provide continuous monitoring and support throughout the process and beyond.', ar: 'نقدم المراقبة والدعم المستمر طوال العملية وما بعدها.' },
+      image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      order: 4
+    }
+  ];
+
+  useEffect(() => {
+    const fetchProcessSteps = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${API_URL}/api/content/section/goals?active=true`);
+        if (response.data && response.data.length > 0) {
+          setProcessSteps(response.data.sort((a: ProcessStep, b: ProcessStep) => (a.order || 0) - (b.order || 0)));
+        } else {
+          setProcessSteps(defaultSteps);
+        }
+      } catch (error) {
+        console.error('Error fetching process steps:', error);
+        setProcessSteps(defaultSteps);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProcessSteps();
+  }, []);
+
   return (
     <div className="our-process-page">
       {/* Enhanced Hero Section */}
@@ -19,7 +108,7 @@ const OurProcess: React.FC = () => {
             <h1 className="hero-title">Our Process</h1>
             <p className="hero-subtitle">Streamlined Excellence in Every Step</p>
             <p className="hero-description">
-              Our proven methodology ensures seamless transactions and exceptional results 
+              Our proven methodology ensures seamless transactions and exceptional results
               through every phase of your real estate journey.
             </p>
           </div>
@@ -34,109 +123,33 @@ const OurProcess: React.FC = () => {
             <p>Our systematic approach ensures transparency, efficiency, and success in every project</p>
           </div>
 
-          <div className="process-timeline">
-            <div className="process-step visual-enhanced">
-              <div className="step-number">01</div>
-              <div className="step-image">
-                <img 
-                  src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                  alt="Initial Consultation"
-                  className="step-img"
-                />
-                <div className="step-icon">🤝</div>
-              </div>
-              <div className="step-content">
-                <h3>Initial Consultation</h3>
-                <p className="step-description">
-                  We begin with a comprehensive consultation to understand your specific needs, 
-                  goals, and preferences. Our experts analyze your requirements and provide 
-                  tailored recommendations.
-                </p>
-                <ul className="step-features">
-                  <li>Needs assessment and goal setting</li>
-                  <li>Market analysis and opportunity identification</li>
-                  <li>Budget planning and financial consultation</li>
-                  <li>Timeline establishment and milestone planning</li>
-                </ul>
-              </div>
+          {loading ? (
+            <div style={{ textAlign: 'center', padding: '3rem' }}>
+              <p>Loading process steps...</p>
             </div>
-
-            <div className="process-step visual-enhanced">
-              <div className="step-number">02</div>
-              <div className="step-image">
-                <img 
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                  alt="Strategy Development"
-                  className="step-img"
-                />
-                <div className="step-icon">📋</div>
-              </div>
-              <div className="step-content">
-                <h3>Strategy Development</h3>
-                <p className="step-description">
-                  Based on your consultation, we develop a customized strategy that aligns 
-                  with your objectives. This includes market positioning, pricing strategies, 
-                  and action plans.
-                </p>
-                <ul className="step-features">
-                  <li>Customized strategy formulation</li>
-                  <li>Market positioning and competitive analysis</li>
-                  <li>Risk assessment and mitigation planning</li>
-                  <li>Resource allocation and team assignment</li>
-                </ul>
-              </div>
+          ) : (
+            <div className="process-timeline">
+              {processSteps.map((step, index) => (
+                <div className="process-step visual-enhanced" key={step._id}>
+                  <div className="step-number">{String(index + 1).padStart(2, '0')}</div>
+                  <div className="step-image">
+                    <img
+                      src={getImageUrl(step.image)}
+                      alt={getText(step.title)}
+                      className="step-img"
+                    />
+                    <div className="step-icon">{getStepIcon(index)}</div>
+                  </div>
+                  <div className="step-content">
+                    <h3>{getText(step.title)}</h3>
+                    <p className="step-description">
+                      {getText(step.description)}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
-
-            <div className="process-step visual-enhanced">
-              <div className="step-number">03</div>
-              <div className="step-image">
-                <img 
-                  src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                  alt="Implementation"
-                  className="step-img"
-                />
-                <div className="step-icon">⚡</div>
-              </div>
-              <div className="step-content">
-                <h3>Implementation & Execution</h3>
-                <p className="step-description">
-                  Our experienced team executes the strategy with precision and attention to detail. 
-                  We handle all aspects of the process while keeping you informed at every step.
-                </p>
-                <ul className="step-features">
-                  <li>Professional marketing and promotion</li>
-                  <li>Client screening and qualification</li>
-                  <li>Negotiation and deal structuring</li>
-                  <li>Documentation and legal compliance</li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="process-step visual-enhanced">
-              <div className="step-number">04</div>
-              <div className="step-image">
-                <img 
-                  src="https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                  alt="Monitoring & Support"
-                  className="step-img"
-                />
-                <div className="step-icon">📊</div>
-              </div>
-              <div className="step-content">
-                <h3>Monitoring & Ongoing Support</h3>
-                <p className="step-description">
-                  We provide continuous monitoring and support throughout the process and beyond. 
-                  Our commitment extends well past the transaction completion.
-                </p>
-                <ul className="step-features">
-                  <li>Progress tracking and reporting</li>
-                  <li>Performance optimization</li>
-                  <li>Post-transaction support</li>
-                  <li>Long-term relationship management</li>
-                </ul>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       </section>
 

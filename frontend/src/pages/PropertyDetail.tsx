@@ -1,177 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
-import { Property } from '../store/slices/propertySlice';
-
-// Mock property data
-const mockProperties: { [key: string]: Property } = {
-  "1": {
-    _id: "1",
-    title: "Lusail Marina Heights - Luxury Waterfront Apartment",
-    description: "Experience unparalleled luxury in this stunning 3-bedroom apartment at Lusail Marina Heights. This smart home features panoramic marina views, premium finishes, and access to world-class amenities including private beach access, concierge service, and state-of-the-art fitness facilities. Located in Qatar's most prestigious waterfront development.",
-    price: 3100000,
-    location: "Lusail Marina, Lusail City",
-    country: "Qatar",
-    bedrooms: 3,
-    bathrooms: 3,
-    area: 180,
-    yearBuilt: 2023,
-    images: [
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80",
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2053&q=80",
-      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-      "https://images.unsplash.com/photo-1600607687644-aac4c3eac7f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
-    ],
-    type: "sale",
-    status: "available",
-    propertyType: "Apartment",
-    features: ["Marina Views", "Smart Home Technology", "Concierge Service", "Private Beach Access", "Gym", "Swimming Pool", "24/7 Security", "Covered Parking", "Balcony", "Built-in Wardrobes"],
-    agent: "Sarah Al-Mahmoud",
-    agentPhone: "+974 5555 1234",
-    verified: true,
-    createdAt: "2024-01-15T00:00:00.000Z",
-    updatedAt: "2024-01-15T00:00:00.000Z"
-  },
-  "2": {
-    _id: "2",
-    title: "West Bay Executive Office Space",
-    description: "Prime commercial office space in the heart of West Bay's financial district. This modern office features floor-to-ceiling windows with stunning city and sea views, premium finishes, and flexible layout options. Perfect for multinational corporations and growing businesses seeking a prestigious address in Doha's business hub.",
-    price: 15000,
-    location: "West Bay, Doha",
-    country: "Qatar",
-    bedrooms: 0,
-    bathrooms: 2,
-    area: 250,
-    yearBuilt: 2022,
-    images: [
-      "https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80",
-      "https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80",
-      "https://images.unsplash.com/photo-1497366412874-3415097a27e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80"
-    ],
-    type: "rent",
-    status: "available",
-    propertyType: "Office",
-    features: ["City Views", "Sea Views", "24/7 Access", "High-Speed Internet", "Conference Rooms", "Reception Area", "Parking Spaces", "Security System"],
-    agent: "Ahmed Hassan",
-    agentPhone: "+974 5555 5678",
-    verified: true,
-    createdAt: "2024-01-10T00:00:00.000Z",
-    updatedAt: "2024-01-10T00:00:00.000Z"
-  },
-  "3": {
-    _id: "3",
-    title: "The Pearl Penthouse - Ultimate Luxury Living",
-    description: "Discover the pinnacle of luxury living in this extraordinary penthouse at The Pearl-Qatar. This magnificent 4-bedroom residence spans two levels and features a private rooftop terrace with 360-degree views, private elevator access, and the finest imported materials throughout. An exclusive lifestyle awaits in Qatar's most coveted address.",
-    price: 8500000,
-    location: "The Pearl-Qatar, Doha",
-    country: "Qatar",
-    bedrooms: 4,
-    bathrooms: 5,
-    area: 450,
-    yearBuilt: 2021,
-    images: [
-      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-      "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-      "https://images.unsplash.com/photo-1600585154526-990dced4db0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-      "https://images.unsplash.com/photo-1600566752355-35792bedcfea?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
-    ],
-    type: "sale",
-    status: "available",
-    propertyType: "Penthouse",
-    features: ["Rooftop Terrace", "Private Elevator", "360° Views", "Imported Materials", "Smart Home", "Wine Cellar", "Home Theater", "Maid's Room", "Driver's Room", "Private Pool"],
-    agent: "Fatima Al-Zahra",
-    agentPhone: "+974 5555 9012",
-    verified: true,
-    createdAt: "2024-01-05T00:00:00.000Z",
-    updatedAt: "2024-01-05T00:00:00.000Z"
-  },
-  "4": {
-    _id: "4",
-    title: "Al Rayyan Family Villa - Modern Comfort",
-    description: "Spacious family villa in the prestigious Al Rayyan district. This contemporary 5-bedroom home features an open-plan design, private garden, swimming pool, and maid's quarters. Perfect for families seeking comfort and privacy in a well-established neighborhood with excellent schools and amenities nearby.",
-    price: 4200000,
-    location: "Al Rayyan, Doha",
-    country: "Qatar",
-    bedrooms: 5,
-    bathrooms: 4,
-    area: 350,
-    yearBuilt: 2020,
-    images: [
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2053&q=80"
-    ],
-    type: "sale",
-    status: "available",
-    propertyType: "Villa",
-    features: ["Private Garden", "Swimming Pool", "Maid's Room", "Driver's Room", "Covered Parking", "Security System", "Central AC", "Built-in Kitchen"],
-    agent: "Mohammed Al-Thani",
-    agentPhone: "+974 5555 3456",
-    verified: true,
-    createdAt: "2024-01-12T00:00:00.000Z",
-    updatedAt: "2024-01-12T00:00:00.000Z"
-  },
-  "5": {
-    _id: "5",
-    title: "Msheireb Downtown Studio - Modern Living",
-    description: "Contemporary studio apartment in the heart of Msheireb Downtown Doha. This smart home features premium finishes, integrated appliances, and access to world-class amenities. Walking distance to museums, restaurants, and the Doha Metro. Perfect for young professionals and investors.",
-    price: 8500,
-    location: "Msheireb Downtown, Doha",
-    country: "Qatar",
-    bedrooms: 0,
-    bathrooms: 1,
-    area: 45,
-    yearBuilt: 2023,
-    images: [
-      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
-    ],
-    type: "rent",
-    status: "available",
-    propertyType: "Studio",
-    features: ["Smart Home", "Premium Finishes", "Integrated Appliances", "Metro Access", "24/7 Concierge", "Gym", "Rooftop Terrace"],
-    agent: "Layla Ibrahim",
-    agentPhone: "+974 5555 7890",
-    verified: true,
-    createdAt: "2024-01-08T00:00:00.000Z",
-    updatedAt: "2024-01-08T00:00:00.000Z"
-  }
-};
+import { fetchPropertyById, clearSelectedProperty } from '../store/slices/propertySlice';
+import { RootState, AppDispatch } from '../store/store';
 
 const PropertyDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const { t } = useTranslation();
 
-  // Use mock data instead of Redux state
-  const [property, setProperty] = useState<Property | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
+  // Get property from Redux state
+  const { selectedProperty: property, loading, error } = useSelector((state: RootState) => state.properties);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  useEffect(() => {
-    // Simulate API loading delay
-    setLoading(true);
-    setError(null);
+  // API URL for images
+  const API_URL = 'http://localhost:5000';
 
-    setTimeout(() => {
-      if (id && mockProperties[id]) {
-        setProperty(mockProperties[id]);
-        setLoading(false);
-      } else {
-        setProperty(null);
-        setError("Property not found");
-        setLoading(false);
-      }
-    }, 500); // Simulate 500ms loading time
+  // Helper function to get text from multilingual field
+  const getText = (field: any, defaultValue: string = '') => {
+    if (typeof field === 'string') return field;
+    if (field && typeof field === 'object') return field.en || field.ar || defaultValue;
+    return defaultValue;
+  };
+
+  // Helper function to get array from multilingual field
+  const getArray = (field: any): string[] => {
+    if (Array.isArray(field)) return field;
+    if (field && typeof field === 'object') return field.en || field.ar || [];
+    return [];
+  };
+
+  // Helper function to get property image
+  const getPropertyImage = (imageUrl: string) => {
+    if (imageUrl.startsWith('http')) return imageUrl;
+    return `${API_URL}${imageUrl}`;
+  };
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchPropertyById(id));
+    }
 
     return () => {
-      setProperty(null);
+      dispatch(clearSelectedProperty());
     };
-  }, [id]);
+  }, [id, dispatch]);
 
   const handlePrevImage = () => {
     if (property?.images && property.images.length > 0) {
@@ -267,15 +143,21 @@ const PropertyDetail: React.FC = () => {
     );
   }
 
+  // Get display values
+  const title = getText(property.title);
+  const description = getText(property.description);
+  const location = getText(property.location);
+  const features = getArray(property.features);
+
   return (
     <>
       <Helmet>
-        <title>{property.title} - N&H Real Estate</title>
-        <meta name="description" content={property.description} />
-        <meta property="og:title" content={`${property.title} - N&H Real Estate`} />
-        <meta property="og:description" content={property.description} />
+        <title>{title} - N&H Real Estate</title>
+        <meta name="description" content={description} />
+        <meta property="og:title" content={`${title} - N&H Real Estate`} />
+        <meta property="og:description" content={description} />
         {property.images && property.images.length > 0 && (
-          <meta property="og:image" content={property.images[0]} />
+          <meta property="og:image" content={getPropertyImage(property.images[0])} />
         )}
       </Helmet>
 
@@ -286,8 +168,8 @@ const PropertyDetail: React.FC = () => {
             <div className="hero-overlay"></div>
             {property.images && property.images.length > 0 && (
               <img
-                src={property.images[currentImageIndex]}
-                alt={property.title}
+                src={getPropertyImage(property.images[currentImageIndex])}
+                alt={title}
                 className="hero-bg-image"
               />
             )}
@@ -299,13 +181,13 @@ const PropertyDetail: React.FC = () => {
                 <div className="property-status-badge">
                   {property.type === 'sale' ? 'For Sale' : property.type === 'rent' ? 'For Rent' : 'Off Plan'}
                 </div>
-                <h1 className="hero-title">{property.title}</h1>
+                <h1 className="hero-title">{title}</h1>
                 <div className="property-location-hero">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                     <path d="M21 10C21 17 12 23 12 23S3 17 3 10C3 5.02944 7.02944 1 12 1C16.9706 1 21 5.02944 21 10Z" stroke="currentColor" strokeWidth="2"/>
                     <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="2"/>
                   </svg>
-                  <span>{property.location}</span>
+                  <span>{location}, {(property as any).country || ''}</span>
                 </div>
                 <div className="property-price-hero">
                   QAR {property.price?.toLocaleString()}
@@ -346,9 +228,35 @@ const PropertyDetail: React.FC = () => {
                     className={`thumbnail ${index === currentImageIndex ? 'active' : ''}`}
                     onClick={() => setCurrentImageIndex(index)}
                   >
-                    <img src={image} alt={`${property.title} ${index + 1}`} />
+                    <img src={getPropertyImage(image)} alt={`${title} ${index + 1}`} />
                   </div>
                 ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Property Video Section */}
+        {(property as any).video && (
+          <section className="property-video-section">
+            <div className="container">
+              <h2 className="section-title-main">Property Video Tour</h2>
+              <div className="property-video-container">
+                <video
+                  controls
+                  controlsList="nodownload"
+                  style={{
+                    width: '100%',
+                    maxHeight: '600px',
+                    borderRadius: '12px',
+                    objectFit: 'contain',
+                    backgroundColor: '#000'
+                  }}
+                >
+                  <source src={getPropertyImage((property as any).video)} type="video/mp4" />
+                  <source src={getPropertyImage((property as any).video)} type="video/webm" />
+                  Your browser does not support the video tag.
+                </video>
               </div>
             </div>
           </section>
@@ -366,19 +274,19 @@ const PropertyDetail: React.FC = () => {
                   <span className="breadcrumb-separator">›</span>
                   <span onClick={() => navigate('/properties')} className="breadcrumb-link">Properties</span>
                   <span className="breadcrumb-separator">›</span>
-                  <span className="breadcrumb-current">{property.title}</span>
+                  <span className="breadcrumb-current">{title}</span>
                 </nav>
 
                 {/* Property Header */}
                 <div className="property-header-modern">
                   <div className="property-title-section">
-                    <h1 className="property-title-modern">{property.title}</h1>
+                    <h1 className="property-title-modern">{title}</h1>
                     <div className="property-location-modern">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                         <path d="M21 10C21 17 12 23 12 23S3 17 3 10C3 5.02944 7.02944 1 12 1C16.9706 1 21 5.02944 21 10Z" stroke="currentColor" strokeWidth="2"/>
                         <circle cx="12" cy="10" r="3" stroke="currentColor" strokeWidth="2"/>
                       </svg>
-                      <span>{property.location}</span>
+                      <span>{location}</span>
                     </div>
                   </div>
 
@@ -469,16 +377,16 @@ const PropertyDetail: React.FC = () => {
                 <div className="property-description-section">
                   <h2 className="section-title">Description</h2>
                   <div className="description-content">
-                    <p>{property.description}</p>
+                    <p>{description}</p>
                   </div>
                 </div>
 
                 {/* Property Features */}
-                {property.features && property.features.length > 0 && (
+                {features && features.length > 0 && (
                   <div className="property-amenities-section">
                     <h2 className="section-title">Features & Amenities</h2>
                     <div className="amenities-grid">
-                      {property.features.map((feature, index) => (
+                      {features.map((feature, index) => (
                         <div key={index} className="amenity-item">
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                             <polyline points="20,6 9,17 4,12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -486,6 +394,63 @@ const PropertyDetail: React.FC = () => {
                           <span>{feature}</span>
                         </div>
                       ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Off-Plan Details */}
+                {property.type === 'off-plan' && (
+                  <div className="off-plan-details-section">
+                    <h2 className="section-title">Off-Plan Details</h2>
+                    <div className="off-plan-grid">
+                      {(property as any).developer && (
+                        <div className="off-plan-item">
+                          <div className="off-plan-label">Developer</div>
+                          <div className="off-plan-value">{(property as any).developer}</div>
+                        </div>
+                      )}
+                      {(property as any).projectName && (
+                        <div className="off-plan-item">
+                          <div className="off-plan-label">Project Name</div>
+                          <div className="off-plan-value">{(property as any).projectName}</div>
+                        </div>
+                      )}
+                      {(property as any).completionDate && (
+                        <div className="off-plan-item">
+                          <div className="off-plan-label">Completion Date</div>
+                          <div className="off-plan-value">{(property as any).completionDate}</div>
+                        </div>
+                      )}
+                      {(property as any).handoverDate && (
+                        <div className="off-plan-item">
+                          <div className="off-plan-label">Handover Date</div>
+                          <div className="off-plan-value">{(property as any).handoverDate}</div>
+                        </div>
+                      )}
+                      {(property as any).startingPrice && (
+                        <div className="off-plan-item">
+                          <div className="off-plan-label">Starting Price</div>
+                          <div className="off-plan-value">QAR {(property as any).startingPrice.toLocaleString()}</div>
+                        </div>
+                      )}
+                      {(property as any).downPayment && (
+                        <div className="off-plan-item">
+                          <div className="off-plan-label">Down Payment</div>
+                          <div className="off-plan-value">{(property as any).downPayment}</div>
+                        </div>
+                      )}
+                      {(property as any).paymentPlan && (
+                        <div className="off-plan-item off-plan-item-full">
+                          <div className="off-plan-label">Payment Plan</div>
+                          <div className="off-plan-value">{(property as any).paymentPlan}</div>
+                        </div>
+                      )}
+                      {(property as any).installmentPlan && (
+                        <div className="off-plan-item off-plan-item-full">
+                          <div className="off-plan-label">Installment Options</div>
+                          <div className="off-plan-value">{(property as any).installmentPlan}</div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
@@ -508,10 +473,12 @@ const PropertyDetail: React.FC = () => {
                       </svg>
                     </div>
                     <div className="agent-details">
-                      <div className="agent-name">{property.agent || 'N&H Real Estate'}</div>
+                      <div className="agent-name">
+                        {typeof property.agent === 'string' ? 'N&H Real Estate' : property.agent?.name || 'N&H Real Estate'}
+                      </div>
                       <div className="agent-title">Property Consultant</div>
-                      {property.agentPhone && (
-                        <div className="agent-phone">{property.agentPhone}</div>
+                      {(typeof property.agent !== 'string' && property.agent?.phone) && (
+                        <div className="agent-phone">{property.agent.phone}</div>
                       )}
                     </div>
                   </div>
@@ -760,6 +727,28 @@ const PropertyDetail: React.FC = () => {
           object-fit: cover;
         }
 
+        .property-video-section {
+          background: #f8f9fa;
+          padding: 3rem 0;
+          border-bottom: 1px solid #e0e0e0;
+        }
+
+        .section-title-main {
+          font-size: 2rem;
+          font-weight: 700;
+          color: var(--luxury-burgundy);
+          margin-bottom: 2rem;
+          text-align: center;
+        }
+
+        .property-video-container {
+          max-width: 1000px;
+          margin: 0 auto;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+          border-radius: 12px;
+          overflow: hidden;
+        }
+
         .property-info-section {
           background: white;
           padding: 40px 0;
@@ -959,6 +948,56 @@ const PropertyDetail: React.FC = () => {
         .amenity-item svg {
           color: var(--matte-gold);
           flex-shrink: 0;
+        }
+
+        /* Off-Plan Details Section */
+        .off-plan-details-section {
+          margin-top: 40px;
+          padding: 30px;
+          background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+          border-radius: 12px;
+          border: 1px solid #e0e0e0;
+        }
+
+        .off-plan-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 20px;
+          margin-top: 20px;
+        }
+
+        .off-plan-item {
+          padding: 20px;
+          background: white;
+          border-radius: 8px;
+          border-left: 4px solid var(--matte-gold);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+          transition: all 0.3s ease;
+        }
+
+        .off-plan-item:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .off-plan-item-full {
+          grid-column: 1 / -1;
+        }
+
+        .off-plan-label {
+          font-size: 13px;
+          color: #666;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin-bottom: 8px;
+          font-weight: 600;
+        }
+
+        .off-plan-value {
+          font-size: 16px;
+          color: #333;
+          font-weight: 600;
+          line-height: 1.5;
         }
 
         .property-sidebar {

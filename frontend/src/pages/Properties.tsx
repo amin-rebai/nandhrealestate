@@ -10,26 +10,17 @@ const Properties: React.FC = () => {
   const navigate = useNavigate();
   const { properties, loading, error } = useSelector((state: RootState) => state.properties);
 
+  // API URL for images
+  const API_URL = 'http://localhost:5000';
+
   // Helper functions for property images
   const getPropertyImage = (property: any) => {
-    const imageMap: { [key: string]: string } = {
-      "Lusail Marina Heights": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      "The Pearl Towers": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      "West Bay Executive Suites": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      "Msheireb Downtown Residences": "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      "Al Waab Garden Villas": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      "Doha Festival City Mall": "https://images.unsplash.com/photo-1555636222-cae831e670b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      "Lusail Business District Tower": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      "The Pearl Marina Apartments": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      "West Bay Premium Office": "https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      "Lusail Waterfront Penthouse": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      "Al Sadd Family Villa": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      "Doha Sports City Complex": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      "Msheireb Smart City Towers": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      "The Pearl Beachfront Villa": "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      "West Bay Financial Center": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-    };
-    return imageMap[property.title] || getDefaultPropertyImage(property.propertyType);
+    if (property.images && property.images.length > 0) {
+      // If image starts with http, use it directly, otherwise prepend API_URL
+      const imageUrl = property.images[0];
+      return imageUrl.startsWith('http') ? imageUrl : `${API_URL}${imageUrl}`;
+    }
+    return getDefaultPropertyImage(property.propertyType);
   };
 
   const getDefaultPropertyImage = (propertyType: string) => {
@@ -37,10 +28,26 @@ const Properties: React.FC = () => {
       "Apartment": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
       "Villa": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
       "Office": "https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      "Commercial": "https://images.unsplash.com/photo-1555636222-cae831e670b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      "Penthouse": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+      "Shop": "https://images.unsplash.com/photo-1555636222-cae831e670b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Penthouse": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Studio": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Townhouse": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
     };
     return defaultImages[propertyType] || "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80";
+  };
+
+  // Helper function to get text from multilingual field
+  const getText = (field: any, defaultValue: string = '') => {
+    if (typeof field === 'string') return field;
+    if (field && typeof field === 'object') return field.en || field.ar || defaultValue;
+    return defaultValue;
+  };
+
+  // Helper function to get array from multilingual field
+  const getArray = (field: any): string[] => {
+    if (Array.isArray(field)) return field;
+    if (field && typeof field === 'object') return field.en || field.ar || [];
+    return [];
   };
 
   // Filter states
@@ -54,234 +61,19 @@ const Properties: React.FC = () => {
   });
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  // Enhanced property data with rent, sale, and off-plan categories
-  const allProperties = [
-    // SALE PROPERTIES
-    {
-      _id: "1",
-      title: "Lusail Marina Heights",
-      location: "Lusail",
-      country: "Qatar",
-      price: 850000,
-      priceText: "QAR 3,100,000",
-      category: "sale" as const,
-      propertyType: "Apartment",
-      bedrooms: 3,
-      bathrooms: 3,
-      area: 180,
-      yearBuilt: 2023,
-      description: "Smart waterfront luxury residences with panoramic marina views and world-class amenities.",
-      features: ["Marina Views", "Smart Home Technology", "Concierge Service", "Private Beach Access", "Gym", "Swimming Pool"],
-      images: ["lusail1.jpg", "lusail2.jpg", "lusail3.jpg"],
-      agent: "Sarah Al-Mahmoud",
-      agentPhone: "+974 5555 1234",
-      dateAdded: "2024-01-15",
-      verified: true,
-      type: "sale" as const,
-      status: "available" as const,
-      createdAt: "2024-01-15T10:00:00Z",
-      updatedAt: "2024-01-15T10:00:00Z"
-    },
-    {
-      _id: "2",
-      title: "Porto Arabia Penthouse",
-      location: "The Pearl",
-      country: "Qatar",
-      price: 1200000,
-      priceText: "QAR 4,370,000",
-      category: "sale" as const,
-      propertyType: "Penthouse",
-      bedrooms: 4,
-      bathrooms: 5,
-      area: 320,
-      yearBuilt: 2022,
-      description: "Exclusive sea-view penthouse with private elevator and rooftop terrace.",
-      features: ["Sea Views", "Premium Finishes", "Private Elevator", "Rooftop Terrace", "Maid's Room", "Study Room"],
-      images: ["pearl1.jpg", "pearl2.jpg", "pearl3.jpg"],
-      agent: "Ahmed Hassan",
-      agentPhone: "+974 5555 2345",
-      dateAdded: "2024-01-10",
-      verified: true
-    },
-    {
-      _id: "3",
-      title: "Palm Jumeirah Villa",
-      location: "Palm Jumeirah",
-      country: "UAE",
-      price: 2500000,
-      priceText: "AED 9,200,000",
-      category: "sale" as const,
-      propertyType: "Villa",
-      bedrooms: 5,
-      bathrooms: 6,
-      area: 450,
-      yearBuilt: 2021,
-      description: "Iconic beachfront villa with private beach access and stunning Arabian Gulf views.",
-      features: ["Beach Access", "Private Pool", "Garden", "Maid's Room", "Driver's Room", "Garage"],
-      images: ["palm1.jpg", "palm2.jpg", "palm3.jpg"],
-      agent: "Maria Rodriguez",
-      agentPhone: "+971 50 123 4567",
-      dateAdded: "2024-01-08",
-      verified: true
-    },
-    {
-      _id: "4",
-      title: "New Cairo Compound Villa",
-      location: "New Cairo",
-      country: "Egypt",
-      price: 450000,
-      priceText: "EGP 13,950,000",
-      category: "sale" as const,
-      propertyType: "Villa",
-      bedrooms: 4,
-      bathrooms: 4,
-      area: 380,
-      yearBuilt: 2023,
-      description: "Premium gated community villa with modern design and comprehensive amenities.",
-      features: ["Gated Community", "Garden", "Garage", "Security", "Club House", "Kids Area"],
-      images: ["cairo1.jpg", "cairo2.jpg", "cairo3.jpg"],
-      agent: "Omar Farouk",
-      agentPhone: "+20 100 123 4567",
-      dateAdded: "2024-01-05",
-      verified: true
-    },
-
-    // RENT PROPERTIES
-    {
-      _id: "5",
-      title: "West Bay Executive Apartment",
-      location: "West Bay",
-      country: "Qatar",
-      price: 12000,
-      priceText: "QAR 12,000/month",
-      category: "rent" as const,
-      propertyType: "Apartment",
-      bedrooms: 2,
-      bathrooms: 2,
-      area: 120,
-      yearBuilt: 2020,
-      description: "Fully furnished executive apartment in the heart of Doha's.",
-      features: ["Furnished", "City Views", "Gym", "Swimming Pool", "Parking", "24/7 Security"],
-      images: ["westbay1.jpg", "westbay2.jpg", "westbay3.jpg"],
-      agent: "Fatima Al-Zahra",
-      agentPhone: "+974 5555 3456",
-      dateAdded: "2024-01-20",
-      verified: true
-    },
-    {
-      _id: "6",
-      title: "Lusail Studio",
-      location: "Lusail",
-      country: "UAE",
-      price: 4500,
-      priceText: "AED 4,500/month",
-      category: "rent" as const,
-      propertyType: "Studio",
-      bedrooms: 0,
-      bathrooms: 1,
-      area: 45,
-      yearBuilt: 2019,
-      description: "Modern studio apartment with marina views and premium amenities.",
-      features: ["Marina Views", "Furnished", "Gym", "Pool", "Metro Access", "Balcony"],
-      images: ["marina1.jpg", "marina2.jpg", "marina3.jpg"],
-      agent: "John Smith",
-      agentPhone: "+971 50 234 5678",
-      dateAdded: "2024-01-18",
-      verified: true
-    },
-    {
-      _id: "7",
-      title: "Zamalak Luxury Apartment",
-      location: "Zamalek",
-      country: "Egypt",
-      price: 1200,
-      priceText: "EGP 37,200/month",
-      category: "rent" as const,
-      propertyType: "Apartment",
-      bedrooms: 3,
-      bathrooms: 2,
-      area: 150,
-      yearBuilt: 2018,
-      description: "Elegant apartment in prestigious Zamalek with Nile views.",
-      features: ["Nile Views", "Balcony", "Parking", "Elevator", "Central AC", "Furnished"],
-      images: ["zamalek1.jpg", "zamalek2.jpg", "zamalek3.jpg"],
-      agent: "Yasmin Nour",
-      agentPhone: "+20 100 234 5678",
-      dateAdded: "2024-01-16",
-      verified: true
-    },
-
-    // OFF-PLAN PROPERTIES
-    {
-      _id: "8",
-      title: "Lusail City Towers",
-      location: "Lusail",
-      country: "Qatar",
-      price: 750000,
-      priceText: "Starting QAR 2,730,000",
-      category: "off-plan" as const,
-      propertyType: "Apartment",
-      bedrooms: 2,
-      bathrooms: 2,
-      area: 140,
-      yearBuilt: 2026,
-      description: "Ultra-modern residential towers in the heart of Lusail City with smart home features.",
-      features: ["Smart Home", "Gym", "Pool", "Retail", "Metro Access", "Green Spaces"],
-      images: ["lusail-tower1.jpg", "lusail-tower2.jpg", "lusail-tower3.jpg"],
-      agent: "Khalid Al-Thani",
-      agentPhone: "+974 5555 4567",
-      dateAdded: "2024-01-12",
-      verified: true,
-      completionDate: "Q4 2026",
-      paymentPlan: "20% Down Payment, 80% on Completion"
-    },
-    {
-      _id: "9",
-      title: "Lusail Creek Harbour",
-      location: "Creek Harbour",
-      country: "UAE",
-      price: 890000,
-      priceText: "Starting AED 3,270,000",
-      category: "off-plan" as const,
-      propertyType: "Apartment",
-      bedrooms: 1,
-      bathrooms: 1,
-      area: 75,
-      yearBuilt: 2027,
-      description: "Waterfront living with iconic Lusail skyline views and world-class amenities.",
-      features: ["Creek Views", "Retail", "Marina", "Parks", "Metro", "Beach Access"],
-      images: ["creek1.jpg", "creek2.jpg", "creek3.jpg"],
-      agent: "Elena Petrov",
-      agentPhone: "+971 50 345 6789",
-      dateAdded: "2024-01-14",
-      verified: true,
-      completionDate: "Q2 2027",
-      paymentPlan: "10% Down Payment, 90% During Construction"
-    },
-    {
-      _id: "10",
-      title: "New Administrative Capital",
-      location: "New Capital",
-      country: "Egypt",
-      price: 320000,
-      priceText: "Starting EGP 9,920,000",
-      category: "off-plan" as const,
-      propertyType: "Apartment",
-      bedrooms: 3,
-      bathrooms: 2,
-      area: 165,
-      yearBuilt: 2025,
-      description: "Modern apartments in Egypt's new administrative capital with government district proximity.",
-      features: ["Government District", "Green Spaces", "Shopping", "Schools", "Metro", "Parking"],
-      images: ["newcapital1.jpg", "newcapital2.jpg", "newcapital3.jpg"],
-      agent: "Amr Mostafa",
-      agentPhone: "+20 100 345 6789",
-      dateAdded: "2024-01-11",
-      verified: true,
-      completionDate: "Q3 2025",
-      paymentPlan: "15% Down Payment, 85% Over 5 Years"
-    }
-  ];
+  // Transform backend properties to match frontend format
+  const allProperties = properties.map((property: any) => ({
+    ...property,
+    title: getText(property.title),
+    description: getText(property.description),
+    location: getText(property.location),
+    features: getArray(property.features),
+    category: property.type, // Map 'type' to 'category' for filtering
+    priceText: `QAR ${property.price.toLocaleString()}`,
+    dateAdded: property.createdAt,
+    agent: typeof property.agent === 'string' ? 'Agent' : property.agent?.name || 'Agent',
+    agentPhone: typeof property.agent === 'string' ? '' : property.agent?.phone || ''
+  }));
 
   // Handle URL search parameters
   useEffect(() => {
@@ -349,13 +141,6 @@ const Properties: React.FC = () => {
       ...prev,
       [filterType]: value
     }));
-  };
-
-  const formatPrice = (price: number, category: string) => {
-    if (category === 'rent') {
-      return `${price.toLocaleString()}/month`;
-    }
-    return price.toLocaleString();
   };
 
   return (
@@ -588,11 +373,34 @@ const Properties: React.FC = () => {
             </div>
           </div>
 
+          {/* Loading State */}
+          {loading && (
+            <div style={{ textAlign: 'center', padding: '3rem' }}>
+              <div style={{ fontSize: '1.2rem', color: 'var(--luxury-burgundy)' }}>Loading properties...</div>
+            </div>
+          )}
+
+          {/* Error State */}
+          {error && (
+            <div style={{ textAlign: 'center', padding: '3rem' }}>
+              <div style={{ fontSize: '1.2rem', color: '#d32f2f' }}>Error: {error}</div>
+            </div>
+          )}
+
+          {/* Empty State */}
+          {!loading && !error && filteredProperties.length === 0 && (
+            <div style={{ textAlign: 'center', padding: '3rem' }}>
+              <div style={{ fontSize: '1.5rem', color: 'var(--luxury-burgundy)', marginBottom: '1rem' }}>No properties found</div>
+              <div style={{ fontSize: '1rem', color: 'var(--text-light)' }}>Try adjusting your filters or check back later for new listings.</div>
+            </div>
+          )}
+
           {/* Properties Grid/List */}
-          <div className={`properties-container ${viewMode === 'list' ? 'list-view' : 'grid-view'}`}>
-            {viewMode === 'grid' ? (
-              <div className="properties-grid">
-                {filteredProperties.map((property) => (
+          {!loading && !error && filteredProperties.length > 0 && (
+            <div className={`properties-container ${viewMode === 'list' ? 'list-view' : 'grid-view'}`}>
+              {viewMode === 'grid' ? (
+                <div className="properties-grid">
+                  {filteredProperties.map((property) => (
                   <div key={property._id} className="property-card enhanced-visual">
                     <div className="property-image-container">
                       <img
@@ -662,7 +470,7 @@ const Properties: React.FC = () => {
 
                       <div className="property-features" style={{ marginBottom: '1.5rem' }}>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
-                          {property.features.slice(0, 4).map((feature, index) => (
+                          {property.features.slice(0, 4).map((feature: string, index: number) => (
                             <span
                               key={index}
                               style={{
@@ -844,7 +652,7 @@ const Properties: React.FC = () => {
 
                       <div className="property-features" style={{ marginBottom: '1rem' }}>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
-                          {property.features.slice(0, 6).map((feature, index) => (
+                          {property.features.slice(0, 6).map((feature: string, index: number) => (
                             <span
                               key={index}
                               style={{
@@ -898,46 +706,6 @@ const Properties: React.FC = () => {
                 ))}
               </div>
             )}
-          </div>
-
-          {/* No Results */}
-          {filteredProperties.length === 0 && (
-            <div style={{
-              textAlign: 'center',
-              padding: '4rem 2rem',
-              background: 'var(--pure-white)',
-              borderRadius: '12px',
-              boxShadow: '0 4px 15px rgba(0, 0, 0, 0.08)'
-            }}>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🏠</div>
-              <h3 style={{ color: 'var(--luxury-burgundy)', marginBottom: '1rem' }}>No Properties Found</h3>
-              <p style={{ color: 'var(--text-light)', marginBottom: '2rem' }}>
-                Try adjusting your filters to see more properties.
-              </p>
-              <button
-                onClick={() => setFilters({
-                  location: 'all',
-                  propertyType: 'all',
-                  bedrooms: 'all',
-                  priceRange: 'all',
-                  sortBy: 'newest'
-                })}
-                className="btn btn-primary"
-              >
-                Clear All Filters
-              </button>
-            </div>
-          )}
-
-          {loading && (
-            <div className="loading">
-              <p>Loading additional properties...</p>
-            </div>
-          )}
-
-          {error && (
-            <div className="error">
-              <p>Error loading properties: {error}</p>
             </div>
           )}
         </div>

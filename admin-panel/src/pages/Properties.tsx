@@ -92,12 +92,15 @@ const Properties: React.FC = () => {
     description: '',
     price: '',
     location: '',
+    locationCity: '',
+    locationDetails: '',
     country: 'Qatar',
     bedrooms: '',
     bathrooms: '',
     area: '',
     yearBuilt: '',
     images: [] as string[],
+    video: '',
     type: 'sale' as 'sale' | 'rent' | 'off-plan',
     status: 'available' as 'available' | 'sold' | 'rented',
     features: '',
@@ -105,6 +108,12 @@ const Properties: React.FC = () => {
     verified: false,
     completionDate: '',
     paymentPlan: '',
+    developer: '',
+    projectName: '',
+    handoverDate: '',
+    startingPrice: '',
+    downPayment: '',
+    installmentPlan: '',
     propertyType: 'Apartment'
   });
 
@@ -129,6 +138,15 @@ const Properties: React.FC = () => {
   const handleOpenDialog = (property?: Property) => {
     if (property) {
       setEditingProperty(property);
+      const locationStr = typeof property.location === 'string'
+        ? property.location
+        : (property.location as any)?.en || '';
+
+      // Parse location to extract city and details
+      const locationParts = locationStr.split(',').map((s: string) => s.trim());
+      const locationCity = locationParts[0] || '';
+      const locationDetails = locationParts.slice(1).join(', ') || '';
+
       setFormData({
         title: typeof property.title === 'string'
           ? property.title
@@ -137,15 +155,16 @@ const Properties: React.FC = () => {
           ? property.description
           : (property.description as any)?.en || '',
         price: property.price.toString(),
-        location: typeof property.location === 'string'
-          ? property.location
-          : (property.location as any)?.en || '',
+        location: locationStr,
+        locationCity: locationCity,
+        locationDetails: locationDetails,
         country: (property as any).country || 'Qatar',
         bedrooms: property.bedrooms.toString(),
         bathrooms: property.bathrooms.toString(),
         area: property.area.toString(),
         yearBuilt: (property as any).yearBuilt?.toString() || '',
         images: property.images || [],
+        video: (property as any).video || '',
         type: property.type,
         status: property.status,
         features: typeof property.features === 'object' && Array.isArray(property.features)
@@ -153,10 +172,16 @@ const Properties: React.FC = () => {
           : typeof property.features === 'object'
           ? ((property.features as any).en?.join(', ') || '')
           : '',
-        agent: property.agent._id,
+        agent: typeof property.agent === 'string' ? property.agent : property.agent?._id || '',
         verified: (property as any).verified || false,
         completionDate: (property as any).completionDate || '',
         paymentPlan: (property as any).paymentPlan || '',
+        developer: (property as any).developer || '',
+        projectName: (property as any).projectName || '',
+        handoverDate: (property as any).handoverDate || '',
+        startingPrice: (property as any).startingPrice?.toString() || '',
+        downPayment: (property as any).downPayment || '',
+        installmentPlan: (property as any).installmentPlan || '',
         propertyType: (property as any).propertyType || 'Apartment'
       });
     } else {
@@ -166,12 +191,15 @@ const Properties: React.FC = () => {
         description: '',
         price: '',
         location: '',
+        locationCity: '',
+        locationDetails: '',
         country: 'Qatar',
         bedrooms: '',
         bathrooms: '',
         area: '',
         yearBuilt: '',
         images: [],
+        video: '',
         type: 'sale',
         status: 'available',
         features: '',
@@ -179,6 +207,12 @@ const Properties: React.FC = () => {
         verified: false,
         completionDate: '',
         paymentPlan: '',
+        developer: '',
+        projectName: '',
+        handoverDate: '',
+        startingPrice: '',
+        downPayment: '',
+        installmentPlan: '',
         propertyType: 'Apartment'
       });
     }
@@ -192,17 +226,40 @@ const Properties: React.FC = () => {
   };
 
   const handleSubmit = async () => {
+    console.log('handleSubmit called');
+    console.log('formData:', formData);
+
+    // Validate Qatar-specific fields
+    if (formData.country === 'Qatar' && !formData.locationCity) {
+      alert('Please select a city/area for Qatar properties');
+      return;
+    }
+
+    // Validate non-Qatar location field
+    if (formData.country !== 'Qatar' && !formData.location) {
+      alert('Please enter a location');
+      return;
+    }
+
+    // Construct full location string
+    const fullLocation = formData.country === 'Qatar' && formData.locationCity
+      ? `${formData.locationCity}${formData.locationDetails ? ', ' + formData.locationDetails : ''}`
+      : formData.location;
+
+    console.log('fullLocation:', fullLocation);
+
     const propertyData: any = {
       title: { en: formData.title, ar: formData.title },
       description: { en: formData.description, ar: formData.description },
       price: Number(formData.price),
-      location: { en: formData.location, ar: formData.location },
+      location: { en: fullLocation, ar: fullLocation },
       country: formData.country,
       bedrooms: Number(formData.bedrooms),
       bathrooms: Number(formData.bathrooms),
       area: Number(formData.area),
       yearBuilt: Number(formData.yearBuilt),
       images: formData.images,
+      video: formData.video,
       type: formData.type,
       status: formData.status,
       features: {
@@ -214,20 +271,35 @@ const Properties: React.FC = () => {
       propertyType: formData.propertyType
     };
 
+    console.log('propertyData:', propertyData);
+
     // Add off-plan specific fields
     if (formData.type === 'off-plan') {
       propertyData.completionDate = formData.completionDate;
       propertyData.paymentPlan = formData.paymentPlan;
+      propertyData.developer = formData.developer;
+      propertyData.projectName = formData.projectName;
+      propertyData.handoverDate = formData.handoverDate;
+      propertyData.startingPrice = formData.startingPrice ? Number(formData.startingPrice) : undefined;
+      propertyData.downPayment = formData.downPayment;
+      propertyData.installmentPlan = formData.installmentPlan;
     }
 
     try {
+      console.log('Dispatching createProperty/updateProperty...');
       if (editingProperty) {
         await dispatch(updateProperty({ id: editingProperty._id, data: propertyData })).unwrap();
       } else {
         await dispatch(createProperty(propertyData)).unwrap();
       }
+      console.log('Property created/updated successfully');
+
+      // Refetch properties to get populated agent data
+      await dispatch(fetchProperties({ page: currentPage, limit: 10 }));
+
       handleCloseDialog();
     } catch (error) {
+      console.error('Error creating/updating property:', error);
       // Error handled by slice
     }
   };
@@ -287,6 +359,55 @@ const Properties: React.FC = () => {
     setFormData(prev => ({
       ...prev,
       images: prev.images.filter((_, i) => i !== index)
+    }));
+  };
+
+  const handleVideoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Check if file is a video
+    if (!file.type.startsWith('video/')) {
+      alert('Please select a valid video file');
+      return;
+    }
+
+    // Check file size (max 100MB)
+    if (file.size > 100 * 1024 * 1024) {
+      alert('Video file size must be less than 100MB');
+      return;
+    }
+
+    setUploading(true);
+
+    try {
+      const formDataUpload = new FormData();
+      formDataUpload.append('video', file);
+
+      const response = await axios.post(`${API_URL}/upload/video`, formDataUpload, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+        },
+      });
+
+      setFormData(prev => ({
+        ...prev,
+        video: response.data.data.url
+      }));
+    } catch (error: any) {
+      console.error('Failed to upload video:', error);
+      alert('Failed to upload video. Please try again.');
+    } finally {
+      setUploading(false);
+      event.target.value = '';
+    }
+  };
+
+  const handleRemoveVideo = () => {
+    setFormData(prev => ({
+      ...prev,
+      video: ''
     }));
   };
 
@@ -463,9 +584,9 @@ const Properties: React.FC = () => {
                         fontSize: '0.875rem'
                       }}
                     >
-                      {property.agent.name.charAt(0)}
+                      {property.agent?.name?.charAt(0) || 'A'}
                     </Avatar>
-                    <Typography variant="body2">{property.agent.name}</Typography>
+                    <Typography variant="body2">{property.agent?.name || 'Unknown Agent'}</Typography>
                   </Box>
                 </TableCell>
                 <TableCell>
@@ -585,7 +706,16 @@ const Properties: React.FC = () => {
                       fullWidth
                       label="Country"
                       value={formData.country}
-                      onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                      onChange={(e) => {
+                        const newCountry = e.target.value;
+                        setFormData({
+                          ...formData,
+                          country: newCountry,
+                          locationCity: '',
+                          locationDetails: '',
+                          location: newCountry !== 'Qatar' ? formData.location : ''
+                        });
+                      }}
                       required
                     >
                       <MenuItem value="Qatar">Qatar</MenuItem>
@@ -598,15 +728,60 @@ const Properties: React.FC = () => {
                       <MenuItem value="Turkey">Turkey</MenuItem>
                     </TextField>
                   </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      label="Location"
-                      value={formData.location}
-                      onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                      required
-                    />
-                  </Grid>
+
+                  {/* Qatar-specific location fields */}
+                  {formData.country === 'Qatar' ? (
+                    <>
+                      <Grid item xs={12} md={6}>
+                        <TextField
+                          select
+                          fullWidth
+                          label="City/Area"
+                          value={formData.locationCity}
+                          onChange={(e) => setFormData({ ...formData, locationCity: e.target.value })}
+                          required
+                        >
+                          <MenuItem value="">Select City/Area</MenuItem>
+                          <MenuItem value="Doha">Doha</MenuItem>
+                          <MenuItem value="Lusail">Lusail</MenuItem>
+                          <MenuItem value="The Pearl">The Pearl</MenuItem>
+                          <MenuItem value="West Bay">West Bay</MenuItem>
+                          <MenuItem value="Al Waab">Al Waab</MenuItem>
+                          <MenuItem value="Al Sadd">Al Sadd</MenuItem>
+                          <MenuItem value="Al Dafna">Al Dafna</MenuItem>
+                          <MenuItem value="Msheireb Downtown">Msheireb Downtown</MenuItem>
+                          <MenuItem value="Al Wakrah">Al Wakrah</MenuItem>
+                          <MenuItem value="Al Khor">Al Khor</MenuItem>
+                          <MenuItem value="Al Rayyan">Al Rayyan</MenuItem>
+                          <MenuItem value="Umm Salal">Umm Salal</MenuItem>
+                          <MenuItem value="Al Gharrafa">Al Gharrafa</MenuItem>
+                          <MenuItem value="Ain Khaled">Ain Khaled</MenuItem>
+                          <MenuItem value="Old Airport">Old Airport</MenuItem>
+                        </TextField>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          fullWidth
+                          label="Location Details (Building, Street, Community)"
+                          value={formData.locationDetails}
+                          onChange={(e) => setFormData({ ...formData, locationDetails: e.target.value })}
+                          placeholder="e.g., Marina Tower, Building 123, Street 45"
+                          helperText="Optional: Add specific building, street, or community details"
+                        />
+                      </Grid>
+                    </>
+                  ) : (
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        label="Location"
+                        value={formData.location}
+                        onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                        required
+                        placeholder="Enter full location"
+                      />
+                    </Grid>
+                  )}
                   <Grid item xs={6} md={3}>
                     <TextField
                       fullWidth
@@ -737,7 +912,7 @@ const Properties: React.FC = () => {
 
             {/* Off-Plan Specific Fields */}
             {formData.type === 'off-plan' && (
-              <Accordion>
+              <Accordion defaultExpanded>
                 <AccordionSummary expandIcon={<ExpandMore />}>
                   <Typography variant="h6">Off-Plan Details</Typography>
                 </AccordionSummary>
@@ -746,21 +921,89 @@ const Properties: React.FC = () => {
                     <Grid item xs={12} md={6}>
                       <TextField
                         fullWidth
+                        label="Developer"
+                        value={formData.developer}
+                        onChange={(e) => setFormData({ ...formData, developer: e.target.value })}
+                        placeholder="e.g. Emaar Properties"
+                        helperText="Name of the property developer"
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        fullWidth
+                        label="Project Name"
+                        value={formData.projectName}
+                        onChange={(e) => setFormData({ ...formData, projectName: e.target.value })}
+                        placeholder="e.g. Dubai Creek Harbour"
+                        helperText="Name of the development project"
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        fullWidth
                         label="Completion Date"
                         value={formData.completionDate}
                         onChange={(e) => setFormData({ ...formData, completionDate: e.target.value })}
                         placeholder="e.g. Q4 2025"
+                        helperText="Expected project completion date"
                         required
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
                       <TextField
                         fullWidth
+                        label="Handover Date"
+                        value={formData.handoverDate}
+                        onChange={(e) => setFormData({ ...formData, handoverDate: e.target.value })}
+                        placeholder="e.g. December 2025"
+                        helperText="Expected handover date to buyers"
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        fullWidth
+                        label="Starting Price"
+                        type="number"
+                        value={formData.startingPrice}
+                        onChange={(e) => setFormData({ ...formData, startingPrice: e.target.value })}
+                        placeholder="e.g. 500000"
+                        helperText="Starting price for units in this project"
+                        InputProps={{
+                          startAdornment: <InputAdornment position="start">QAR</InputAdornment>,
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        fullWidth
+                        label="Down Payment"
+                        value={formData.downPayment}
+                        onChange={(e) => setFormData({ ...formData, downPayment: e.target.value })}
+                        placeholder="e.g. 10% or QAR 50,000"
+                        helperText="Required down payment amount or percentage"
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
                         label="Payment Plan"
                         value={formData.paymentPlan}
                         onChange={(e) => setFormData({ ...formData, paymentPlan: e.target.value })}
-                        placeholder="e.g. 10% Down Payment, 90% on Completion"
+                        placeholder="e.g. 10% Down Payment, 40% During Construction, 50% on Completion"
+                        helperText="Overall payment plan structure"
                         required
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        multiline
+                        rows={3}
+                        label="Installment Plan"
+                        value={formData.installmentPlan}
+                        onChange={(e) => setFormData({ ...formData, installmentPlan: e.target.value })}
+                        placeholder="e.g. Monthly installments available, Flexible payment options, Post-handover payment plan"
+                        helperText="Detailed installment options and payment flexibility"
                       />
                     </Grid>
                   </Grid>
@@ -828,6 +1071,79 @@ const Properties: React.FC = () => {
                           </ImageListItem>
                         ))}
                       </ImageList>
+                    )}
+                  </Grid>
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
+
+            {/* Video Section */}
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMore />}>
+                <Typography variant="h6">Property Video</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Box sx={{ mb: 2 }}>
+                      <input
+                        accept="video/*"
+                        style={{ display: 'none' }}
+                        id="property-video-upload"
+                        type="file"
+                        onChange={handleVideoUpload}
+                      />
+                      <label htmlFor="property-video-upload">
+                        <Button
+                          variant="outlined"
+                          component="span"
+                          startIcon={<CloudUpload />}
+                          disabled={uploading || !!formData.video}
+                          sx={{
+                            borderColor: '#4B0E14',
+                            color: '#4B0E14',
+                            '&:hover': {
+                              borderColor: '#6B1423',
+                              backgroundColor: 'rgba(75, 14, 20, 0.04)'
+                            }
+                          }}
+                        >
+                          {uploading ? 'Uploading...' : formData.video ? 'Video Uploaded' : 'Upload Video'}
+                        </Button>
+                      </label>
+                      <Typography variant="caption" display="block" sx={{ mt: 1, color: '#666' }}>
+                        Max file size: 100MB. Supported formats: MP4, MOV, AVI, WebM
+                      </Typography>
+                    </Box>
+
+                    {formData.video && (
+                      <Box sx={{ position: 'relative', width: '100%', maxWidth: 600 }}>
+                        <video
+                          src={`${API_URL}${formData.video}`}
+                          controls
+                          style={{
+                            width: '100%',
+                            maxHeight: 400,
+                            borderRadius: 8,
+                            objectFit: 'contain',
+                            backgroundColor: '#000'
+                          }}
+                        />
+                        <IconButton
+                          onClick={handleRemoveVideo}
+                          sx={{
+                            position: 'absolute',
+                            top: 8,
+                            right: 8,
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                            '&:hover': {
+                              backgroundColor: 'rgba(255, 255, 255, 1)'
+                            }
+                          }}
+                        >
+                          <CloseIcon />
+                        </IconButton>
+                      </Box>
                     )}
                   </Grid>
                 </Grid>

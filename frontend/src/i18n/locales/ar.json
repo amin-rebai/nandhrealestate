@@ -26,7 +26,13 @@
     "services": "الخدمات",
     "blog": "المدونة والأخبار",
     "contact": "اتصل بنا",
-    "language": "اللغة"
+    "language": "اللغة",
+    "ourServices": "خدماتنا",
+    "ourServicesDesc": "حلول عقارية شاملة",
+    "ourProcess": "عمليتنا",
+    "ourProcessDesc": "منهجية مبسطة",
+    "ourPartners": "شركاؤنا",
+    "ourPartnersDesc": "تحالفات استراتيجية"
   },
   "hero": {
     "title": "إن آند إتش العقارية",
@@ -156,5 +162,21 @@
     "socialShare": "شارك على وسائل التواصل الاجتماعي",
     "copyLink": "نسخ الرابط",
     "linkCopied": "تم نسخ الرابط!"
+  },
+  "home": {
+    "featuredProperties": "العقارات المميزة",
+    "exceptionalProperties": "عقارات استثنائية",
+    "handpickedLuxury": "عقارات فاخرة منتقاة بعناية تحدد التميز في العقارات",
+    "forSale": "للبيع",
+    "forRent": "للإيجار",
+    "beds": "غرف",
+    "baths": "حمامات",
+    "viewAllProperties": "عرض جميع العقارات",
+    "ourServices": "خدماتنا",
+    "comprehensiveSolutions": "حلول عقارية شاملة",
+    "servicesDescription": "من البيع والتأجير إلى إدارة العقارات والاستشارات الاستثمارية",
+    "learnMore": "اعرف المزيد",
+    "allRightsReserved": "جميع الحقوق محفوظة",
+    "licensedCompany": "شركة عقارية مرخصة | منظمة من قبل هيئة مركز قطر للمال"
   }
 }

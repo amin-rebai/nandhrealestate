@@ -1,7 +1,96 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import axios from 'axios';
+
+interface Partner {
+  _id: string;
+  title: string | { en: string; ar: string };
+  description: string | { en: string; ar: string };
+  image?: string;
+  order?: number;
+}
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 const OurPartners: React.FC = () => {
+  const { i18n } = useTranslation();
+  const [partners, setPartners] = useState<Partner[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Helper function to get text from multilingual field
+  const getText = (value: string | { en: string; ar: string } | undefined): string => {
+    if (!value) return '';
+    if (typeof value === 'string') return value;
+    return value[i18n.language as 'en' | 'ar'] || value.en || '';
+  };
+
+  // Helper function to get image URL
+  const getImageUrl = (image: string | undefined): string => {
+    if (!image) return 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+    if (image.startsWith('http')) return image;
+    return `${API_URL}${image}`;
+  };
+
+  // Helper function to get partner icon
+  const getPartnerIcon = (index: number): string => {
+    const icons = ['🏦', '💻', '⚖️', '🏗️', '🌍', '📊'];
+    return icons[index % icons.length];
+  };
+
+  // Default partners
+  const defaultPartners: Partner[] = [
+    {
+      _id: '1',
+      title: { en: 'Financial Partners', ar: 'الشركاء الماليون' },
+      description: { en: 'Leading banks and financial institutions providing mortgage and financing solutions.', ar: 'البنوك والمؤسسات المالية الرائدة التي تقدم حلول الرهن العقاري والتمويل.' },
+      image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      order: 1
+    },
+    {
+      _id: '2',
+      title: { en: 'Technology Partners', ar: 'شركاء التكنولوجيا' },
+      description: { en: 'Cutting-edge proptech and digital solutions for modern real estate.', ar: 'حلول التكنولوجيا العقارية والرقمية المتطورة للعقارات الحديثة.' },
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      order: 2
+    },
+    {
+      _id: '3',
+      title: { en: 'Legal & Advisory Partners', ar: 'الشركاء القانونيون والاستشاريون' },
+      description: { en: 'Top-tier legal and consulting firms for comprehensive support.', ar: 'شركات قانونية واستشارية من الدرجة الأولى للدعم الشامل.' },
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      order: 3
+    },
+    {
+      _id: '4',
+      title: { en: 'Construction & Development', ar: 'البناء والتطوير' },
+      description: { en: 'Premier construction and development companies for quality projects.', ar: 'شركات البناء والتطوير الرائدة للمشاريع عالية الجودة.' },
+      image: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      order: 4
+    }
+  ];
+
+  useEffect(() => {
+    const fetchPartners = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${API_URL}/api/content/section/clients?active=true`);
+        if (response.data && response.data.length > 0) {
+          setPartners(response.data.sort((a: Partner, b: Partner) => (a.order || 0) - (b.order || 0)));
+        } else {
+          setPartners(defaultPartners);
+        }
+      } catch (error) {
+        console.error('Error fetching partners:', error);
+        setPartners(defaultPartners);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPartners();
+  }, []);
+
   return (
     <div className="our-partners-page">
       {/* Enhanced Hero Section */}
@@ -19,7 +108,7 @@ const OurPartners: React.FC = () => {
             <h1 className="hero-title">Our Partners</h1>
             <p className="hero-subtitle">Building Success Through Strategic Alliances</p>
             <p className="hero-description">
-              We collaborate with industry leaders, financial institutions, and technology 
+              We collaborate with industry leaders, financial institutions, and technology
               partners to deliver exceptional value and comprehensive solutions.
             </p>
           </div>
@@ -34,103 +123,32 @@ const OurPartners: React.FC = () => {
             <p>Our carefully selected partners enable us to provide comprehensive real estate solutions</p>
           </div>
 
-          <div className="partners-categories-grid">
-            <div className="partner-category visual-enhanced">
-              <div className="category-image">
-                <img 
-                  src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                  alt="Financial Partners"
-                  className="category-img"
-                />
-                <div className="category-icon">🏦</div>
-              </div>
-              <div className="category-content">
-                <h3>Financial Partners</h3>
-                <p className="category-description">
-                  <strong>Leading banks and financial institutions</strong>
-                </p>
-                <ul className="category-features">
-                  <li>Mortgage and financing solutions</li>
-                  <li>Investment banking services</li>
-                  <li>Insurance and risk management</li>
-                  <li>International banking networks</li>
-                  <li>Specialized real estate financing</li>
-                </ul>
-              </div>
+          {loading ? (
+            <div style={{ textAlign: 'center', padding: '3rem' }}>
+              <p>Loading partners...</p>
             </div>
-
-            <div className="partner-category visual-enhanced">
-              <div className="category-image">
-                <img 
-                  src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                  alt="Technology Partners"
-                  className="category-img"
-                />
-                <div className="category-icon">💻</div>
-              </div>
-              <div className="category-content">
-                <h3>Technology Partners</h3>
-                <p className="category-description">
-                  <strong>Cutting-edge proptech and digital solutions</strong>
-                </p>
-                <ul className="category-features">
-                  <li>CRM and lead management systems</li>
-                  <li>Virtual tour and 3D visualization</li>
-                  <li>Property management platforms</li>
-                  <li>Digital marketing and analytics</li>
-                  <li>Blockchain and smart contracts</li>
-                </ul>
-              </div>
+          ) : (
+            <div className="partners-categories-grid">
+              {partners.map((partner, index) => (
+                <div className="partner-category visual-enhanced" key={partner._id}>
+                  <div className="category-image">
+                    <img
+                      src={getImageUrl(partner.image)}
+                      alt={getText(partner.title)}
+                      className="category-img"
+                    />
+                    <div className="category-icon">{getPartnerIcon(index)}</div>
+                  </div>
+                  <div className="category-content">
+                    <h3>{getText(partner.title)}</h3>
+                    <p className="category-description">
+                      {getText(partner.description)}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
-
-            <div className="partner-category visual-enhanced">
-              <div className="category-image">
-                <img 
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                  alt="Legal Partners"
-                  className="category-img"
-                />
-                <div className="category-icon">⚖️</div>
-              </div>
-              <div className="category-content">
-                <h3>Legal & Advisory Partners</h3>
-                <p className="category-description">
-                  <strong>Top-tier legal and consulting firms</strong>
-                </p>
-                <ul className="category-features">
-                  <li>Real estate law and compliance</li>
-                  <li>Contract negotiation and drafting</li>
-                  <li>Tax planning and optimization</li>
-                  <li>Regulatory compliance</li>
-                  <li>International legal support</li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="partner-category visual-enhanced">
-              <div className="category-image">
-                <img 
-                  src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                  alt="Construction Partners"
-                  className="category-img"
-                />
-                <div className="category-icon">🏗️</div>
-              </div>
-              <div className="category-content">
-                <h3>Construction & Development</h3>
-                <p className="category-description">
-                  <strong>Premier construction and development companies</strong>
-                </p>
-                <ul className="category-features">
-                  <li>Luxury residential developments</li>
-                  <li>Commercial construction projects</li>
-                  <li>Renovation and refurbishment</li>
-                  <li>Sustainable building practices</li>
-                  <li>Project management expertise</li>
-                </ul>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       </section>
 

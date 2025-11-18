@@ -3,14 +3,18 @@ import axios from 'axios';
 
 export interface ContentItem {
   _id: string;
-  section: 'hero' | 'about' | 'featured' | 'services' | 'goals' | 'clients' | 'vision' | 'mission' | 'values';
+  section: 'hero' | 'about' | 'featured' | 'services' | 'goals' | 'clients' | 'vision' | 'mission' | 'values' | 'slider' | 'portfolio' | 'contact';
   title: string | { en: string; ar: string };
   subtitle?: string | { en: string; ar: string };
   content?: string | { en: string; ar: string };
   description?: string | { en: string; ar: string };
   image?: string;
   backgroundImage?: string;
+  videoUrl?: string;
+  mediaType?: 'image' | 'video';
   ctaText?: string | { en: string; ar: string };
+  ctaLink?: string;
+  propertyType?: 'villa' | 'apartment' | 'penthouse' | 'commercial' | 'office' | 'retail';
   isActive: boolean;
   order?: number;
   stats?: Array<{
@@ -38,6 +42,9 @@ interface ContentState {
   visionSection: ContentItem | null;
   missionSection: ContentItem | null;
   valuesSections: ContentItem[];
+  sliderSections: ContentItem[];
+  portfolioSections: ContentItem[];
+  contactSection: ContentItem | null;
 }
 
 const initialState: ContentState = {
@@ -53,7 +60,10 @@ const initialState: ContentState = {
   clientsSections: [],
   visionSection: null,
   missionSection: null,
-  valuesSections: []
+  valuesSections: [],
+  sliderSections: [],
+  portfolioSections: [],
+  contactSection: null
 };
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
@@ -222,6 +232,12 @@ const contentSlice = createSlice({
           state.missionSection = data.data.find((item: ContentItem) => item.isActive) || null;
         } else if (section === 'values') {
           state.valuesSections = data.data;
+        } else if (section === 'slider') {
+          state.sliderSections = data.data;
+        } else if (section === 'portfolio') {
+          state.portfolioSections = data.data;
+        } else if (section === 'contact') {
+          state.contactSection = data.data[0] || null;
         }
       })
       .addCase(fetchContentBySection.rejected, (state, action) => {
@@ -256,6 +272,10 @@ const contentSlice = createSlice({
           state.missionSection = action.payload;
         } else if (action.payload.section === 'values') {
           state.valuesSections.push(action.payload);
+        } else if (action.payload.section === 'slider') {
+          state.sliderSections.push(action.payload);
+        } else if (action.payload.section === 'portfolio') {
+          state.portfolioSections.push(action.payload);
         }
       })
       .addCase(createContent.rejected, (state, action) => {
@@ -308,6 +328,16 @@ const contentSlice = createSlice({
           if (valuesIndex !== -1) {
             state.valuesSections[valuesIndex] = action.payload;
           }
+        } else if (action.payload.section === 'slider') {
+          const sliderIndex = state.sliderSections.findIndex(item => item._id === action.payload._id);
+          if (sliderIndex !== -1) {
+            state.sliderSections[sliderIndex] = action.payload;
+          }
+        } else if (action.payload.section === 'portfolio') {
+          const portfolioIndex = state.portfolioSections.findIndex(item => item._id === action.payload._id);
+          if (portfolioIndex !== -1) {
+            state.portfolioSections[portfolioIndex] = action.payload;
+          }
         }
 
         if (state.selectedContent?._id === action.payload._id) {
@@ -331,6 +361,8 @@ const contentSlice = createSlice({
         state.goalsSections = state.goalsSections.filter(item => item._id !== action.payload);
         state.clientsSections = state.clientsSections.filter(item => item._id !== action.payload);
         state.valuesSections = state.valuesSections.filter(item => item._id !== action.payload);
+        state.sliderSections = state.sliderSections.filter(item => item._id !== action.payload);
+        state.portfolioSections = state.portfolioSections.filter(item => item._id !== action.payload);
 
         // Clear single sections if deleted
         if (state.heroSection?._id === action.payload) {
@@ -344,6 +376,9 @@ const contentSlice = createSlice({
         }
         if (state.missionSection?._id === action.payload) {
           state.missionSection = null;
+        }
+        if (state.contactSection?._id === action.payload) {
+          state.contactSection = null;
         }
 
         if (state.selectedContent?._id === action.payload) {

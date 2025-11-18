@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IContent extends Document {
-  section: 'hero' | 'about' | 'featured' | 'services' | 'goals' | 'clients' | 'vision' | 'mission' | 'values';
+  section: 'hero' | 'about' | 'featured' | 'services' | 'goals' | 'clients' | 'vision' | 'mission' | 'values' | 'slider' | 'portfolio' | 'contact';
   title: {
     en: string;
     ar: string;
@@ -20,10 +20,14 @@ export interface IContent extends Document {
   };
   image?: string;
   backgroundImage?: string;
+  videoUrl?: string;
+  mediaType?: 'image' | 'video';
   ctaText?: {
     en?: string;
     ar?: string;
   };
+  ctaLink?: string;
+  propertyType?: 'villa' | 'apartment' | 'penthouse' | 'commercial' | 'office' | 'retail';
   isActive: boolean;
   order?: number;
   stats?: Array<{
@@ -44,7 +48,7 @@ const ContentSchema: Schema = new Schema({
   section: {
     type: String,
     required: [true, 'Section type is required'],
-    enum: ['hero', 'about', 'featured', 'services', 'goals', 'clients', 'vision', 'mission', 'values'],
+    enum: ['hero', 'about', 'featured', 'services', 'goals', 'clients', 'vision', 'mission', 'values', 'slider', 'portfolio', 'contact'],
     index: true
   },
   title: {
@@ -105,6 +109,15 @@ const ContentSchema: Schema = new Schema({
     type: String,
     trim: true
   },
+  videoUrl: {
+    type: String,
+    trim: true
+  },
+  mediaType: {
+    type: String,
+    enum: ['image', 'video'],
+    default: 'image'
+  },
   ctaText: {
     en: {
       type: String,
@@ -116,6 +129,15 @@ const ContentSchema: Schema = new Schema({
       trim: true,
       maxlength: [50, 'CTA text cannot exceed 50 characters']
     }
+  },
+  ctaLink: {
+    type: String,
+    trim: true
+  },
+  propertyType: {
+    type: String,
+    enum: ['villa', 'apartment', 'penthouse', 'commercial', 'office', 'retail'],
+    trim: true
   },
   isActive: {
     type: Boolean,

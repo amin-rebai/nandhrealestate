@@ -2,6 +2,10 @@ import express from 'express';
 import {
   uploadImage,
   handleImageUpload,
+  uploadVideo,
+  handleVideoUpload,
+  uploadMedia,
+  handleMediaUpload,
   uploadImages,
   handleImagesUpload,
   deleteImage,
@@ -16,6 +20,12 @@ router.use(protect);
 
 // Single image upload
 router.post('/image', uploadImage, handleImageUpload);
+
+// Single video upload
+router.post('/video', uploadVideo, handleVideoUpload);
+
+// Single media upload (image or video)
+router.post('/media', uploadMedia, handleMediaUpload);
 
 // Multiple images upload
 router.post('/images', uploadImages, handleImagesUpload);

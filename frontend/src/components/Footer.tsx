@@ -1,9 +1,70 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+interface ContactInfo {
+  phone: string;
+  email: string;
+  address: { en: string; ar: string };
+  socialMedia: {
+    facebook: string;
+    instagram: string;
+    twitter: string;
+    linkedin: string;
+    youtube: string;
+  };
+}
 
 const Footer: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const [contactInfo, setContactInfo] = useState<ContactInfo>({
+    phone: '+974 7070 4504',
+    email: 'info@nhrealestate.qa',
+    address: { en: 'Doha, Qatar', ar: 'الدوحة، قطر' },
+    socialMedia: {
+      facebook: '',
+      instagram: '',
+      twitter: '',
+      linkedin: '',
+      youtube: ''
+    }
+  });
+
+  useEffect(() => {
+    const fetchContactInfo = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/api/content/section/contact?active=true`);
+        if (response.data && response.data.length > 0) {
+          const data = response.data[0];
+          setContactInfo({
+            phone: data.metadata?.phone || '+974 7070 4504',
+            email: data.metadata?.email || 'info@nhrealestate.qa',
+            address: data.metadata?.address || { en: 'Doha, Qatar', ar: 'الدوحة، قطر' },
+            socialMedia: data.metadata?.socialMedia || {
+              facebook: '',
+              instagram: '',
+              twitter: '',
+              linkedin: '',
+              youtube: ''
+            }
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching contact info:', error);
+      }
+    };
+
+    fetchContactInfo();
+  }, []);
+
+  const getText = (field: string | { en: string; ar: string } | undefined): string => {
+    if (!field) return '';
+    if (typeof field === 'string') return field;
+    return field[i18n.language as 'en' | 'ar'] || field.en || '';
+  };
 
   return (
     <footer className="footer">
@@ -23,11 +84,11 @@ const Footer: React.FC = () => {
             </p>
             <p style={{ marginTop: '1rem' }}>
               <strong>{t('contact.address')}:</strong><br />
-              Doha, Qatar
+              {getText(contactInfo.address)}
             </p>
             <p>
-              <strong>{t('contact.emailUs')}:</strong> info@nhrealestate.qa<br />
-              <strong>{t('contact.callUs')}:</strong> +974 7070 4504
+              <strong>{t('contact.emailUs')}:</strong> {contactInfo.email}<br />
+              <strong>{t('contact.callUs')}:</strong> {contactInfo.phone}
             </p>
           </div>
 
@@ -74,15 +135,25 @@ const Footer: React.FC = () => {
         {/* Social Links & Copyright */}
         <div className="footer-bottom">
           <div className="social-links">
-            <a href="#" aria-label="LinkedIn">💼</a>
-            <a href="#" aria-label="Instagram">📷</a>
-            <a href="#" aria-label="Twitter">🐦</a>
-            <a href="#" aria-label="Facebook">📘</a>
-            <a href="#" aria-label="YouTube">📺</a>
+            {contactInfo.socialMedia.linkedin && (
+              <a href={contactInfo.socialMedia.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">💼</a>
+            )}
+            {contactInfo.socialMedia.instagram && (
+              <a href={contactInfo.socialMedia.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">📷</a>
+            )}
+            {contactInfo.socialMedia.twitter && (
+              <a href={contactInfo.socialMedia.twitter} target="_blank" rel="noopener noreferrer" aria-label="Twitter">🐦</a>
+            )}
+            {contactInfo.socialMedia.facebook && (
+              <a href={contactInfo.socialMedia.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook">📘</a>
+            )}
+            {contactInfo.socialMedia.youtube && (
+              <a href={contactInfo.socialMedia.youtube} target="_blank" rel="noopener noreferrer" aria-label="YouTube">📺</a>
+            )}
           </div>
-          <p>&copy; 2025 N&H Real Estate. All rights reserved.</p>
+          <p>&copy; 2025 N&H Real Estate. {t('home.allRightsReserved')}</p>
           <p style={{ fontSize: '0.9rem', marginTop: '0.5rem' }}>
-            Licensed Real Estate Company | Regulated by Qatar Financial Centre Authority
+            {t('home.licensedCompany')}
           </p>
         </div>
       </div>

@@ -22,6 +22,7 @@ export interface Property {
   area: number;
   yearBuilt: number;
   images: string[];
+  video?: string;
   type: 'sale' | 'rent' | 'off-plan';
   status: 'available' | 'sold' | 'rented';
   features: {
@@ -35,8 +36,15 @@ export interface Property {
     phone?: string;
   };
   verified: boolean;
+  // Off-plan specific fields
   completionDate?: string;
   paymentPlan?: string;
+  developer?: string;
+  projectName?: string;
+  handoverDate?: string;
+  startingPrice?: number;
+  downPayment?: string;
+  installmentPlan?: string;
   propertyType: string;
   createdAt: string;
   updatedAt: string;

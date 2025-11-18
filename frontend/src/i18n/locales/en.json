@@ -26,7 +26,13 @@
     "services": "Services",
     "blog": "Blog & News",
     "contact": "Contact",
-    "language": "Language"
+    "language": "Language",
+    "ourServices": "Our Services",
+    "ourServicesDesc": "Complete real estate solutions",
+    "ourProcess": "Our Process",
+    "ourProcessDesc": "Streamlined methodology",
+    "ourPartners": "Our Partners",
+    "ourPartnersDesc": "Strategic alliances"
   },
   "hero": {
     "title": "N&H Real Estate",
@@ -156,5 +162,21 @@
     "socialShare": "Share on Social Media",
     "copyLink": "Copy Link",
     "linkCopied": "Link copied to clipboard!"
+  },
+  "home": {
+    "featuredProperties": "Featured Properties",
+    "exceptionalProperties": "Exceptional Properties",
+    "handpickedLuxury": "Handpicked luxury properties that define excellence in real estate",
+    "forSale": "For Sale",
+    "forRent": "For Rent",
+    "beds": "Beds",
+    "baths": "Baths",
+    "viewAllProperties": "View All Properties",
+    "ourServices": "Our Services",
+    "comprehensiveSolutions": "Comprehensive Real Estate Solutions",
+    "servicesDescription": "From sales and leasing to property management and investment advisory",
+    "learnMore": "Learn More",
+    "allRightsReserved": "All rights reserved",
+    "licensedCompany": "Licensed Real Estate Company | Regulated by Qatar Financial Centre Authority"
   }
 }

@@ -26,8 +26,8 @@ const storage = multer.diskStorage({
   }
 });
 
-// File filter
-const fileFilter = (req: any, file: any, cb: any) => {
+// File filter for images
+const imageFileFilter = (req: any, file: any, cb: any) => {
   // Check file type
   if (file.mimetype.startsWith('image/')) {
     cb(null, true);
@@ -36,23 +36,69 @@ const fileFilter = (req: any, file: any, cb: any) => {
   }
 };
 
-// Configure multer
-const upload = multer({
+// File filter for videos
+const videoFileFilter = (req: any, file: any, cb: any) => {
+  // Check file type
+  if (file.mimetype.startsWith('video/')) {
+    cb(null, true);
+  } else {
+    cb(new Error('Not a video! Please upload only videos.'), false);
+  }
+};
+
+// File filter for media (images and videos)
+const mediaFileFilter = (req: any, file: any, cb: any) => {
+  // Check file type
+  if (file.mimetype.startsWith('image/') || file.mimetype.startsWith('video/')) {
+    cb(null, true);
+  } else {
+    cb(new Error('Please upload only images or videos.'), false);
+  }
+};
+
+// Configure multer for images
+const imageUpload = multer({
   storage: storage,
   limits: {
     fileSize: 5 * 1024 * 1024, // 5MB limit
   },
-  fileFilter: fileFilter
+  fileFilter: imageFileFilter
+});
+
+// Configure multer for videos
+const videoUpload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 100 * 1024 * 1024, // 100MB limit for videos
+  },
+  fileFilter: videoFileFilter
+});
+
+// Configure multer for media (images and videos)
+const mediaUpload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 50 * 1024 * 1024, // 50MB limit
+  },
+  fileFilter: mediaFileFilter
 });
 
 // @desc    Upload single image
 // @route   POST /api/upload/image
 // @access  Private
-export const uploadImage = upload.single('image');
+export const uploadImage = imageUpload.single('image');
+
+// @desc    Upload single video
+// @route   POST /api/upload/video
+// @access  Private
+export const uploadVideo = videoUpload.single('video');
+
+// @desc    Upload single media file (image or video)
+// @route   POST /api/upload/media
+// @access  Private
+export const uploadMedia = mediaUpload.single('media');
 
 export const handleImageUpload = async (req: AuthRequest, res: Response) => {
-
-  console.log("jfdlkgjlfdjlkgfdklgjklfdgjklfdjgkfdjgkljdfgjfdlkgjfdg;lk", req.file)
   try {
     if (!req.file) {
       return res.status(400).json({
@@ -69,7 +115,67 @@ export const handleImageUpload = async (req: AuthRequest, res: Response) => {
         filename: req.file.filename,
         originalName: req.file.originalname,
         size: req.file.size,
-        url: imageUrl
+        url: imageUrl,
+        type: 'image'
+      }
+    });
+  } catch (error: any) {
+    return res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+};
+
+export const handleVideoUpload = async (req: AuthRequest, res: Response) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        error: 'Please upload a video'
+      });
+    }
+
+    const videoUrl = `/uploads/${req.file.filename}`;
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        filename: req.file.filename,
+        originalName: req.file.originalname,
+        size: req.file.size,
+        url: videoUrl,
+        type: 'video'
+      }
+    });
+  } catch (error: any) {
+    return res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+};
+
+export const handleMediaUpload = async (req: AuthRequest, res: Response) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        error: 'Please upload a media file'
+      });
+    }
+
+    const mediaUrl = `/uploads/${req.file.filename}`;
+    const mediaType = req.file.mimetype.startsWith('image/') ? 'image' : 'video';
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        filename: req.file.filename,
+        originalName: req.file.originalname,
+        size: req.file.size,
+        url: mediaUrl,
+        type: mediaType
       }
     });
   } catch (error: any) {
@@ -83,7 +189,7 @@ export const handleImageUpload = async (req: AuthRequest, res: Response) => {
 // @desc    Upload multiple images
 // @route   POST /api/upload/images
 // @access  Private
-export const uploadImages = upload.array('images', 10); // Max 10 images
+export const uploadImages = imageUpload.array('images', 10); // Max 10 images
 
 export const handleImagesUpload = async (req: AuthRequest, res: Response) => {
 
