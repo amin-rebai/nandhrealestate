@@ -1,6 +1,47 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../store/store';
+import { fetchContentBySection } from '../store/slices/contentSlice';
 
 const About: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { aboutSection, heroSection } = useSelector((state: RootState) => state.content);
+  const language = useSelector((s: RootState) => s.language.currentLanguage);
+
+  useEffect(() => {
+    // Fetch both hero and about sections (active only) for current language
+    dispatch(fetchContentBySection({ section: 'hero', language, active: true }));
+    dispatch(fetchContentBySection({ section: 'about', language, active: true }));
+  }, [dispatch, language]);
+
+  // Safe access helpers
+  const getMeta = (path: string, fallback: any = '') => {
+    try {
+      // support dot paths like 'ceo.photo' inside aboutSection.metadata
+      if (!aboutSection?.metadata) return fallback;
+      const parts = path.split('.');
+      let node: any = aboutSection.metadata;
+      for (const p of parts) {
+        node = node?.[p];
+      }
+      return node ?? fallback;
+    } catch (e) {
+      return fallback;
+    }
+  };
+
+  const displayML = (value: any) => {
+    if (value === null || value === undefined) return '';
+    if (typeof value === 'string' || typeof value === 'number') return String(value);
+    // multilingual object { en, ar }
+    if (typeof value === 'object') {
+      return value[language] ?? value.en ?? '';
+    }
+    return '';
+  };
+
+  const hero = heroSection || null;
+
   return (
     <div className="about-page">
       {/* Enhanced Hero Section */}
@@ -13,14 +54,16 @@ const About: React.FC = () => {
             className="hero-bg-image"
           />
         </div>
-        <div className="hero-content">
-          <div className="container">
-            <h1 className="hero-title">About N&H Real Estate</h1>
-            <p className="hero-subtitle">Building Trust Through Excellence</p>
-            <p className="hero-description">
-              Discover our journey, vision, and commitment to transforming the real estate
-              landscape across Qatar, the Gulf, MENA, and Europe.
-            </p>
+        <div className="hero-content hero-left">
+          <div className="container hero-inner">
+            <div className="hero-pretitle">Who&apos;s Redefining the...</div>
+            <h1 className="hero-title big">{(hero?.title as string) || 'Future of Real Estate ?'}</h1>
+
+            <div className="hero-description-block">
+              <p className="hero-description">
+                {(hero?.description as string) || 'N&H Homes Real Estate is reshaping how people discover, invest, and experience property. We combine human expertise with smart technology to deliver faster decisions, clearer insights, and exceptional client journeys.'}
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -32,41 +75,30 @@ const About: React.FC = () => {
             <h2>Vision & Mission</h2>
           </div>
           <div className="vision-mission-grid">
-            <div className="vision-card visual-enhanced">
-              <div className="card-image">
-                <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                  alt="Our Vision"
-                  className="card-img"
-                />
+            <div
+              className="vision-card visual-enhanced bg-card"
+              style={{
+                backgroundImage: `url(${getMeta('visionImage') || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80'})`
+              }}
+            >
+              <div className="bg-overlay" />
+              <div className="card-content overlay-content">
                 <div className="card-icon">🎯</div>
-              </div>
-              <div className="card-content">
                 <h3>Our Vision</h3>
-                <p>
-                  To be the region's most trusted and innovative real estate partner, delivering
-                  excellence and sustainable growth through professionalism, technology, and
-                  client-focused solutions.
-                </p>
+                <p>{displayML(getMeta('vision', 'To be the region\'s most trusted and innovative real estate partner, delivering excellence and sustainable growth through professionalism, technology, and client-focused solutions.'))}</p>
               </div>
             </div>
-            <div className="mission-card visual-enhanced">
-              <div className="card-image">
-                <img
-                  src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                  alt="Our Mission"
-                  className="card-img"
-                />
+            <div
+              className="mission-card visual-enhanced bg-card"
+              style={{
+                backgroundImage: `url(${getMeta('missionImage') || 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80'})`
+              }}
+            >
+              <div className="bg-overlay" />
+              <div className="card-content overlay-content">
                 <div className="card-icon">🚀</div>
-              </div>
-              <div className="card-content">
                 <h3>Our Mission</h3>
-                <p>
-                  Our mission is to simplify the real estate journey through end-to-end services,
-                  delivering measurable value powered by market insights and modern tools. We build
-                  long-term partnerships grounded in trust and transparency, and we champion sustainable
-                  growth aligned with Qatar National Vision 2030 and global best practices.
-                </p>
+                <p>{displayML(getMeta('mission', 'Our mission is to simplify the real estate journey through end-to-end services, delivering measurable value powered by market insights and modern tools.'))}</p>
               </div>
             </div>
           </div>
@@ -81,10 +113,8 @@ const About: React.FC = () => {
           </div>
           <div className="ceo-message" style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
             <div style={{ background: 'rgba(197, 160, 89, 0.1)', padding: '3rem', borderRadius: '12px', border: '2px solid var(--matte-gold)' }}>
-              <p style={{ fontSize: '1.2rem', lineHeight: '1.8', marginBottom: '2rem', fontStyle: 'italic' }}>
-                "At N&H Real Estate, we believe property is more than bricks and mortar—it represents 
-                security, prosperity, and legacy. Our mission is to empower clients with the knowledge, 
-                tools, and guidance they need to make confident real estate decisions."
+                <p style={{ fontSize: '1.2rem', lineHeight: '1.8', marginBottom: '2rem', fontStyle: 'italic' }}>
+                {displayML(getMeta('ceo.message', '"At N&H Real Estate, we believe property is more than bricks and mortar—it represents security, prosperity, and legacy."'))}
               </p>
               <p style={{ fontSize: '1.1rem', lineHeight: '1.7', marginBottom: '2rem' }}>
                 "As Qatar and the wider region continue their rapid transformation, we remain committed 
@@ -102,9 +132,15 @@ const About: React.FC = () => {
               <div style={{ borderTop: '1px solid var(--matte-gold)', paddingTop: '1.5rem', marginTop: '2rem' }}>
                 <p style={{ fontWeight: '600', color: 'var(--matte-gold)' }}>CEO – N&H Real Estate</p>
               </div>
+              {/* optional photo */}
+              {getMeta('ceo.photo') && (
+                <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+                  <img src={getMeta('ceo.photo')} alt="CEO" style={{ width: 120, height: 120, borderRadius: '50%', objectFit: 'cover', border: '3px solid #f3e9d8' }} />
+                </div>
+              )}
+              </div>
             </div>
           </div>
-        </div>
       </section>
 
       {/* Global Network */}
@@ -118,10 +154,12 @@ const About: React.FC = () => {
             </p>
           </div>
           <div className="network-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', marginTop: '3rem' }}>
-            <div className="network-card service-card">
-              <h3>🇶🇦 Qatar</h3>
-              <p>Doha, Lusail, The Pearl, West Bay, Msheireb Downtown, Al Waab</p>
-            </div>
+            {Array.isArray(aboutSection?.metadata?.worldwideNetwork) && aboutSection?.metadata?.worldwideNetwork.map((item: any, idx: number) => (
+              <div className="network-card service-card" key={idx}>
+                <h3>{displayML(item.label) || 'Country'}</h3>
+                <p>{displayML(item.value) || ''}</p>
+              </div>
+            ))}
             
           </div>
           <div style={{ textAlign: 'center', marginTop: '3rem' }}>
@@ -142,11 +180,13 @@ const About: React.FC = () => {
             <p>What sets us apart in the competitive real estate market</p>
           </div>
           <div className="why-choose-grid values-grid">
-            <div className="value-card">
-              <div className="value-icon">🌍</div>
-              <h3>Global Reach with Local Expertise</h3>
-              <p>Active across multiple international markets with deep local knowledge</p>
-            </div>
+            {Array.isArray(aboutSection?.metadata?.whyChoose) && aboutSection?.metadata?.whyChoose.map((item: any, idx: number) => (
+              <div className="value-card" key={idx}>
+                <div className="value-icon">🌍</div>
+                <h3>{displayML(item.title) || 'Title'}</h3>
+                <p>{displayML(item.description) || ''}</p>
+              </div>
+            ))}
             <div className="value-card">
               <div className="value-icon">🔑</div>
               <h3>Exclusive Listings</h3>

@@ -12,6 +12,7 @@ const Properties: React.FC = () => {
 
   // API URL for images
   const API_URL = 'http://localhost:5000';
+  const [heroImage, setHeroImage] = useState<string | null>(null);
 
   // Helper functions for property images
   const getPropertyImage = (property: any) => {
@@ -93,6 +94,24 @@ const Properties: React.FC = () => {
     }
 
     dispatch(fetchProperties({}));
+
+    // Try to fetch a page-level hero image for the properties page (portfolio section)
+    const fetchPortfolioHero = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/content/section/portfolio?active=true`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          const item = data[0];
+          const image = item.backgroundImage || item.image || '';
+          if (image) setHeroImage(image.startsWith('http') ? image : `${API_URL}${image}`);
+        }
+      } catch (e) {
+        // ignore
+      }
+    };
+
+    fetchPortfolioHero();
   }, [dispatch, location.search]);
 
   // Filter properties based on active tab and filters
@@ -150,7 +169,7 @@ const Properties: React.FC = () => {
         <div className="hero-background">
           <div className="hero-overlay"></div>
           <img
-            src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+            src={heroImage || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'}
             alt="Properties"
             className="hero-bg-image"
           />

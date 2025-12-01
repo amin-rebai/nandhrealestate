@@ -6,6 +6,7 @@ import type { InitOptions } from 'i18next';
 // Import translation files
 import enTranslations from './locales/en.json';
 import arTranslations from './locales/ar.json';
+import frTranslations from './locales/fr.json';
 
 const initOptions: InitOptions = {
   // Fallback language
@@ -15,7 +16,7 @@ const initOptions: InitOptions = {
   debug: process.env.NODE_ENV === 'development',
 
   // Languages to support
-  supportedLngs: ['en', 'ar'],
+  supportedLngs: ['en', 'ar', 'fr'],
 
   // Resources (translations)
   resources: {
@@ -24,6 +25,9 @@ const initOptions: InitOptions = {
     },
     ar: {
       translation: arTranslations
+    },
+    fr: {
+      translation: frTranslations
     }
   },
 

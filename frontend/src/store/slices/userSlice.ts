@@ -5,12 +5,16 @@ export interface User {
   _id: string;
   name: string;
   email: string;
-  role: 'user' | 'admin';
+  role: 'user' | 'admin' | 'agent';
+  phone?: string;
+  avatar?: string;
+  isActive: boolean;
 }
 
 interface UserState {
   user: User | null;
   isAuthenticated: boolean;
+  agents: User[];
   loading: boolean;
   error: string | null;
 }
@@ -18,6 +22,7 @@ interface UserState {
 const initialState: UserState = {
   user: null,
   isAuthenticated: false,
+  agents: [],
   loading: false,
   error: null,
 };
@@ -26,7 +31,7 @@ const initialState: UserState = {
 export const loginUser = createAsyncThunk(
   'user/login',
   async (credentials: { email: string; password: string }) => {
-    const response = await axios.post('/api/auth/login', credentials);
+    const response = await axios.post('http://localhost:5000/api/auth/login', credentials);
     localStorage.setItem('token', response.data.token);
     return response.data.user;
   }
@@ -35,7 +40,7 @@ export const loginUser = createAsyncThunk(
 export const registerUser = createAsyncThunk(
   'user/register',
   async (userData: { name: string; email: string; password: string }) => {
-    const response = await axios.post('/api/auth/register', userData);
+    const response = await axios.post('http://localhost:5000/api/auth/register', userData);
     localStorage.setItem('token', response.data.token);
     return response.data.user;
   }
@@ -46,11 +51,24 @@ export const getCurrentUser = createAsyncThunk(
   async () => {
     const token = localStorage.getItem('token');
     if (!token) throw new Error('No token found');
-    
-    const response = await axios.get('/api/auth/me', {
+
+    const response = await axios.get('http://localhost:5000/api/auth/me', {
       headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;
+  }
+);
+
+export const fetchAgents = createAsyncThunk(
+  'user/fetchAgents',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/users?role=agent');
+      return response.data.data;
+    } catch (error: any) {
+      const message = error.response?.data?.error || error.message || 'Failed to fetch agents';
+      return rejectWithValue(message);
+    }
   }
 );
 
@@ -98,6 +116,18 @@ const userSlice = createSlice({
       .addCase(getCurrentUser.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isAuthenticated = true;
+      })
+      .addCase(fetchAgents.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAgents.fulfilled, (state, action) => {
+        state.loading = false;
+        state.agents = action.payload;
+      })
+      .addCase(fetchAgents.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });

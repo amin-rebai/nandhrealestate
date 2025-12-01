@@ -8,7 +8,7 @@ const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 interface ContactInfo {
   phone: string;
   email: string;
-  address: { en: string; ar: string };
+  address: { en: string; ar: string; fr?: string };
   socialMedia: {
     facebook: string;
     instagram: string;
@@ -60,10 +60,14 @@ const Footer: React.FC = () => {
     fetchContactInfo();
   }, []);
 
-  const getText = (field: string | { en: string; ar: string } | undefined): string => {
+  const getText = (field?: string | { en: string; ar: string; fr?: string }): string => {
     if (!field) return '';
     if (typeof field === 'string') return field;
-    return field[i18n.language as 'en' | 'ar'] || field.en || '';
+    // ensure we only use supported language keys that exist on the object
+    const lang = i18n.language === 'ar' ? 'ar' : i18n.language === 'fr' ? 'fr' : 'en';
+    // Use a safe string-index lookup so TypeScript accepts dynamic keys (fr is optional)
+    const localized = (field as { [key: string]: string })[lang];
+    return localized || field.en || '';
   };
 
   return (

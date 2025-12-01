@@ -170,6 +170,7 @@
   "language": {
     "english": "English",
     "arabic": "العربية",
+    "french": "Français",
     "switchTo": "Switch to {{language}}"
   },
   "messages": {

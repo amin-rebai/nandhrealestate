@@ -5,8 +5,8 @@ import axios from 'axios';
 
 interface PartnerItem {
   _id: string;
-  title: string | { en: string; ar: string };
-  description?: string | { en: string; ar: string };
+  title: string | { en: string; ar: string; fr?: string };
+  description?: string | { en: string; ar: string; fr?: string };
   image?: string;
   isActive: boolean;
   order?: number;
@@ -36,10 +36,18 @@ const PartnersSection: React.FC = () => {
     fetchPartners();
   }, [API_URL]);
 
-  const getText = (value: string | { en: string; ar: string } | undefined): string => {
+  const getText = (value: string | { en: string; ar: string; fr?: string } | undefined): string => {
     if (!value) return '';
     if (typeof value === 'string') return value;
-    return value[i18n.language as 'en' | 'ar'] || value.en || '';
+    const lang = i18n.language === 'ar' ? 'ar' : i18n.language === 'fr' ? 'fr' : 'en';
+
+    // Explicitly handle the optional 'fr' key to avoid indexing a type that might not have 'fr'
+    if (lang === 'fr') {
+      return value.fr ?? value.en ?? '';
+    }
+
+    // lang is 'en' | 'ar' here, both keys exist on the type
+    return value[lang as 'en' | 'ar'] || value.en || '';
   };
 
   const getImageUrl = (image: string | undefined): string => {
@@ -51,32 +59,32 @@ const PartnersSection: React.FC = () => {
   const defaultPartners = [
     {
       _id: '1',
-      title: { en: 'Leading Developers', ar: 'المطورون الرائدون' },
-      description: { en: 'Strong alliances with leading developers in the GCC, MENA, and Europe.', ar: 'تحالفات قوية مع المطورين الرائدين في دول مجلس التعاون الخليجي ومنطقة الشرق الأوسط وشمال أفريقيا وأوروبا.' },
+      title: { en: 'Leading Developers', ar: 'المطورون الرائدون', fr: 'Principaux promoteurs' },
+      description: { en: 'Strong alliances with leading developers in the GCC, MENA, and Europe.', ar: 'تحالفات قوية مع المطورين الرائدين في دول مجلس التعاون الخليجي ومنطقة الشرق الأوسط وشمال أفريقيا وأوروبا.', fr: "Forts partenariats avec les principaux promoteurs dans le GCC, la MENA et l'Europe." },
       image: '',
       isActive: true,
       order: 1
     },
     {
       _id: '2',
-      title: { en: 'Financial Institutions', ar: 'المؤسسات المالية' },
-      description: { en: 'Partnerships with banks and financial institutions for comprehensive solutions.', ar: 'شراكات مع البنوك والمؤسسات المالية للحلول الشاملة.' },
+      title: { en: 'Financial Institutions', ar: 'المؤسسات المالية', fr: 'Institutions financières' },
+      description: { en: 'Partnerships with banks and financial institutions for comprehensive solutions.', ar: 'شراكات مع البنوك والمؤسسات المالية للحلول الشاملة.', fr: "Partenariats avec des banques et institutions financières pour des solutions complètes." },
       image: '',
       isActive: true,
       order: 2
     },
     {
       _id: '3',
-      title: { en: 'Technology Partners', ar: 'شركاء التكنولوجيا' },
-      description: { en: 'Collaboration with leading technology providers for innovative solutions.', ar: 'التعاون مع مزودي التكنولوجيا الرائدين للحلول المبتكرة.' },
+      title: { en: 'Technology Partners', ar: 'شركاء التكنولوجيا', fr: 'Partenaires technologiques' },
+      description: { en: 'Collaboration with leading technology providers for innovative solutions.', ar: 'التعاون مع مزودي التكنولوجيا الرائدين للحلول المبتكرة.', fr: "Collaboration avec des fournisseurs technologiques leaders pour des solutions innovantes." },
       image: '',
       isActive: true,
       order: 3
     },
     {
       _id: '4',
-      title: { en: 'Industry Leaders', ar: 'قادة الصناعة' },
-      description: { en: 'Strategic alliances with industry leaders across global markets.', ar: 'تحالفات استراتيجية مع قادة الصناعة عبر الأسواق العالمية.' },
+      title: { en: 'Industry Leaders', ar: 'قادة الصناعة', fr: 'Leaders de l’industrie' },
+      description: { en: 'Strategic alliances with industry leaders across global markets.', ar: 'تحالفات استراتيجية مع قادة الصناعة عبر الأسواق العالمية.', fr: "Alliances stratégiques avec les leaders de l'industrie sur les marchés mondiaux." },
       image: '',
       isActive: true,
       order: 4

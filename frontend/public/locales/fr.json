@@ -1,0 +1,37 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "view": "Voir",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "clear": "Effacer",
+    "submit": "Soumettre",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "close": "Fermer",
+    "yes": "Oui",
+    "no": "Non"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "about": "À propos",
+    "properties": "Biens",
+    "services": "Services",
+    "blog": "Blog & Actualités",
+    "contact": "Contact",
+    "language": "Langue",
+    "ourServices": "Nos Services",
+    "ourServicesDesc": "Solutions immobilières complètes",
+    "ourProcess": "Notre Processus",
+    "ourProcessDesc": "Méthodologie simplifiée",
+    "ourPartners": "Nos Partenaires",
+    "ourPartnersDesc": "Alliances stratégiques"
+  }
+}

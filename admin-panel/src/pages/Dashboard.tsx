@@ -28,10 +28,11 @@ const Dashboard: React.FC = () => {
   const { t, i18n } = useTranslation();
 
   // Helper function to display multilingual content
-  const displayMultilingual = (value: string | { en: string; ar: string } | undefined): string => {
+  const displayMultilingual = (value: string | { en: string; ar: string; fr?: string } | undefined): string => {
     if (!value) return '';
     if (typeof value === 'string') return value;
-    return value[i18n.language as 'en' | 'ar'] || value.en || '';
+    const lang = i18n.language === 'ar' ? 'ar' : i18n.language === 'fr' ? 'fr' : 'en';
+    return value[lang] || value.en || value.fr || '';
   };
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);

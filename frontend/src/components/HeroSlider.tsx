@@ -4,29 +4,30 @@ import axios from 'axios';
 
 interface SlideData {
   _id: string;
-  title: string | { en: string; ar: string };
-  subtitle?: string | { en: string; ar: string };
-  description?: string | { en: string; ar: string };
+  title: string | { en: string; ar: string; fr?: string };
+  subtitle?: string | { en: string; ar: string; fr?: string };
+  description?: string | { en: string; ar: string; fr?: string };
   backgroundImage?: string;
   videoUrl?: string;
   mediaType?: 'image' | 'video';
-  ctaText?: string | { en: string; ar: string };
+  ctaText?: string | { en: string; ar: string; fr?: string };
   ctaLink?: string;
   isActive: boolean;
   order?: number;
 }
-
-const HeroSlider: React.FC = () => {
-  const { t, i18n } = useTranslation();
+  const HeroSlider: React.FC = () => {
+  const { i18n } = useTranslation();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slides, setSlides] = useState<SlideData[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Helper function to display multilingual content
-  const displayMultilingual = (value: string | { en: string; ar: string } | undefined): string => {
+  const displayMultilingual = (value: string | { en: string; ar: string; fr?: string } | undefined): string => {
     if (!value) return '';
     if (typeof value === 'string') return value;
-    return value[i18n.language as 'en' | 'ar'] || value.en || '';
+    const lang = i18n.language === 'ar' ? 'ar' : i18n.language === 'fr' ? 'fr' : 'en';
+    // index by 'lang' safely (fr is optional) and fallback to English
+    return value[lang as 'en' | 'ar' | 'fr'] || value.en || '';
   };
 
   // Fetch slider data from API
@@ -45,24 +46,24 @@ const HeroSlider: React.FC = () => {
           setSlides([
             {
               _id: '1',
-              title: { en: "Find Your Perfect Apartment", ar: "ابحث عن شقتك المثالية" },
-              subtitle: { en: "Luxury Living Awaits", ar: "الحياة الفاخرة في انتظارك" },
-              description: { en: "Discover premium apartments in Qatar's most prestigious locations. From modern studios to spacious penthouses.", ar: "اكتشف الشقق المميزة في أرقى المواقع في قطر. من الاستوديوهات الحديثة إلى البنتهاوس الواسعة." },
+              title: { en: "Find Your Perfect Apartment", ar: "ابحث عن شقتك المثالية", fr: "Trouvez votre appartement idéal" },
+              subtitle: { en: "Luxury Living Awaits", ar: "الحياة الفاخرة في انتظارك", fr: "Le luxe vous attend" },
+              description: { en: "Discover premium apartments in Qatar's most prestigious locations. From modern studios to spacious penthouses.", ar: "اكتشف الشقق المميزة في أرقى المواقع في قطر. من الاستوديوهات الحديثة إلى البنتهاوس الواسع.", fr: "Découvrez des appartements haut de gamme dans les emplacements les plus prestigieux du Qatar, des studios modernes aux penthouses spacieux." },
               backgroundImage: "/images/hero_1.jpg",
               mediaType: 'image',
-              ctaText: { en: "Search Apartments", ar: "البحث عن الشقق" },
+              ctaText: { en: "Search Apartments", ar: "البحث عن الشقق", fr: "Rechercher des appartements" },
               ctaLink: "/properties",
               isActive: true,
               order: 1
             },
             {
               _id: '2',
-              title: { en: "Luxury Apartments in Prime Locations", ar: "شقق فاخرة في مواقع مميزة" },
-              subtitle: { en: "Premium Real Estate", ar: "عقارات مميزة" },
-              description: { en: "Experience sophisticated living in Lusail, West Bay, and Downtown Doha. Your dream apartment is just a search away.", ar: "اختبر الحياة المتطورة في لوسيل والخليج الغربي ووسط الدوحة. شقة أحلامك على بعد بحث واحد." },
+              title: { en: "Luxury Apartments in Prime Locations", ar: "شقق فاخرة في مواقع مميزة", fr: "Appartements de luxe dans des emplacements privilégiés" },
+              subtitle: { en: "Premium Real Estate", ar: "عقارات مميزة", fr: "Immobilier de prestige" },
+              description: { en: "Experience sophisticated living in Lusail, West Bay, and Downtown Doha. Your dream apartment is just a search away.", ar: "اختبر الحياة المتطورة في لوسيل والخليج الغربي ووسط الدوحة. شقة أحلامك على بعد بحث واحد.", fr: "Vivez un style de vie sophistiqué à Lusail, West Bay et le centre-ville de Doha. Votre appartement idéal est à portée de recherche." },
               backgroundImage: "/images/hero_2.jpg",
               mediaType: 'image',
-              ctaText: { en: "View Properties", ar: "عرض العقارات" },
+              ctaText: { en: "View Properties", ar: "عرض العقارات", fr: "Voir les biens" },
               ctaLink: "/properties",
               isActive: true,
               order: 2
@@ -73,14 +74,14 @@ const HeroSlider: React.FC = () => {
         console.error('Error fetching slider data:', error);
         // Fallback to default slides on error
         setSlides([
-          {
+            {
             _id: '1',
-            title: { en: "Find Your Perfect Apartment", ar: "ابحث عن شقتك المثالية" },
-            subtitle: { en: "Luxury Living Awaits", ar: "الحياة الفاخرة في انتظارك" },
-            description: { en: "Discover premium apartments in Qatar's most prestigious locations.", ar: "اكتشف الشقق المميزة في أرقى المواقع في قطر." },
+            title: { en: "Find Your Perfect Apartment", ar: "ابحث عن شقتك المثالية", fr: "Trouvez votre appartement idéal" },
+            subtitle: { en: "Luxury Living Awaits", ar: "الحياة الفاخرة في انتظارك", fr: "Le luxe vous attend" },
+            description: { en: "Discover premium apartments in Qatar's most prestigious locations.", ar: "اكتشف الشقق المميزة في أرقى المواقع في قطر.", fr: "Découvrez des appartements haut de gamme dans les emplacements les plus prestigieux du Qatar." },
             backgroundImage: "/images/hero_1.jpg",
             mediaType: 'image',
-            ctaText: { en: "Search Apartments", ar: "البحث عن الشقق" },
+            ctaText: { en: "Search Apartments", ar: "البحث عن الشقق", fr: "Rechercher des appartements" },
             ctaLink: "/properties",
             isActive: true,
             order: 1
@@ -196,7 +197,8 @@ const HeroSlider: React.FC = () => {
 
             {/* Content */}
             <div className="slide-content" style={{ position: 'relative', zIndex: 3 }}>
-              <div className="slide-text">
+              <div className="container slide-inner">
+                <div className="slide-text">
                 <p className="slide-subtitle">{displayMultilingual(slide.subtitle)}</p>
                 <h1 className="slide-title">{displayMultilingual(slide.title)}</h1>
                 <p className="slide-description">{displayMultilingual(slide.description)}</p>
@@ -205,6 +207,7 @@ const HeroSlider: React.FC = () => {
                     {displayMultilingual(slide.ctaText)}
                   </a>
                 )}
+                </div>
               </div>
             </div>
           </div>

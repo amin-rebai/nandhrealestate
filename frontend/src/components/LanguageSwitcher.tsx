@@ -6,12 +6,13 @@ const LanguageSwitcher: React.FC = () => {
   const { i18n, t } = useTranslation();
 
   const toggleLanguage = () => {
-    const newLanguage = i18n.language === 'en' ? 'ar' : 'en';
+    // Cycle through: en -> ar -> fr -> en
+    const newLanguage = i18n.language === 'en' ? 'ar' : i18n.language === 'ar' ? 'fr' : 'en';
     i18n.changeLanguage(newLanguage);
   };
 
-  const currentLanguage = i18n.language === 'ar' ? 'arabic' : 'english';
-  const targetLanguage = i18n.language === 'ar' ? 'english' : 'arabic';
+  const currentLanguage = i18n.language === 'ar' ? 'arabic' : i18n.language === 'fr' ? 'french' : 'english';
+  const targetLanguage = i18n.language === 'ar' ? 'french' : i18n.language === 'fr' ? 'english' : 'arabic';
 
   return (
     <button 

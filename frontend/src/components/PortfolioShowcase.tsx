@@ -5,12 +5,12 @@ import axios from 'axios';
 
 interface PortfolioItem {
   _id: string;
-  title: string | { en: string; ar: string };
-  subtitle?: string | { en: string; ar: string };
-  description?: string | { en: string; ar: string };
+  title: string | { en: string; ar: string; fr?: string };
+  subtitle?: string | { en: string; ar: string; fr?: string };
+  description?: string | { en: string; ar: string; fr?: string };
   backgroundImage?: string;
   image?: string;
-  ctaText?: string | { en: string; ar: string };
+  ctaText?: string | { en: string; ar: string; fr?: string };
   ctaLink?: string;
   propertyType?: 'villa' | 'apartment' | 'penthouse' | 'commercial' | 'office' | 'retail';
   isActive: boolean;
@@ -18,15 +18,16 @@ interface PortfolioItem {
 }
 
 const PortfolioShowcase: React.FC = () => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Helper function to display multilingual content
-  const displayMultilingual = (value: string | { en: string; ar: string } | undefined): string => {
+  const displayMultilingual = (value: string | { en: string; ar: string; fr?: string } | undefined): string => {
     if (!value) return '';
     if (typeof value === 'string') return value;
-    return value[i18n.language as 'en' | 'ar'] || value.en || '';
+    const lang = i18n.language === 'ar' ? 'ar' : i18n.language === 'fr' ? 'fr' : 'en';
+    return (value as any)[lang] || value.en || (value as any).fr || '';
   };
 
   // Fetch portfolio data from API
@@ -45,8 +46,8 @@ const PortfolioShowcase: React.FC = () => {
           setPortfolioItems([
             {
               _id: '1',
-              title: { en: "Luxury Villas", ar: "الفيلات الفاخرة" },
-              description: { en: "Exclusive waterfront properties with premium amenities", ar: "عقارات حصرية على الواجهة البحرية مع وسائل الراحة المميزة" },
+              title: { en: "Luxury Villas", ar: "الفيلات الفاخرة", fr: 'Villas de luxe' },
+              description: { en: "Exclusive waterfront properties with premium amenities", ar: "عقارات حصرية على الواجهة البحرية مع وسائل الراحة المميزة", fr: "Propriétés exclusives en bord de mer avec équipements haut de gamme" },
               backgroundImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
               ctaText: { en: "Explore Villas", ar: "استكشف الفيلات" },
               ctaLink: "/properties",
@@ -56,8 +57,8 @@ const PortfolioShowcase: React.FC = () => {
             },
             {
               _id: '2',
-              title: { en: "Modern Apartments", ar: "الشقق الحديثة" },
-              description: { en: "Contemporary living in prime locations", ar: "الحياة العصرية في المواقع المميزة" },
+              title: { en: "Modern Apartments", ar: "الشقق الحديثة", fr: 'Appartements modernes' },
+              description: { en: "Contemporary living in prime locations", ar: "الحياة العصرية في المواقع المميزة", fr: "Vivre contemporain dans des emplacements privilégiés" },
               backgroundImage: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
               ctaText: { en: "View Apartments", ar: "عرض الشقق" },
               ctaLink: "/properties",
@@ -67,8 +68,8 @@ const PortfolioShowcase: React.FC = () => {
             },
             {
               _id: '3',
-              title: { en: "Penthouse Collection", ar: "مجموعة البنتهاوس" },
-              description: { en: "Sky-high luxury with panoramic views", ar: "الفخامة العالية مع الإطلالات البانورامية" },
+              title: { en: "Penthouse Collection", ar: "مجموعة البنتهاوس", fr: 'Collection Penthouse' },
+              description: { en: "Sky-high luxury with panoramic views", ar: "الفخامة العالية مع الإطلالات البانورامية", fr: "Luxe en altitude avec vues panoramiques" },
               backgroundImage: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
               ctaText: { en: "View Penthouses", ar: "عرض البنتهاوس" },
               ctaLink: "/properties",
@@ -81,11 +82,11 @@ const PortfolioShowcase: React.FC = () => {
       } catch (error) {
         console.error('Error fetching portfolio data:', error);
         // Fallback to default items on error
-        setPortfolioItems([
+          setPortfolioItems([
           {
             _id: '1',
-            title: { en: "Luxury Properties", ar: "العقارات الفاخرة" },
-            description: { en: "Discover exceptional real estate opportunities", ar: "اكتشف الفرص العقارية الاستثنائية" },
+            title: { en: "Luxury Properties", ar: "العقارات الفاخرة", fr: 'Biens de luxe' },
+            description: { en: "Discover exceptional real estate opportunities", ar: "اكتشف الفرص العقارية الاستثنائية", fr: "Découvrez des opportunités immobilières exceptionnelles" },
             backgroundImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
             ctaText: { en: "Explore Properties", ar: "استكشف العقارات" },
             ctaLink: "/properties",

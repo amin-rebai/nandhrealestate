@@ -6,6 +6,7 @@ import { store } from './store/store';
 import Home from './pages/Home';
 import About from './pages/About';
 import Properties from './pages/Properties';
+import Agents from './pages/Agents';
 import Services from './pages/Services';
 import OurServices from './pages/OurServices';
 import OurProcess from './pages/OurProcess';
@@ -18,7 +19,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
 import './App.css';
-import './i18n';
+import './i18n/index';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/properties" element={<Properties />} />
+                  <Route path="/agents" element={<Agents />} />
                   <Route path="/services" element={<Services />} />
                   <Route path="/our-services" element={<OurServices />} />
                   <Route path="/our-process" element={<OurProcess />} />

@@ -86,19 +86,24 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       path: '/properties'
     },
     {
-      text: t('navigation.users'),
+      text: 'Agents',
       icon: <People />,
+      path: '/agents'
+    },
+    {
+      text: t('navigation.users'),
+      icon: <AccountCircle />,
       path: '/users'
+    },
+    {
+      text: 'Frontend Pages',
+      icon: <Article />,
+      path: '/content'
     },
     {
       text: t('media.title'),
       icon: <Image />,
       path: '/media'
-    },
-    {
-      text: t('content.title'),
-      icon: <Article />,
-      path: '/content'
     },
     {
       text: t('navigation.blog'),

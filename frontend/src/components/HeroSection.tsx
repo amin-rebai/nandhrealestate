@@ -5,13 +5,13 @@ import axios from 'axios';
 
 interface HeroData {
   _id: string;
-  title: string | { en: string; ar: string };
-  subtitle?: string | { en: string; ar: string };
-  description?: string | { en: string; ar: string };
+  title: string | { en: string; ar: string; fr?: string };
+  subtitle?: string | { en: string; ar: string; fr?: string };
+  description?: string | { en: string; ar: string; fr?: string };
   backgroundImage?: string;
   videoUrl?: string;
   mediaType?: 'image' | 'video';
-  ctaText?: string | { en: string; ar: string };
+  ctaText?: string | { en: string; ar: string; fr?: string };
   ctaLink?: string;
   isActive: boolean;
 }
@@ -27,7 +27,14 @@ const HeroSection: React.FC = () => {
   useEffect(() => {
     const fetchHeroData = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/content?section=hero`);
+        const base = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+        // Prefer admin-managed 'home' section for site hero, fallback to legacy 'hero'
+        let response = await axios.get(`${base}/api/content?section=home`);
+        if (!response.data || response.data.length === 0) {
+          response = await axios.get(`${base}/api/content?section=hero`);
+        }
+
         if (response.data && response.data.length > 0) {
           const activeHero = response.data.find((item: HeroData) => item.isActive);
           setHeroData(activeHero || response.data[0]);
@@ -42,10 +49,11 @@ const HeroSection: React.FC = () => {
     fetchHeroData();
   }, []);
 
-  const getText = (value: string | { en: string; ar: string } | undefined): string => {
+  const getText = (value: string | { en: string; ar: string; fr?: string } | undefined): string => {
     if (!value) return '';
     if (typeof value === 'string') return value;
-    return value[i18n.language as 'en' | 'ar'] || value.en || '';
+    const lang = i18n.language === 'ar' ? 'ar' : i18n.language === 'fr' ? 'fr' : 'en';
+    return (value as any)[lang] || value.en || (value as any).fr || '';
   };
 
   const getVideoUrl = (): string => {

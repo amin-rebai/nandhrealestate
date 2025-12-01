@@ -72,6 +72,7 @@ const Header: React.FC = () => {
           <li><Link to="/" className={isActive('/')} onClick={closeMobileMenu}>{t('navigation.home')}</Link></li>
           <li><Link to="/about" className={isActive('/about')} onClick={closeMobileMenu}>{t('navigation.about')}</Link></li>
           <li><Link to="/properties" className={isActive('/properties')} onClick={closeMobileMenu}>{t('navigation.properties')}</Link></li>
+          <li><Link to="/agents" className={isActive('/agents')} onClick={closeMobileMenu}>Agents</Link></li>
 
           {/* Services Dropdown */}
           <li

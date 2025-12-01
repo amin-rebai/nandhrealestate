@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import './OurProcess.css';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 
 interface ProcessStep {
   _id: string;
-  title: string | { en: string; ar: string };
-  description: string | { en: string; ar: string };
+  title: string | { en: string; ar: string; fr?: string };
+  description: string | { en: string; ar: string; fr?: string };
   image?: string;
   order?: number;
 }
@@ -19,10 +20,11 @@ const OurProcess: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   // Helper function to get text from multilingual field
-  const getText = (value: string | { en: string; ar: string } | undefined): string => {
+  const getText = (value: string | { en: string; ar: string; fr?: string } | undefined): string => {
     if (!value) return '';
     if (typeof value === 'string') return value;
-    return value[i18n.language as 'en' | 'ar'] || value.en || '';
+    const lang = i18n.language === 'ar' ? 'ar' : i18n.language === 'fr' ? 'fr' : 'en';
+    return (value as any)[lang] || value.en || (value as any).fr || '';
   };
 
   // Helper function to get image URL
@@ -32,53 +34,74 @@ const OurProcess: React.FC = () => {
     return `${API_URL}${image}`;
   };
 
-  // Helper function to get step icon
-  const getStepIcon = (index: number): string => {
-    const icons = ['🤝', '📋', '⚡', '📊', '🎯', '✅'];
-    return icons[index % icons.length];
-  };
+  // (removed unused step-icon helper — layout uses images/cards)
 
-  // Default process steps
-  const defaultSteps: ProcessStep[] = [
-    {
-      _id: '1',
-      title: { en: 'Initial Consultation', ar: 'الاستشارة الأولية' },
-      description: { en: 'We begin with a comprehensive consultation to understand your specific needs, goals, and preferences.', ar: 'نبدأ باستشارة شاملة لفهم احتياجاتك وأهدافك وتفضيلاتك المحددة.' },
-      image: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      order: 1
-    },
-    {
-      _id: '2',
-      title: { en: 'Strategy Development', ar: 'تطوير الاستراتيجية' },
-      description: { en: 'Based on your consultation, we develop a customized strategy that aligns with your objectives.', ar: 'بناءً على استشارتك، نطور استراتيجية مخصصة تتماشى مع أهدافك.' },
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      order: 2
-    },
-    {
-      _id: '3',
-      title: { en: 'Implementation & Execution', ar: 'التنفيذ والتطبيق' },
-      description: { en: 'Our experienced team executes the strategy with precision and attention to detail.', ar: 'ينفذ فريقنا ذو الخبرة الاستراتيجية بدقة واهتمام بالتفاصيل.' },
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      order: 3
-    },
-    {
-      _id: '4',
-      title: { en: 'Monitoring & Ongoing Support', ar: 'المراقبة والدعم المستمر' },
-      description: { en: 'We provide continuous monitoring and support throughout the process and beyond.', ar: 'نقدم المراقبة والدعم المستمر طوال العملية وما بعدها.' },
-      image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      order: 4
-    }
-  ];
+  
 
   useEffect(() => {
     const fetchProcessSteps = async () => {
+      // Default process steps used as a fallback when API returns no data
+      const defaultSteps: ProcessStep[] = [
+        {
+          _id: '1',
+          title: { en: 'Initial Consultation', ar: 'الاستشارة الأولية', fr: 'Consultation initiale' },
+          description: { en: 'We begin with a comprehensive consultation to understand your specific needs, goals, and preferences.', ar: 'نبدأ باستشارة شاملة لفهم احتياجاتك وأهدافك وتفضيلاتك المحددة.', fr: "Nous commençons par une consultation approfondie pour comprendre vos besoins, objectifs et préférences." },
+          image: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+          order: 1
+        },
+        {
+          _id: '2',
+          title: { en: 'Strategy Development', ar: 'تطوير الاستراتيجية', fr: 'Stratégie et planification' },
+          description: { en: 'Based on your consultation, we develop a customized strategy that aligns with your objectives.', ar: 'بناءً على استشارتك، نطور استراتيجية مخصصة تتماشى مع أهدافك.', fr: "Sur la base de la consultation, nous élaborons une stratégie personnalisée adaptée à vos objectifs." },
+          image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+          order: 2
+        },
+        {
+          _id: '3',
+          title: { en: 'Implementation & Execution', ar: 'التنفيذ والتطبيق', fr: 'Mise en œuvre & Exécution' },
+          description: { en: 'Our experienced team executes the strategy with precision and attention to detail.', ar: 'ينفذ فريقنا ذو الخبرة الاستراتيجية بدقة واهتمام بالتفاصيل.', fr: "Notre équipe expérimentée exécute la stratégie avec précision et souci du détail." },
+          image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+          order: 3
+        },
+        {
+          _id: '4',
+          title: { en: 'Monitoring & Ongoing Support', ar: 'المراقبة والدعم المستمر', fr: 'Suivi & Support continu' },
+          description: { en: 'We provide continuous monitoring and support throughout the process and beyond.', ar: 'نقدم المراقبة والدعم المستمر طوال العملية وما بعدها.', fr: "Nous assurons un suivi continu et un support tout au long du processus et au-delà." },
+          image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+          order: 4
+        }
+      ];
       try {
         setLoading(true);
         const response = await axios.get(`${API_URL}/api/content/section/goals?active=true`);
         if (response.data && response.data.length > 0) {
           setProcessSteps(response.data.sort((a: ProcessStep, b: ProcessStep) => (a.order || 0) - (b.order || 0)));
         } else {
-          setProcessSteps(defaultSteps);
+          // fall back to a 3-step set that includes French strings for defaults
+          const fallback: ProcessStep[] = [
+            {
+              _id: '1',
+              title: { en: 'Initial Consultation', ar: 'الاستشارة الأولية', fr: 'Consultation initiale' },
+              description: { en: "We begin with a comprehensive consultation to understand your specific needs, goals, and preferences.", ar: 'نبدأ باستشارة شاملة لفهم احتياجاتك وأهدافك وتفضيلاتك المحددة.', fr: "Nous commençons par une consultation approfondie pour comprendre vos besoins, objectifs et préférences." },
+              image: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              order: 1
+            },
+            {
+              _id: '2',
+              title: { en: 'Strategy & Planning', ar: 'تطوير الاستراتيجية', fr: 'Stratégie & planification' },
+              description: { en: 'Based on your consultation, we develop a customized strategy that aligns with your objectives.', ar: 'بناءً على استشارتك، نطور استراتيجية مخصصة تتماشى مع أهدافك.', fr: "Sur la base de la consultation, nous élaborons une stratégie personnalisée adaptée à vos objectifs." },
+              image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              order: 2
+            },
+            {
+              _id: '3',
+              title: { en: 'Handover & Support', ar: 'التسليم والدعم', fr: 'Remise & Support' },
+              description: { en: 'From first contact through to handover, we provide guidance, data-driven recommendations and professional support.', ar: 'من الاتصال الأول وحتى التسليم، نقدم التوجيه والتوصيات القائمة على البيانات والدعم المهني.', fr: "De la première prise de contact à la remise, nous fournissons des conseils, des recommandations basées sur les données et un accompagnement professionnel." },
+              image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              order: 3
+            }
+          ];
+          setProcessSteps(fallback);
         }
       } catch (error) {
         console.error('Error fetching process steps:', error);
@@ -93,24 +116,19 @@ const OurProcess: React.FC = () => {
 
   return (
     <div className="our-process-page">
-      {/* Enhanced Hero Section */}
-      <section className="about-hero">
-        <div className="hero-background">
-          <div className="hero-overlay"></div>
-          <img
-            src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
-            alt="Our Process"
-            className="hero-bg-image"
-          />
-        </div>
-        <div className="hero-content">
-          <div className="container">
-            <h1 className="hero-title">Our Process</h1>
-            <p className="hero-subtitle">Streamlined Excellence in Every Step</p>
-            <p className="hero-description">
-              Our proven methodology ensures seamless transactions and exceptional results
-              through every phase of your real estate journey.
-            </p>
+      {/* New hero matching the provided design */}
+      <section className="our-process-hero">
+        <div className="container">
+          <div className="heading-row">
+            <div style={{ flex: '0 1 560px' }}>
+              <h1>OUR PROCESS</h1>
+              <p className="gold-subtitle">HOW WE GUIDE YOU SMARTLY THROUGH EVERY STEP</p>
+            </div>
+            <div style={{ flex: '0 1 300px', textAlign: 'right' }}>
+              <p className="lead">
+                We use a hands-on, professional approach to deliver exceptional results — every step is designed to protect your investment and support your goals.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -128,25 +146,17 @@ const OurProcess: React.FC = () => {
               <p>Loading process steps...</p>
             </div>
           ) : (
-            <div className="process-timeline">
-              {processSteps.map((step, index) => (
-                <div className="process-step visual-enhanced" key={step._id}>
-                  <div className="step-number">{String(index + 1).padStart(2, '0')}</div>
-                  <div className="step-image">
-                    <img
-                      src={getImageUrl(step.image)}
-                      alt={getText(step.title)}
-                      className="step-img"
-                    />
-                    <div className="step-icon">{getStepIcon(index)}</div>
+            <div className="process-cards">
+              {processSteps.slice(0, 3).map((step, index) => (
+                <article key={step._id} className="process-card">
+                  <div className="card-media">
+                    <img src={getImageUrl(step.image)} alt={getText(step.title)} />
                   </div>
-                  <div className="step-content">
+                  <div className="card-body">
                     <h3>{getText(step.title)}</h3>
-                    <p className="step-description">
-                      {getText(step.description)}
-                    </p>
+                    <p>{getText(step.description)}</p>
                   </div>
-                </div>
+                </article>
               ))}
             </div>
           )}

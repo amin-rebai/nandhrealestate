@@ -10,10 +10,10 @@ export interface Agent {
 
 export interface Property {
   _id: string;
-  title: string | { en: string; ar: string };
-  description: string | { en: string; ar: string };
+  title: string | { en: string; ar: string; fr?: string };
+  description: string | { en: string; ar: string; fr?: string };
   price: number;
-  location: string | { en: string; ar: string };
+  location: string | { en: string; ar: string; fr?: string };
   bedrooms: number;
   bathrooms: number;
   area: number;
@@ -28,7 +28,7 @@ export interface Property {
   country?: string;
   priceText?: string;
   yearBuilt?: number;
-  features?: string[] | { en: string[]; ar: string[] };
+  features?: string[] | { en: string[]; ar: string[]; fr?: string[] };
   agent?: string | Agent;
   agentPhone?: string;
   dateAdded?: string;

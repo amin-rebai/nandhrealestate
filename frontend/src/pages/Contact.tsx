@@ -6,8 +6,8 @@ import axios from 'axios';
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 interface ContactInfo {
-  title: { en: string; ar: string };
-  description: { en: string; ar: string };
+  title: { en: string; ar: string; fr?: string };
+  description: { en: string; ar: string; fr?: string };
   phone: string;
   email: string;
   address: { en: string; ar: string };
@@ -27,13 +27,14 @@ const Contact: React.FC = () => {
   });
 
   const [contactInfo, setContactInfo] = useState<ContactInfo>({
-    title: { en: 'Contact N&H Real Estate', ar: 'اتصل بـ N&H العقارية' },
-    description: { en: 'Get in touch with our expert team', ar: 'تواصل مع فريقنا المتخصص' },
+    title: { en: 'Contact N&H Real Estate', ar: 'اتصل بـ N&H العقارية', fr: 'Contactez N&H Immobilier' },
+    description: { en: 'Get in touch with our expert team', ar: 'تواصل مع فريقنا المتخصص', fr: "Contactez notre équipe d'experts" },
     phone: '+974 7070 4504',
     email: 'info@nhrealestate.qa',
     address: { en: 'Doha, Qatar', ar: 'الدوحة، قطر' },
     businessHours: { en: 'Sun - Thu: 8:00 AM - 6:00 PM', ar: 'الأحد - الخميس: 8:00 صباحاً - 6:00 مساءً' }
   });
+  const [heroImage, setHeroImage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchContactInfo = async () => {
@@ -41,6 +42,9 @@ const Contact: React.FC = () => {
         const response = await axios.get(`${API_URL}/api/content/section/contact?active=true`);
         if (response.data && response.data.length > 0) {
           const data = response.data[0];
+          // Page-level hero image configuration may come as backgroundImage or image
+          const bg = data.backgroundImage || data.image || data.metadata?.backgroundImage || data.metadata?.image || '';
+          if (bg) setHeroImage(bg.startsWith('http') ? bg : `${API_URL}${bg}`);
           setContactInfo({
             title: data.title || { en: 'Contact N&H Real Estate', ar: 'اتصل بـ N&H العقارية' },
             description: data.description || { en: 'Get in touch with our expert team', ar: 'تواصل مع فريقنا المتخصص' },
@@ -58,10 +62,10 @@ const Contact: React.FC = () => {
     fetchContactInfo();
   }, []);
 
-  const getText = (field: string | { en: string; ar: string } | undefined): string => {
+  const getText = (field: string | { en: string; ar: string; fr?: string } | undefined): string => {
     if (!field) return '';
     if (typeof field === 'string') return field;
-    return field[i18n.language as 'en' | 'ar'] || field.en || '';
+    return field[i18n.language as 'en' | 'ar' | 'fr'] || field.en || field.fr || '';
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -92,7 +96,7 @@ const Contact: React.FC = () => {
         <div className="hero-background">
           <div className="hero-overlay"></div>
           <img
-            src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+            src={heroImage || 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'}
             alt="Contact N&H Real Estate"
             className="hero-bg-image"
           />

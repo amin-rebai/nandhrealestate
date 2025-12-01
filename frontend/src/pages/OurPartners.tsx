@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 
 interface Partner {
   _id: string;
-  title: string | { en: string; ar: string };
-  description: string | { en: string; ar: string };
+  title: string | { en: string; ar: string; fr?: string };
+  description: string | { en: string; ar: string; fr?: string };
   image?: string;
   order?: number;
 }
@@ -19,10 +19,11 @@ const OurPartners: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   // Helper function to get text from multilingual field
-  const getText = (value: string | { en: string; ar: string } | undefined): string => {
+  const getText = (value: string | { en: string; ar: string; fr?: string } | undefined): string => {
     if (!value) return '';
     if (typeof value === 'string') return value;
-    return value[i18n.language as 'en' | 'ar'] || value.en || '';
+    const lang = i18n.language === 'ar' ? 'ar' : i18n.language === 'fr' ? 'fr' : 'en';
+    return (value as any)[lang] || value.en || (value as any).fr || '';
   };
 
   // Helper function to get image URL
@@ -38,38 +39,39 @@ const OurPartners: React.FC = () => {
     return icons[index % icons.length];
   };
 
-  // Default partners
-  const defaultPartners: Partner[] = [
+  // Default partners (memoized so it stays stable and doesn't trigger effect warnings)
+  const defaultPartners: Partner[] = useMemo(() => [
     {
       _id: '1',
-      title: { en: 'Financial Partners', ar: 'الشركاء الماليون' },
-      description: { en: 'Leading banks and financial institutions providing mortgage and financing solutions.', ar: 'البنوك والمؤسسات المالية الرائدة التي تقدم حلول الرهن العقاري والتمويل.' },
+        title: { en: 'Financial Partners', ar: 'الشركاء الماليون', fr: 'Partenaires financiers' },
+        description: { en: 'Leading banks and financial institutions providing mortgage and financing solutions.', ar: 'البنوك والمؤسسات المالية الرائدة التي تقدم حلول الرهن العقاري والتمويل.', fr: 'Banques et institutions financières de premier plan offrant des solutions hypothécaires et de financement.' },
       image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       order: 1
     },
     {
       _id: '2',
-      title: { en: 'Technology Partners', ar: 'شركاء التكنولوجيا' },
-      description: { en: 'Cutting-edge proptech and digital solutions for modern real estate.', ar: 'حلول التكنولوجيا العقارية والرقمية المتطورة للعقارات الحديثة.' },
+      title: { en: 'Technology Partners', ar: 'شركاء التكنولوجيا', fr: 'Partenaires technologiques' },
+      description: { en: 'Cutting-edge proptech and digital solutions for modern real estate.', ar: 'حلول التكنولوجيا العقارية والرقمية المتطورة للعقارات الحديثة.', fr: 'Solutions proptech et numériques de pointe pour l’immobilier moderne.' },
       image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       order: 2
     },
     {
       _id: '3',
-      title: { en: 'Legal & Advisory Partners', ar: 'الشركاء القانونيون والاستشاريون' },
-      description: { en: 'Top-tier legal and consulting firms for comprehensive support.', ar: 'شركات قانونية واستشارية من الدرجة الأولى للدعم الشامل.' },
+      title: { en: 'Legal & Advisory Partners', ar: 'الشركاء القانونيون والاستشاريون', fr: 'Partenaires juridiques & de conseil' },
+      description: { en: 'Top-tier legal and consulting firms for comprehensive support.', ar: 'شركات قانونية واستشارية من الدرجة الأولى للدعم الشامل.', fr: "Cabinets juridiques et de conseil de premier plan pour un soutien complet." },
       image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       order: 3
     },
     {
       _id: '4',
-      title: { en: 'Construction & Development', ar: 'البناء والتطوير' },
-      description: { en: 'Premier construction and development companies for quality projects.', ar: 'شركات البناء والتطوير الرائدة للمشاريع عالية الجودة.' },
+      title: { en: 'Construction & Development', ar: 'البناء والتطوير', fr: 'Construction & Développement' },
+      description: { en: 'Premier construction and development companies for quality projects.', ar: 'شركات البناء والتطوير الرائدة للمشاريع عالية الجودة.', fr: 'Entreprises de construction et de développement de premier ordre pour des projets de qualité.' },
       image: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       order: 4
     }
-  ];
+  ], []);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const fetchPartners = async () => {
       try {
@@ -89,7 +91,7 @@ const OurPartners: React.FC = () => {
     };
 
     fetchPartners();
-  }, []);
+  }, [defaultPartners]);
 
   return (
     <div className="our-partners-page">

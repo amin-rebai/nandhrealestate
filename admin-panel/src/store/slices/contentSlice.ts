@@ -3,22 +3,22 @@ import axios from 'axios';
 
 export interface ContentItem {
   _id: string;
-  section: 'hero' | 'about' | 'featured' | 'services' | 'goals' | 'clients' | 'vision' | 'mission' | 'values' | 'slider' | 'portfolio' | 'contact';
-  title: string | { en: string; ar: string };
-  subtitle?: string | { en: string; ar: string };
-  content?: string | { en: string; ar: string };
-  description?: string | { en: string; ar: string };
+  section: 'home' | 'hero' | 'about' | 'featured' | 'services' | 'goals' | 'clients' | 'vision' | 'mission' | 'values' | 'slider' | 'portfolio' | 'contact';
+  title: string | { en: string; ar: string; fr?: string };
+  subtitle?: string | { en: string; ar: string; fr?: string };
+  content?: string | { en: string; ar: string; fr?: string };
+  description?: string | { en: string; ar: string; fr?: string };
   image?: string;
   backgroundImage?: string;
   videoUrl?: string;
   mediaType?: 'image' | 'video';
-  ctaText?: string | { en: string; ar: string };
+  ctaText?: string | { en: string; ar: string; fr?: string };
   ctaLink?: string;
   propertyType?: 'villa' | 'apartment' | 'penthouse' | 'commercial' | 'office' | 'retail';
   isActive: boolean;
   order?: number;
   stats?: Array<{
-    label: string | { en: string; ar: string };
+    label: string | { en: string; ar: string; fr?: string };
     value: string;
   }>;
   metadata?: {

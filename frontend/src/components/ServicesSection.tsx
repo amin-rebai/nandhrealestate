@@ -5,8 +5,8 @@ import axios from 'axios';
 
 interface ServiceItem {
   _id: string;
-  title: string | { en: string; ar: string };
-  description?: string | { en: string; ar: string };
+  title: string | { en: string; ar: string; fr?: string };
+  description?: string | { en: string; ar: string; fr?: string };
   image?: string;
   isActive: boolean;
   order?: number;
@@ -39,7 +39,8 @@ const ServicesSection: React.FC = () => {
   const getText = (value: string | { en: string; ar: string } | undefined): string => {
     if (!value) return '';
     if (typeof value === 'string') return value;
-    return value[i18n.language as 'en' | 'ar'] || value.en || '';
+  const lang = i18n.language === 'ar' ? 'ar' : i18n.language === 'fr' ? 'fr' : 'en';
+    return (value as any)[lang] || value.en || (value as any).fr || '';
   };
 
   const getImageUrl = (image: string | undefined): string => {
@@ -51,32 +52,32 @@ const ServicesSection: React.FC = () => {
   const defaultServices = [
     {
       _id: '1',
-      title: { en: 'Sales & Leasing', ar: 'المبيعات والتأجير' },
-      description: { en: 'Luxury residential, commercial, and retail properties with expert guidance through every step of the transaction.', ar: 'عقارات سكنية وتجارية وتجزئة فاخرة مع إرشادات خبراء في كل خطوة من المعاملة.' },
+      title: { en: 'Sales & Leasing', ar: 'المبيعات والتأجير', fr: 'Ventes & Location' },
+      description: { en: 'Luxury residential, commercial, and retail properties with expert guidance through every step of the transaction.', ar: 'عقارات سكنية وتجارية وتجزئة فاخرة مع إرشادات خبراء في كل خطوة من المعاملة.', fr: "Propriétés résidentielles, commerciales et de détail de luxe avec un accompagnement expert à chaque étape." },
       image: '',
       isActive: true,
       order: 1
     },
     {
       _id: '2',
-      title: { en: 'Property Management', ar: 'إدارة الممتلكات' },
-      description: { en: 'Complete property management services including tenant relations, maintenance, and financial reporting.', ar: 'خدمات إدارة الممتلكات الكاملة بما في ذلك علاقات المستأجرين والصيانة والتقارير المالية.' },
+      title: { en: 'Property Management', ar: 'إدارة الممتلكات', fr: 'Gestion immobilière' },
+      description: { en: 'Complete property management services including tenant relations, maintenance, and financial reporting.', ar: 'خدمات إدارة الممتلكات الكاملة بما في ذلك علاقات المستأجرين والصيانة والتقارير المالية.', fr: "Services complets de gestion immobilière incluant relations avec les locataires, maintenance et reporting financier." },
       image: '',
       isActive: true,
       order: 2
     },
     {
       _id: '3',
-      title: { en: 'Development Management', ar: 'إدارة التطوير' },
-      description: { en: 'End-to-end development services from feasibility studies to project delivery and handover.', ar: 'خدمات التطوير الشاملة من دراسات الجدوى إلى تسليم المشروع وتسليمه.' },
+      title: { en: 'Development Management', ar: 'إدارة التطوير', fr: 'Gestion de développement' },
+      description: { en: 'End-to-end development services from feasibility studies to project delivery and handover.', ar: 'خدمات التطوير الشاملة من دراسات الجدوى إلى تسليم المشروع وتسليمه.', fr: "Services de développement de A à Z, des études de faisabilité à la livraison et la remise." },
       image: '',
       isActive: true,
       order: 3
     },
     {
       _id: '4',
-      title: { en: 'Investment Advisory', ar: 'الاستشارات الاستثمارية' },
-      description: { en: 'Strategic investment guidance and portfolio management to maximize returns and minimize risks.', ar: 'إرشادات استثمارية استراتيجية وإدارة المحافظ لتعظيم العوائد وتقليل المخاطر.' },
+      title: { en: 'Investment Advisory', ar: 'الاستشارات الاستثمارية', fr: 'Conseils en investissement' },
+      description: { en: 'Strategic investment guidance and portfolio management to maximize returns and minimize risks.', ar: 'إرشادات استثمارية استراتيجية وإدارة المحافظ لتعظيم العوائد وتقليل المخاطر.', fr: "Conseils stratégiques d'investissement et gestion de portefeuille pour maximiser les rendements et minimiser les risques." },
       image: '',
       isActive: true,
       order: 4

@@ -5,9 +5,10 @@ import axios from 'axios';
 
 interface ServiceItem {
   _id: string;
-  title: string | { en: string; ar: string };
-  description?: string | { en: string; ar: string };
+  title: string | { en: string; ar: string; fr?: string };
+  description?: string | { en: string; ar: string; fr?: string };
   image?: string;
+  backgroundImage?: string;
   isActive: boolean;
   order?: number;
 }
@@ -15,6 +16,7 @@ interface ServiceItem {
 const OurServices: React.FC = () => {
   const { i18n } = useTranslation();
   const [services, setServices] = useState<ServiceItem[]>([]);
+  const [heroImage, setHeroImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
@@ -24,7 +26,15 @@ const OurServices: React.FC = () => {
       try {
         const response = await axios.get(`${API_URL}/api/content/section/services?active=true`);
         if (response.data && response.data.data) {
-          setServices(response.data.data);
+            const data = response.data.data as ServiceItem[];
+            setServices(data);
+
+            // Find a page-level services content item that can act as a hero background (active preferred)
+            const activeBg = data.find(d => d.isActive && (d.backgroundImage || d.image)) || data.find(d => d.backgroundImage || d.image);
+            if (activeBg) {
+              const image = (activeBg.backgroundImage || activeBg.image) || '';
+              if (image) setHeroImage(image.startsWith('http') ? image : `${API_URL}${image}`);
+            }
         }
       } catch (error) {
         console.error('Error fetching services:', error);
@@ -36,10 +46,11 @@ const OurServices: React.FC = () => {
     fetchServices();
   }, [API_URL]);
 
-  const getText = (value: string | { en: string; ar: string } | undefined): string => {
+  const getText = (value: string | { en: string; ar: string; fr?: string } | undefined): string => {
     if (!value) return '';
     if (typeof value === 'string') return value;
-    return value[i18n.language as 'en' | 'ar'] || value.en || '';
+    const lang = i18n.language === 'ar' ? 'ar' : i18n.language === 'fr' ? 'fr' : 'en';
+    return (value as any)[lang] || value.en || (value as any).fr || '';
   };
 
   const getImageUrl = (image: string | undefined): string => {
@@ -60,7 +71,7 @@ const OurServices: React.FC = () => {
         <div className="hero-background">
           <div className="hero-overlay"></div>
           <img
-            src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+            src={heroImage || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'}
             alt="Our Services"
             className="hero-bg-image"
           />

@@ -26,6 +26,7 @@ import { useTranslation } from 'react-i18next';
 interface MultilingualValue {
   en: string;
   ar: string;
+  fr: string;
 }
 
 interface RichTextEditorProps {
@@ -52,9 +53,9 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   disabled = false
 }) => {
   const { t, i18n } = useTranslation();
-  const [activeTab, setActiveTab] = useState<'en' | 'ar'>('en');
+  const [activeTab, setActiveTab] = useState<'en' | 'ar' | 'fr'>('en');
 
-  const handleTabChange = (_event: React.SyntheticEvent, newValue: 'en' | 'ar') => {
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: 'en' | 'ar' | 'fr') => {
     setActiveTab(newValue);
   };
 
@@ -132,6 +133,14 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
             </Box>
           }
           value="ar"
+        />
+        <Tab
+          label={
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              🇫🇷 Français
+            </Box>
+          }
+          value="fr"
         />
       </Tabs>
 

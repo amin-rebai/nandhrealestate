@@ -6,6 +6,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { store } from './store/store';
 import Dashboard from './pages/Dashboard';
 import Properties from './pages/Properties';
+import Agents from './pages/Agents';
 import Users from './pages/Users';
 import Media from './pages/Media';
 import Content from './pages/Content';
@@ -15,7 +16,7 @@ import Login from './pages/Login';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
-import './i18n';
+import './i18n/index';
 
 const theme = createTheme({
   palette: {
@@ -93,6 +94,13 @@ function App() {
                 <ProtectedRoute>
                   <Layout>
                     <Properties />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/agents" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Agents />
                   </Layout>
                 </ProtectedRoute>
               } />

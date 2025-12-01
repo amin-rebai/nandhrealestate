@@ -12,6 +12,7 @@ import {
 interface MultilingualValue {
   en: string;
   ar: string;
+  fr: string;
 }
 
 interface MultilingualTextFieldProps extends Omit<TextFieldProps, 'value' | 'onChange'> {
@@ -36,7 +37,7 @@ const MultilingualTextField: React.FC<MultilingualTextFieldProps> = ({
     setActiveTab(newValue);
   };
 
-  const handleInputChange = (language: 'en' | 'ar', inputValue: string) => {
+  const handleInputChange = (language: 'en' | 'ar' | 'fr', inputValue: string) => {
     onChange({
       ...value,
       [language]: inputValue
@@ -61,6 +62,7 @@ const MultilingualTextField: React.FC<MultilingualTextFieldProps> = ({
         >
           <Tab label={t('content.english')} />
           <Tab label={t('content.arabic')} />
+          <Tab label={t('content.french') || 'Français'} />
         </Tabs>
         
         <Box sx={{ p: 2, pt: 1 }}>
@@ -120,6 +122,25 @@ const MultilingualTextField: React.FC<MultilingualTextFieldProps> = ({
               }}
             />
           )}
+            {activeTab === 2 && (
+              <TextField
+                {...textFieldProps}
+                fullWidth
+                label={`${label} (Français)`}
+                value={value.fr ?? ''}
+                onChange={(e) => handleInputChange('fr', e.target.value)}
+                disabled={disabled}
+                multiline={multiline}
+                rows={rows}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': { borderColor: 'transparent' },
+                    '&:hover fieldset': { borderColor: '#4B0E14' },
+                    '&.Mui-focused fieldset': { borderColor: '#4B0E14' }
+                  }
+                }}
+              />
+            )}
         </Box>
       </Paper>
     </Box>

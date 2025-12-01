@@ -147,10 +147,10 @@ const Blog: React.FC = () => {
     }
   };
 
-  const displayMultilingual = (value: any, language: 'en' | 'ar' = 'en'): string => {
+  const displayMultilingual = (value: any, language: 'en' | 'ar' | 'fr' = 'en'): string => {
     if (!value) return '';
     if (typeof value === 'string') return value;
-    return value[language] || value.en || '';
+    return value[language] || value.en || value.fr || '';
   };
 
   return (

@@ -52,36 +52,36 @@ const BlogForm: React.FC = () => {
 
   // Form state
   const [formData, setFormData] = useState({
-    title: { en: '', ar: '' },
-    slug: { en: '', ar: '' },
-    excerpt: { en: '', ar: '' },
-    content: { en: '', ar: '' },
+    title: { en: '', ar: '', fr: '' },
+    slug: { en: '', ar: '', fr: '' },
+    excerpt: { en: '', ar: '', fr: '' },
+    content: { en: '', ar: '', fr: '' },
     featuredImage: '',
-    category: { en: '', ar: '' },
-    tags: [] as Array<{ en: string; ar: string }>,
+    category: { en: '', ar: '', fr: '' },
+    tags: [] as Array<{ en: string; ar: string; fr: string }>,
     author: {
       name: '',
       avatar: '',
-      bio: { en: '', ar: '' }
+      bio: { en: '', ar: '', fr: '' }
     },
     status: 'draft' as 'draft' | 'published' | 'archived',
     isFeatured: false,
     isActive: true,
     seo: {
-      metaTitle: { en: '', ar: '' },
-      metaDescription: { en: '', ar: '' },
-      keywords: { en: '', ar: '' },
+      metaTitle: { en: '', ar: '', fr: '' },
+      metaDescription: { en: '', ar: '', fr: '' },
+      keywords: { en: '', ar: '', fr: '' },
       canonicalUrl: '',
-      ogTitle: { en: '', ar: '' },
-      ogDescription: { en: '', ar: '' },
+      ogTitle: { en: '', ar: '', fr: '' },
+      ogDescription: { en: '', ar: '', fr: '' },
       ogImage: '',
-      twitterTitle: { en: '', ar: '' },
-      twitterDescription: { en: '', ar: '' },
+      twitterTitle: { en: '', ar: '', fr: '' },
+      twitterDescription: { en: '', ar: '', fr: '' },
       twitterImage: ''
     }
   });
 
-  const [tagInput, setTagInput] = useState({ en: '', ar: '' });
+  const [tagInput, setTagInput] = useState({ en: '', ar: '', fr: '' });
 
   useEffect(() => {
     if (isEdit && id) {
@@ -94,33 +94,34 @@ const BlogForm: React.FC = () => {
 
   useEffect(() => {
     if (currentPost && isEdit) {
+      const resolve = (val: any) => ({ en: val?.en ?? '', ar: val?.ar ?? '', fr: val?.fr ?? '' });
       setFormData({
-        title: currentPost.title,
-        slug: currentPost.slug,
-        excerpt: currentPost.excerpt,
-        content: currentPost.content,
-        featuredImage: currentPost.featuredImage,
-        category: currentPost.category,
-        tags: currentPost.tags,
+        title: resolve(currentPost.title),
+        slug: resolve(currentPost.slug),
+        excerpt: resolve(currentPost.excerpt),
+        content: resolve(currentPost.content),
+        featuredImage: currentPost.featuredImage || '',
+        category: resolve(currentPost.category),
+        tags: Array.isArray(currentPost.tags) ? currentPost.tags.map((t: any) => resolve(t)) : [],
         author: {
-          name: currentPost.author.name,
-          avatar: currentPost.author.avatar || '',
-          bio: currentPost.author.bio || { en: '', ar: '' }
+          name: currentPost.author?.name || '',
+          avatar: currentPost.author?.avatar || '',
+          bio: resolve(currentPost.author?.bio)
         },
-        status: currentPost.status,
-        isFeatured: currentPost.isFeatured,
-        isActive: currentPost.isActive,
+        status: currentPost.status || 'draft',
+        isFeatured: !!currentPost.isFeatured,
+        isActive: currentPost.isActive ?? true,
         seo: {
-          metaTitle: currentPost.seo.metaTitle,
-          metaDescription: currentPost.seo.metaDescription,
-          keywords: currentPost.seo.keywords,
-          canonicalUrl: currentPost.seo.canonicalUrl || '',
-          ogTitle: currentPost.seo.ogTitle || { en: '', ar: '' },
-          ogDescription: currentPost.seo.ogDescription || { en: '', ar: '' },
-          ogImage: currentPost.seo.ogImage || '',
-          twitterTitle: currentPost.seo.twitterTitle || { en: '', ar: '' },
-          twitterDescription: currentPost.seo.twitterDescription || { en: '', ar: '' },
-          twitterImage: currentPost.seo.twitterImage || ''
+          metaTitle: resolve(currentPost.seo?.metaTitle),
+          metaDescription: resolve(currentPost.seo?.metaDescription),
+          keywords: resolve(currentPost.seo?.keywords),
+          canonicalUrl: currentPost.seo?.canonicalUrl || '',
+          ogTitle: resolve(currentPost.seo?.ogTitle),
+          ogDescription: resolve(currentPost.seo?.ogDescription),
+          ogImage: currentPost.seo?.ogImage || '',
+          twitterTitle: resolve(currentPost.seo?.twitterTitle),
+          twitterDescription: resolve(currentPost.seo?.twitterDescription),
+          twitterImage: currentPost.seo?.twitterImage || ''
         }
       });
     }
@@ -153,25 +154,24 @@ const BlogForm: React.FC = () => {
       .replace(/-+/g, '-')
       .replace(/^-|-$/g, '');
   };
-
-  const handleTitleChange = (value: { en: string; ar: string }) => {
+  const handleTitleChange = (value: { en: string; ar: string; fr: string }) => {
     setFormData(prev => ({
       ...prev,
       title: value,
       slug: {
         en: generateSlug(value.en),
-        ar: generateSlug(value.ar)
+        ar: generateSlug(value.ar),
+        fr: generateSlug(value.fr)
       }
     }));
   };
-
   const addTag = () => {
-    if (tagInput.en.trim() && tagInput.ar.trim()) {
+    if (tagInput.en.trim() && tagInput.ar.trim() && tagInput.fr.trim()) {
       setFormData(prev => ({
         ...prev,
-        tags: [...prev.tags, { en: tagInput.en.trim(), ar: tagInput.ar.trim() }]
+        tags: [...prev.tags, { en: tagInput.en.trim(), ar: tagInput.ar.trim(), fr: tagInput.fr.trim() }]
       }));
-      setTagInput({ en: '', ar: '' });
+      setTagInput({ en: '', ar: '', fr: '' });
     }
   };
 
@@ -388,20 +388,20 @@ const BlogForm: React.FC = () => {
               <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 600 }}>
                 {t('blog.tags')}
               </Typography>
-              
+
               <Box sx={{ mb: 2 }}>
                 {formData.tags.map((tag, index) => (
                   <Chip
                     key={index}
-                    label={`${tag.en} / ${tag.ar}`}
+                    label={`${tag.en} / ${tag.ar} / ${tag.fr}`}
                     onDelete={() => removeTag(index)}
                     sx={{ mr: 1, mb: 1 }}
                   />
                 ))}
               </Box>
 
-              <Grid container spacing={1} sx={{ mb: 2 }}>
-                <Grid item xs={6}>
+              <Grid container spacing={1} sx={{ mb: 2, alignItems: 'center' }}>
+                <Grid item xs={4}>
                   <TextField
                     size="small"
                     placeholder="English tag"
@@ -409,7 +409,7 @@ const BlogForm: React.FC = () => {
                     onChange={(e) => setTagInput(prev => ({ ...prev, en: e.target.value }))}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={4}>
                   <TextField
                     size="small"
                     placeholder="Arabic tag"
@@ -417,18 +417,24 @@ const BlogForm: React.FC = () => {
                     onChange={(e) => setTagInput(prev => ({ ...prev, ar: e.target.value }))}
                   />
                 </Grid>
+                <Grid item xs={4} sx={{ display: 'flex', alignItems: 'center' }}>
+                  <TextField
+                    size="small"
+                    placeholder="French tag"
+                    value={tagInput.fr}
+                    onChange={(e) => setTagInput(prev => ({ ...prev, fr: e.target.value }))}
+                    sx={{ mr: 1 }}
+                  />
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={addTag}
+                    disabled={!tagInput.en.trim() || !tagInput.ar.trim() || !tagInput.fr.trim()}
+                  >
+                    Add Tag
+                  </Button>
+                </Grid>
               </Grid>
-              
-              <Button
-                variant="outlined"
-                size="small"
-                onClick={addTag}
-                disabled={!tagInput.en.trim() || !tagInput.ar.trim()}
-              >
-                Add Tag
-              </Button>
-
-              <Divider sx={{ my: 2 }} />
 
               {/* Author */}
               <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 600 }}>

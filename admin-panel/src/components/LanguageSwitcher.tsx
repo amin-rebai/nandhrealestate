@@ -29,7 +29,7 @@ const LanguageSwitcher: React.FC = () => {
     handleClose();
   };
 
-  const currentLanguage = i18n.language === 'ar' ? 'arabic' : 'english';
+  const currentLanguage = i18n.language === 'ar' ? 'arabic' : i18n.language === 'fr' ? 'french' : 'english';
 
   return (
     <Box>
@@ -104,6 +104,16 @@ const LanguageSwitcher: React.FC = () => {
             <span style={{ fontSize: '1.2rem' }}>🇸🇦</span>
           </ListItemIcon>
           <ListItemText>{t('language.arabic')}</ListItemText>
+        </MenuItem>
+        <MenuItem 
+          onClick={() => handleLanguageChange('fr')}
+          selected={i18n.language === 'fr'}
+          sx={{ minWidth: 120 }}
+        >
+          <ListItemIcon>
+            <span style={{ fontSize: '1.2rem' }}>🇫🇷</span>
+          </ListItemIcon>
+          <ListItemText>{t('language.french', 'Français')}</ListItemText>
         </MenuItem>
       </Menu>
     </Box>

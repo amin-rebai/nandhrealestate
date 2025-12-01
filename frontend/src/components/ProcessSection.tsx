@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import './ProcessSection.css';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 interface ProcessItem {
   _id: string;
-  title: string | { en: string; ar: string };
-  description?: string | { en: string; ar: string };
+  title: string | { en: string; ar: string; fr?: string };
+  description?: string | { en: string; ar: string; fr?: string };
   image?: string;
   isActive: boolean;
   order?: number;
@@ -39,7 +40,8 @@ const ProcessSection: React.FC = () => {
   const getText = (value: string | { en: string; ar: string } | undefined): string => {
     if (!value) return '';
     if (typeof value === 'string') return value;
-    return value[i18n.language as 'en' | 'ar'] || value.en || '';
+    const lang = i18n.language === 'ar' ? 'ar' : i18n.language === 'fr' ? 'fr' : 'en';
+    return (value as any)[lang] || value.en || (value as any).fr || '';
   };
 
   const getImageUrl = (image: string | undefined): string => {
@@ -51,32 +53,32 @@ const ProcessSection: React.FC = () => {
   const defaultSteps = [
     {
       _id: '1',
-      title: { en: 'Initial Consultation', ar: 'الاستشارة الأولية' },
-      description: { en: 'We begin with a comprehensive consultation to understand your specific needs, goals, and preferences.', ar: 'نبدأ باستشارة شاملة لفهم احتياجاتك وأهدافك وتفضيلاتك المحددة.' },
+      title: { en: 'Initial Consultation', ar: 'الاستشارة الأولية', fr: 'Consultation initiale' },
+      description: { en: 'We begin with a comprehensive consultation to understand your specific needs, goals, and preferences.', ar: 'نبدأ باستشارة شاملة لفهم احتياجاتك وأهدافك وتفضيلاتك المحددة.', fr: "Nous commençons par une consultation approfondie pour comprendre vos besoins, objectifs et préférences." },
       image: '',
       isActive: true,
       order: 1
     },
     {
       _id: '2',
-      title: { en: 'Market Analysis', ar: 'تحليل السوق' },
-      description: { en: 'Our experts conduct thorough market research and analysis to identify the best opportunities.', ar: 'يقوم خبراؤنا بإجراء بحث وتحليل شامل للسوق لتحديد أفضل الفرص.' },
+      title: { en: 'Market Analysis', ar: 'تحليل السوق', fr: 'Analyse du marché' },
+      description: { en: 'Our experts conduct thorough market research and analysis to identify the best opportunities.', ar: 'يقوم خبراؤنا بإجراء بحث وتحليل شامل للسوق لتحديد أفضل الفرص.', fr: "Nos experts effectuent des recherches et une analyse approfondies pour identifier les meilleures opportunités." },
       image: '',
       isActive: true,
       order: 2
     },
     {
       _id: '3',
-      title: { en: 'Implementation', ar: 'التنفيذ' },
-      description: { en: 'We execute the strategy with precision and attention to detail, keeping you informed at every step.', ar: 'ننفذ الاستراتيجية بدقة واهتمام بالتفاصيل، ونبقيك على اطلاع في كل خطوة.' },
+      title: { en: 'Implementation', ar: 'التنفيذ', fr: 'Mise en œuvre' },
+      description: { en: 'We execute the strategy with precision and attention to detail, keeping you informed at every step.', ar: 'ننفذ الاستراتيجية بدقة واهتمام بالتفاصيل، ونبقيك على اطلاع في كل خطوة.', fr: "Nous exécutons la stratégie avec précision et souci du détail, en vous tenant informé à chaque étape." },
       image: '',
       isActive: true,
       order: 3
     },
     {
       _id: '4',
-      title: { en: 'Follow-up & Support', ar: 'المتابعة والدعم' },
-      description: { en: 'Our commitment continues beyond the transaction with ongoing support and service.', ar: 'يستمر التزامنا بعد المعاملة مع الدعم والخدمة المستمرة.' },
+      title: { en: 'Follow-up & Support', ar: 'المتابعة والدعم', fr: 'Suivi & Support' },
+      description: { en: 'Our commitment continues beyond the transaction with ongoing support and service.', ar: 'يستمر التزامنا بعد المعاملة مع الدعم والخدمة المستمرة.', fr: "Notre engagement continue au-delà de la transaction avec un support et des services continus." },
       image: '',
       isActive: true,
       order: 4
@@ -121,60 +123,16 @@ const ProcessSection: React.FC = () => {
           marginTop: '3rem'
         }}>
           {displaySteps.map((step, index) => (
-            <div 
-              key={step._id} 
-              className="process-step-card"
-              style={{
-                backgroundColor: 'white',
-                padding: '2rem',
-                borderRadius: '12px',
-                boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                position: 'relative',
-                overflow: 'hidden'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-8px)';
-                e.currentTarget.style.boxShadow = '0 12px 24px rgba(0,0,0,0.15)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
-              }}
-            >
-              <div style={{
-                position: 'absolute',
-                top: '1rem',
-                right: '1rem',
-                fontSize: '3rem',
-                opacity: 0.1,
-                fontWeight: 'bold',
-                color: '#C1A88A'
-              }}>
-                {String(index + 1).padStart(2, '0')}
-              </div>
+            <div key={step._id} className="process-step-card">
+              <div className="step-number">{String(index + 1).padStart(2, '0')}</div>
               
               {step.image && (
-                <div style={{ marginBottom: '1.5rem' }}>
-                  <img 
-                    src={getImageUrl(step.image)} 
-                    alt={getText(step.title)}
-                    style={{
-                      width: '100%',
-                      height: '180px',
-                      objectFit: 'cover',
-                      borderRadius: '8px'
-                    }}
-                  />
+                <div>
+                  <img src={getImageUrl(step.image)} alt={getText(step.title)} />
                 </div>
               )}
               
-              <div style={{
-                fontSize: '2.5rem',
-                marginBottom: '1rem'
-              }}>
-                {getStepIcon(index)}
-              </div>
+              <div className="step-icon">{getStepIcon(index)}</div>
               
               <h3 style={{
                 fontSize: '1.5rem',

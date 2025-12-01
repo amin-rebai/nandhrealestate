@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IContent extends Document {
-  section: 'hero' | 'about' | 'featured' | 'services' | 'goals' | 'clients' | 'vision' | 'mission' | 'values' | 'slider' | 'portfolio' | 'contact';
+  section: 'home' | 'hero' | 'about' | 'featured' | 'services' | 'goals' | 'clients' | 'vision' | 'mission' | 'values' | 'slider' | 'portfolio' | 'contact';
   title: {
     en: string;
     ar: string;
@@ -48,7 +48,7 @@ const ContentSchema: Schema = new Schema({
   section: {
     type: String,
     required: [true, 'Section type is required'],
-    enum: ['hero', 'about', 'featured', 'services', 'goals', 'clients', 'vision', 'mission', 'values', 'slider', 'portfolio', 'contact'],
+    enum: ['home', 'hero', 'about', 'featured', 'services', 'goals', 'clients', 'vision', 'mission', 'values', 'slider', 'portfolio', 'contact'],
     index: true
   },
   title: {
@@ -186,6 +186,17 @@ ContentSchema.pre('save', async function (next) {
     // Deactivate other hero sections
     await mongoose.model('Content').updateMany(
       { section: 'hero', _id: { $ne: this._id } },
+      { isActive: false }
+    );
+  }
+  next();
+});
+
+// Ensure only one active home section at a time
+ContentSchema.pre('save', async function (next) {
+  if (this.section === 'home' && this.isActive) {
+    await mongoose.model('Content').updateMany(
+      { section: 'home', _id: { $ne: this._id } },
       { isActive: false }
     );
   }
