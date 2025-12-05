@@ -32,7 +32,11 @@ import {
   AccountCircle,
   Logout,
   Settings,
-  RssFeed
+  RssFeed,
+  Info,
+  Business,
+  ContactPhone,
+  Apartment
 } from '@mui/icons-material';
 import { RootState, AppDispatch } from '../store/store';
 import { logout } from '../store/slices/authSlice';
@@ -81,8 +85,28 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       path: '/dashboard'
     },
     {
-      text: t('navigation.properties'),
+      text: t('navigation.users'),
+      icon: <AccountCircle />,
+      path: '/users'
+    },
+    {
+      text: 'Home Page',
       icon: <Home />,
+      path: '/home-page'
+    },
+    {
+      text: 'About Page',
+      icon: <Info />,
+      path: '/about-page'
+    },
+    {
+      text: 'Services Pages',
+      icon: <Business />,
+      path: '/services-page'
+    },
+    {
+      text: t('navigation.properties'),
+      icon: <Apartment />,
       path: '/properties'
     },
     {
@@ -91,14 +115,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       path: '/agents'
     },
     {
-      text: t('navigation.users'),
-      icon: <AccountCircle />,
-      path: '/users'
-    },
-    {
-      text: 'Frontend Pages',
-      icon: <Article />,
-      path: '/content'
+      text: 'Contact Page',
+      icon: <ContactPhone />,
+      path: '/contact-page'
     },
     {
       text: t('media.title'),

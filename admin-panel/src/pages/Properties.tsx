@@ -59,6 +59,8 @@ import {
   Property
 } from '../store/slices/propertySlice';
 import { fetchAgents } from '../store/slices/userSlice';
+import ImageUpload from '../components/ImageUpload';
+import VideoUpload from '../components/VideoUpload';
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
@@ -1019,59 +1021,15 @@ const Properties: React.FC = () => {
               <AccordionDetails>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
-                    <Box sx={{ mb: 2 }}>
-                      <input
-                        accept="image/*"
-                        style={{ display: 'none' }}
-                        id="property-images-upload"
-                        type="file"
-                        multiple
-                        onChange={handleImageUpload}
-                      />
-                      <label htmlFor="property-images-upload">
-                        <Button
-                          variant="outlined"
-                          component="span"
-                          startIcon={<CloudUpload />}
-                          disabled={uploading}
-                          sx={{
-                            borderColor: '#4B0E14',
-                            color: '#4B0E14',
-                            '&:hover': {
-                              borderColor: '#3a0b10',
-                              backgroundColor: '#f8f5f0'
-                            }
-                          }}
-                        >
-                          {uploading ? 'Uploading...' : 'Upload Images'}
-                        </Button>
-                      </label>
-                    </Box>
-
-                    {formData.images.length > 0 && (
-                      <ImageList sx={{ width: '100%', height: 200 }} cols={4} rowHeight={150}>
-                        {formData.images.map((image, index) => (
-                          <ImageListItem key={index}>
-                            <img
-                              src={`${API_URL}${image}`}
-                              alt={`Property ${index + 1}`}
-                              loading="lazy"
-                              style={{ objectFit: 'cover' }}
-                            />
-                            <ImageListItemBar
-                              actionIcon={
-                                <IconButton
-                                  sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                                  onClick={() => handleRemoveImage(index)}
-                                >
-                                  <CloseIcon />
-                                </IconButton>
-                              }
-                            />
-                          </ImageListItem>
-                        ))}
-                      </ImageList>
-                    )}
+                    <ImageUpload
+                      value={formData.images}
+                      onChange={(value) => setFormData(prev => ({ ...prev, images: Array.isArray(value) ? value : [value] }))}
+                      multiple={true}
+                      maxFiles={20}
+                      label="Upload Property Images"
+                      helperText="Upload multiple images. Recommended size: 1200x800px. Max 20 images."
+                      showPreview={true}
+                    />
                   </Grid>
                 </Grid>
               </AccordionDetails>
@@ -1085,66 +1043,13 @@ const Properties: React.FC = () => {
               <AccordionDetails>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
-                    <Box sx={{ mb: 2 }}>
-                      <input
-                        accept="video/*"
-                        style={{ display: 'none' }}
-                        id="property-video-upload"
-                        type="file"
-                        onChange={handleVideoUpload}
-                      />
-                      <label htmlFor="property-video-upload">
-                        <Button
-                          variant="outlined"
-                          component="span"
-                          startIcon={<CloudUpload />}
-                          disabled={uploading || !!formData.video}
-                          sx={{
-                            borderColor: '#4B0E14',
-                            color: '#4B0E14',
-                            '&:hover': {
-                              borderColor: '#6B1423',
-                              backgroundColor: 'rgba(75, 14, 20, 0.04)'
-                            }
-                          }}
-                        >
-                          {uploading ? 'Uploading...' : formData.video ? 'Video Uploaded' : 'Upload Video'}
-                        </Button>
-                      </label>
-                      <Typography variant="caption" display="block" sx={{ mt: 1, color: '#666' }}>
-                        Max file size: 100MB. Supported formats: MP4, MOV, AVI, WebM
-                      </Typography>
-                    </Box>
-
-                    {formData.video && (
-                      <Box sx={{ position: 'relative', width: '100%', maxWidth: 600 }}>
-                        <video
-                          src={`${API_URL}${formData.video}`}
-                          controls
-                          style={{
-                            width: '100%',
-                            maxHeight: 400,
-                            borderRadius: 8,
-                            objectFit: 'contain',
-                            backgroundColor: '#000'
-                          }}
-                        />
-                        <IconButton
-                          onClick={handleRemoveVideo}
-                          sx={{
-                            position: 'absolute',
-                            top: 8,
-                            right: 8,
-                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                            '&:hover': {
-                              backgroundColor: 'rgba(255, 255, 255, 1)'
-                            }
-                          }}
-                        >
-                          <CloseIcon />
-                        </IconButton>
-                      </Box>
-                    )}
+                    <VideoUpload
+                      value={formData.video}
+                      onChange={(value) => setFormData(prev => ({ ...prev, video: value }))}
+                      label="Upload Property Video"
+                      helperText="Max file size: 100MB. Supported formats: MP4, MOV, WebM"
+                      showPreview={true}
+                    />
                   </Grid>
                 </Grid>
               </AccordionDetails>

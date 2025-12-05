@@ -15,6 +15,10 @@ import BlogForm from './pages/BlogForm';
 import Login from './pages/Login';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
+import HomePageManager from './pages/HomePageManager';
+import AboutPageManager from './pages/AboutPageManager';
+import ServicesPageManager from './pages/ServicesPageManager';
+import ContactPageManager from './pages/ContactPageManager';
 import './App.css';
 import './i18n/index';
 
@@ -122,6 +126,34 @@ function App() {
                 <ProtectedRoute>
                   <Layout>
                     <Content />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/home-page" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <HomePageManager />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/about-page" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <AboutPageManager />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/services-page" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <ServicesPageManager />
+                  </Layout>
+                </ProtectedRoute>
+              } />
+              <Route path="/contact-page" element={
+                <ProtectedRoute>
+                  <Layout>
+                    <ContactPageManager />
                   </Layout>
                 </ProtectedRoute>
               } />

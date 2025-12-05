@@ -1,11 +1,53 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
+interface MultilingualText {
+  en: string;
+  ar: string;
+  fr?: string;
+}
+
+interface ProcessSectionData {
+  title: MultilingualText;
+  subtitle: MultilingualText;
+  backgroundImage: string;
+}
 
 const Services: React.FC = () => {
+  const [processSectionData, setProcessSectionData] = useState<ProcessSectionData | null>(null);
+
+  useEffect(() => {
+    const fetchProcessSection = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/content/section/process-section`);
+        const data = response.data?.data || response.data;
+        if (data && data.length > 0) {
+          const item = data[0];
+          setProcessSectionData({
+            title: item.title || { en: 'Our Process', ar: 'عمليتنا', fr: 'Notre processus' },
+            subtitle: item.description || { en: 'A systematic approach to delivering exceptional results', ar: '', fr: '' },
+            backgroundImage: item.image || item.backgroundImage || ''
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching process section:', error);
+      }
+    };
+    fetchProcessSection();
+  }, []);
+
+  const getText = (text: MultilingualText | string | undefined): string => {
+    if (!text) return '';
+    if (typeof text === 'string') return text;
+    return text.en || '';
+  };
   return (
     <div className="services-page">
       {/* Enhanced Hero Section */}
-      <section className="about-hero">
+      {/* <section className="about-hero">
         <div className="hero-background">
           <div className="hero-overlay"></div>
           <img
@@ -24,7 +66,7 @@ const Services: React.FC = () => {
             </p>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Service Categories Navigation */}
       <section className="section section-light">
@@ -165,43 +207,59 @@ const Services: React.FC = () => {
         </div>
       </section>
 
-      {/* Process Section */}
-      <section className="section section-dark">
+      {/* Process Section with Background Image */}
+      <section
+        className="process-section-bg"
+        style={{
+          backgroundImage: processSectionData?.backgroundImage
+            ? `linear-gradient(rgba(75, 14, 20, 0.85), rgba(75, 14, 20, 0.9)), url(${processSectionData.backgroundImage.startsWith('http') ? processSectionData.backgroundImage : `${API_URL.replace('/api', '')}${processSectionData.backgroundImage}`})`
+            : 'linear-gradient(rgba(75, 14, 20, 0.95), rgba(75, 14, 20, 0.95))',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed',
+          padding: '6rem 0',
+          color: 'white'
+        }}
+      >
         <div className="container">
-          <div className="section-header">
-            <h2>Our Process</h2>
-            <p>A systematic approach to delivering exceptional results</p>
+          <div className="section-header" style={{ textAlign: 'center', marginBottom: '3rem' }}>
+            <h2 style={{ color: 'var(--matte-gold)', fontSize: '2.5rem', marginBottom: '1rem' }}>
+              {processSectionData ? getText(processSectionData.title) : 'Our Process'}
+            </h2>
+            <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '1.2rem' }}>
+              {processSectionData ? getText(processSectionData.subtitle) : 'A systematic approach to delivering exceptional results'}
+            </p>
           </div>
           <div className="process-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem', marginTop: '3rem' }}>
-            <div className="process-step" style={{ textAlign: 'center', padding: '2rem' }}>
+            <div className="process-step" style={{ textAlign: 'center', padding: '2rem', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', backdropFilter: 'blur(10px)' }}>
               <div style={{ width: '60px', height: '60px', background: 'var(--matte-gold)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem', fontSize: '1.5rem', color: 'var(--luxury-burgundy)', fontWeight: 'bold' }}>1</div>
               <h3 style={{ color: 'var(--matte-gold)', marginBottom: '1rem' }}>Consultation & Discovery</h3>
-              <p>Understanding client goals, requirements, and investment objectives</p>
+              <p style={{ color: 'rgba(255,255,255,0.8)' }}>Understanding client goals, requirements, and investment objectives</p>
             </div>
-            <div className="process-step" style={{ textAlign: 'center', padding: '2rem' }}>
+            <div className="process-step" style={{ textAlign: 'center', padding: '2rem', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', backdropFilter: 'blur(10px)' }}>
               <div style={{ width: '60px', height: '60px', background: 'var(--matte-gold)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem', fontSize: '1.5rem', color: 'var(--luxury-burgundy)', fontWeight: 'bold' }}>2</div>
               <h3 style={{ color: 'var(--matte-gold)', marginBottom: '1rem' }}>Market Research & Feasibility</h3>
-              <p>Conducting in-depth analysis of opportunities and market conditions</p>
+              <p style={{ color: 'rgba(255,255,255,0.8)' }}>Conducting in-depth analysis of opportunities and market conditions</p>
             </div>
-            <div className="process-step" style={{ textAlign: 'center', padding: '2rem' }}>
+            <div className="process-step" style={{ textAlign: 'center', padding: '2rem', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', backdropFilter: 'blur(10px)' }}>
               <div style={{ width: '60px', height: '60px', background: 'var(--matte-gold)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem', fontSize: '1.5rem', color: 'var(--luxury-burgundy)', fontWeight: 'bold' }}>3</div>
               <h3 style={{ color: 'var(--matte-gold)', marginBottom: '1rem' }}>Strategy Development</h3>
-              <p>Designing tailored solutions and implementation roadmaps</p>
+              <p style={{ color: 'rgba(255,255,255,0.8)' }}>Designing tailored solutions and implementation roadmaps</p>
             </div>
-            <div className="process-step" style={{ textAlign: 'center', padding: '2rem' }}>
+            <div className="process-step" style={{ textAlign: 'center', padding: '2rem', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', backdropFilter: 'blur(10px)' }}>
               <div style={{ width: '60px', height: '60px', background: 'var(--matte-gold)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem', fontSize: '1.5rem', color: 'var(--luxury-burgundy)', fontWeight: 'bold' }}>4</div>
               <h3 style={{ color: 'var(--matte-gold)', marginBottom: '1rem' }}>Execution & Delivery</h3>
-              <p>Managing the transaction or project with precision and care</p>
+              <p style={{ color: 'rgba(255,255,255,0.8)' }}>Managing the transaction or project with precision and care</p>
             </div>
-            <div className="process-step" style={{ textAlign: 'center', padding: '2rem' }}>
+            <div className="process-step" style={{ textAlign: 'center', padding: '2rem', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', backdropFilter: 'blur(10px)' }}>
               <div style={{ width: '60px', height: '60px', background: 'var(--matte-gold)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem', fontSize: '1.5rem', color: 'var(--luxury-burgundy)', fontWeight: 'bold' }}>5</div>
               <h3 style={{ color: 'var(--matte-gold)', marginBottom: '1rem' }}>Reporting & Transparency</h3>
-              <p>Keeping clients informed at every step with detailed updates</p>
+              <p style={{ color: 'rgba(255,255,255,0.8)' }}>Keeping clients informed at every step with detailed updates</p>
             </div>
-            <div className="process-step" style={{ textAlign: 'center', padding: '2rem' }}>
+            <div className="process-step" style={{ textAlign: 'center', padding: '2rem', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', backdropFilter: 'blur(10px)' }}>
               <div style={{ width: '60px', height: '60px', background: 'var(--matte-gold)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem', fontSize: '1.5rem', color: 'var(--luxury-burgundy)', fontWeight: 'bold' }}>6</div>
               <h3 style={{ color: 'var(--matte-gold)', marginBottom: '1rem' }}>Continuous Support</h3>
-              <p>Ensuring long-term satisfaction and ongoing value creation</p>
+              <p style={{ color: 'rgba(255,255,255,0.8)' }}>Ensuring long-term satisfaction and ongoing value creation</p>
             </div>
           </div>
         </div>

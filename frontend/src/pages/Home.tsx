@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 import HeroSection from '../components/HeroSection';
 import PropertySearchWidget from '../components/PropertySearchWidget';
 import PortfolioShowcase from '../components/PortfolioShowcase';
@@ -8,8 +9,128 @@ import ServicesSection from '../components/ServicesSection';
 import ProcessSection from '../components/ProcessSection';
 import PartnersSection from '../components/PartnersSection';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
+interface MultilingualText {
+  en: string;
+  ar: string;
+  fr?: string;
+}
+
+interface AboutHomeData {
+  badge: MultilingualText;
+  title: MultilingualText;
+  description: MultilingualText;
+  description2: MultilingualText;
+  backgroundImage: string;
+  features: Array<{
+    icon: string;
+    title: MultilingualText;
+    description: MultilingualText;
+  }>;
+  statNumber: string;
+  statLabel: MultilingualText;
+}
+
+interface FeaturedPropertiesConfig {
+  badge: MultilingualText;
+  title: MultilingualText;
+  subtitle: MultilingualText;
+  fetchFromDatabase: boolean;
+  propertyCount: number;
+}
+
+interface Property {
+  _id: string;
+  title: string | MultilingualText;
+  location: string | MultilingualText;
+  price: number;
+  bedrooms: number;
+  bathrooms: number;
+  area: number;
+  type: 'sale' | 'rent' | 'off-plan';
+  images: string[];
+  propertyType: string;
+}
+
 const Home: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n.language as 'en' | 'ar' | 'fr';
+
+  const [aboutHomeData, setAboutHomeData] = useState<AboutHomeData | null>(null);
+  const [featuredPropertiesConfig, setFeaturedPropertiesConfig] = useState<FeaturedPropertiesConfig | null>(null);
+  const [featuredProperties, setFeaturedProperties] = useState<Property[]>([]);
+
+  useEffect(() => {
+    const fetchAboutHome = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/content/section/about-home`);
+        const data = response.data?.data || response.data;
+        if (data && data.length > 0) {
+          const item = data[0];
+          setAboutHomeData({
+            badge: item.metadata?.badge || { en: 'About N&H Real Estate', ar: 'عن N&H العقارية', fr: 'À propos de N&H Immobilier' },
+            title: item.title || { en: 'Your Trusted Real Estate Partner', ar: 'شريكك العقاري الموثوق', fr: 'Votre partenaire immobilier de confiance' },
+            description: item.description || { en: '', ar: '', fr: '' },
+            description2: item.metadata?.description2 || { en: '', ar: '', fr: '' },
+            backgroundImage: item.backgroundImage || item.image || '',
+            features: item.metadata?.features || [],
+            statNumber: item.metadata?.statNumber || '1000+',
+            statLabel: item.metadata?.statLabel || { en: 'Happy Clients', ar: 'عملاء سعداء', fr: 'Clients satisfaits' }
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching about-home data:', error);
+      }
+    };
+    fetchAboutHome();
+  }, []);
+
+  // Fetch featured properties configuration
+  useEffect(() => {
+    const fetchFeaturedPropertiesConfig = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/content/section/featured-properties`);
+        const data = response.data?.data || response.data;
+        if (data && data.length > 0) {
+          const item = data[0];
+          setFeaturedPropertiesConfig({
+            badge: item.metadata?.badge || { en: 'Featured Properties', ar: 'عقارات مميزة', fr: 'Propriétés en vedette' },
+            title: item.title || { en: 'Exceptional Properties', ar: 'عقارات استثنائية', fr: 'Propriétés exceptionnelles' },
+            subtitle: item.description || { en: 'Handpicked luxury properties that define excellence in real estate', ar: 'عقارات فاخرة مختارة بعناية', fr: 'Propriétés de luxe sélectionnées' },
+            fetchFromDatabase: item.metadata?.fetchFromDatabase ?? true,
+            propertyCount: item.metadata?.propertyCount || 3
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching featured-properties config:', error);
+      }
+    };
+    fetchFeaturedPropertiesConfig();
+  }, []);
+
+  // Fetch actual properties from database when config is ready
+  useEffect(() => {
+    const fetchProperties = async () => {
+      if (!featuredPropertiesConfig?.fetchFromDatabase) return;
+      try {
+        const response = await axios.get(`${API_URL}/properties?limit=${featuredPropertiesConfig.propertyCount}&sortBy=createdAt&order=desc`);
+        const data = response.data?.data || response.data;
+        if (data && Array.isArray(data)) {
+          setFeaturedProperties(data);
+        }
+      } catch (error) {
+        console.error('Error fetching properties:', error);
+      }
+    };
+    fetchProperties();
+  }, [featuredPropertiesConfig]);
+
+  const getText = (text: MultilingualText | string | undefined): string => {
+    if (!text) return '';
+    if (typeof text === 'string') return text;
+    return text[currentLang] || text.en || '';
+  };
 
   return (
     <div className="home">
@@ -27,64 +148,101 @@ const Home: React.FC = () => {
       <section className="featured-properties-section">
         <div className="container">
           <div className="section-header-modern">
-            <div className="section-badge">{t('home.featuredProperties')}</div>
-            <h2 className="section-title-modern">{t('home.exceptionalProperties')}</h2>
+            <div className="section-badge">
+              {featuredPropertiesConfig ? getText(featuredPropertiesConfig.badge) : t('home.featuredProperties')}
+            </div>
+            <h2 className="section-title-modern">
+              {featuredPropertiesConfig ? getText(featuredPropertiesConfig.title) : t('home.exceptionalProperties')}
+            </h2>
             <p className="section-subtitle-modern">
-              {t('home.handpickedLuxury')}
+              {featuredPropertiesConfig ? getText(featuredPropertiesConfig.subtitle) : t('home.handpickedLuxury')}
             </p>
           </div>
 
           <div className="featured-properties-grid">
-            <div className="featured-property-card">
-              <div className="property-image">
-                <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Luxury Villa" />
-                <div className="property-badge">{t('home.forSale')}</div>
-              </div>
-              <div className="property-info">
-                <h3>Luxury Marina Villa</h3>
-                <p className="property-location">📍 The Pearl, Qatar</p>
-                <p className="property-price">QAR 8,500,000</p>
-                <div className="property-features">
-                  <span>4 {t('home.beds')}</span>
-                  <span>5 {t('home.baths')}</span>
-                  <span>450 sqm</span>
+            {featuredPropertiesConfig?.fetchFromDatabase && featuredProperties.length > 0 ? (
+              featuredProperties.map((property) => (
+                <Link to={`/properties/${property._id}`} key={property._id} className="featured-property-card">
+                  <div className="property-image">
+                    <img
+                      src={property.images?.[0]?.startsWith('http') ? property.images[0] : `${API_URL.replace('/api', '')}${property.images?.[0] || ''}`}
+                      alt={getText(property.title)}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                      }}
+                    />
+                    <div className="property-badge">
+                      {property.type === 'sale' ? t('home.forSale') : property.type === 'rent' ? t('home.forRent') : 'Off Plan'}
+                    </div>
+                  </div>
+                  <div className="property-info">
+                    <h3>{getText(property.title)}</h3>
+                    <p className="property-location">📍 {getText(property.location)}</p>
+                    <p className="property-price">
+                      QAR {property.price?.toLocaleString()}{property.type === 'rent' ? '/month' : ''}
+                    </p>
+                    <div className="property-features">
+                      <span>{property.bedrooms} {t('home.beds')}</span>
+                      <span>{property.bathrooms} {t('home.baths')}</span>
+                      <span>{property.area} sqm</span>
+                    </div>
+                  </div>
+                </Link>
+              ))
+            ) : (
+              <>
+                <div className="featured-property-card">
+                  <div className="property-image">
+                    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Luxury Villa" />
+                    <div className="property-badge">{t('home.forSale')}</div>
+                  </div>
+                  <div className="property-info">
+                    <h3>Luxury Marina Villa</h3>
+                    <p className="property-location">📍 The Pearl, Qatar</p>
+                    <p className="property-price">QAR 8,500,000</p>
+                    <div className="property-features">
+                      <span>4 {t('home.beds')}</span>
+                      <span>5 {t('home.baths')}</span>
+                      <span>450 sqm</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            <div className="featured-property-card">
-              <div className="property-image">
-                <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Modern Apartment" />
-                <div className="property-badge">{t('home.forRent')}</div>
-              </div>
-              <div className="property-info">
-                <h3>Modern Downtown Apartment</h3>
-                <p className="property-location">📍 West Bay, Doha</p>
-                <p className="property-price">QAR 15,000/month</p>
-                <div className="property-features">
-                  <span>3 {t('home.beds')}</span>
-                  <span>3 {t('home.baths')}</span>
-                  <span>180 sqm</span>
+                <div className="featured-property-card">
+                  <div className="property-image">
+                    <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Modern Apartment" />
+                    <div className="property-badge">{t('home.forRent')}</div>
+                  </div>
+                  <div className="property-info">
+                    <h3>Modern Downtown Apartment</h3>
+                    <p className="property-location">📍 West Bay, Doha</p>
+                    <p className="property-price">QAR 15,000/month</p>
+                    <div className="property-features">
+                      <span>3 {t('home.beds')}</span>
+                      <span>3 {t('home.baths')}</span>
+                      <span>180 sqm</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            <div className="featured-property-card">
-              <div className="property-image">
-                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Penthouse" />
-                <div className="property-badge">{t('home.forSale')}</div>
-              </div>
-              <div className="property-info">
-                <h3>Executive Penthouse</h3>
-                <p className="property-location">📍 Lusail City, Qatar</p>
-                <p className="property-price">QAR 12,000,000</p>
-                <div className="property-features">
-                  <span>5 {t('home.beds')}</span>
-                  <span>6 {t('home.baths')}</span>
-                  <span>600 sqm</span>
+                <div className="featured-property-card">
+                  <div className="property-image">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Penthouse" />
+                    <div className="property-badge">{t('home.forSale')}</div>
+                  </div>
+                  <div className="property-info">
+                    <h3>Executive Penthouse</h3>
+                    <p className="property-location">📍 Lusail City, Qatar</p>
+                    <p className="property-price">QAR 12,000,000</p>
+                    <div className="property-features">
+                      <span>5 {t('home.beds')}</span>
+                      <span>6 {t('home.baths')}</span>
+                      <span>600 sqm</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </>
+            )}
           </div>
 
           <div className="section-cta">
@@ -101,60 +259,55 @@ const Home: React.FC = () => {
       {/* Dynamic Portfolio Showcase Section */}
       <PortfolioShowcase />
 
-      {/* About Section with Modern Design */}
-      <section className="about-section-modern">
-        <div className="container">
-          <div className="about-content-grid">
-            <div className="about-text">
-              <div className="section-badge">About N&H Real Estate</div>
-              <h2 className="section-title-modern">Your Trusted Real Estate Partner</h2>
+      {/* About Section with Background Image */}
+      <section
+        className="about-section-bg"
+        style={{
+          backgroundImage: aboutHomeData?.backgroundImage
+            ? `url(${aboutHomeData.backgroundImage.startsWith('http') ? aboutHomeData.backgroundImage : `${API_URL.replace('/api', '')}${aboutHomeData.backgroundImage}`})`
+            : 'url(/images/about.png)'
+        }}
+      >
+        <div className="about-section-overlay">
+          <div className="container">
+            <div className="about-content-centered">
+              <div className="section-badge">
+                {aboutHomeData ? getText(aboutHomeData.badge) : 'About N&H Real Estate'}
+              </div>
+              <h2 className="section-title-modern">
+                {aboutHomeData ? getText(aboutHomeData.title) : 'Your Trusted Real Estate Partner'}
+              </h2>
               <p className="about-description">
-                We provide a comprehensive portfolio of services designed for individuals, families, developers,
-                corporate tenants, and institutional investors. By combining local expertise with international
-                standards, every transaction is managed with professionalism and integrity.
+                {aboutHomeData ? getText(aboutHomeData.description) : 'We provide a comprehensive portfolio of services designed for individuals, families, developers, corporate tenants, and institutional investors. By combining local expertise with international standards, every transaction is managed with professionalism and integrity.'}
               </p>
-              <p className="about-description">
-                With over 15 years of experience across Qatar, UAE, Saudi Arabia, Egypt, France, Morocco,
-                Oman, and Turkey, we deliver world-class real estate solutions tailored to your needs.
-              </p>
+              {aboutHomeData?.description2 && getText(aboutHomeData.description2) && (
+                <p className="about-description">
+                  {getText(aboutHomeData.description2)}
+                </p>
+              )}
 
-              <div className="about-features">
-                <div className="about-feature">
-                  <div className="feature-icon">🏆</div>
-                  <div>
-                    <h4>Award-Winning Service</h4>
-                    <p>Recognized excellence in real estate</p>
+              <div className="about-features-row">
+                {(aboutHomeData?.features && aboutHomeData.features.length > 0 ? aboutHomeData.features : [
+                  { icon: '🏆', title: { en: 'Award-Winning Service', ar: 'خدمة حائزة على جوائز', fr: 'Service primé' }, description: { en: 'Recognized excellence in real estate', ar: 'تميز معترف به في العقارات', fr: 'Excellence reconnue dans l\'immobilier' } },
+                  { icon: '🌍', title: { en: 'Global Network', ar: 'شبكة عالمية', fr: 'Réseau mondial' }, description: { en: 'Properties across 8 countries', ar: 'عقارات في 8 دول', fr: 'Propriétés dans 8 pays' } },
+                  { icon: '🤝', title: { en: 'Trusted Expertise', ar: 'خبرة موثوقة', fr: 'Expertise de confiance' }, description: { en: '15+ years of market experience', ar: 'أكثر من 15 عامًا من الخبرة في السوق', fr: 'Plus de 15 ans d\'expérience du marché' } }
+                ]).map((feature, index) => (
+                  <div className="about-feature-card" key={index}>
+                    <div className="feature-icon">{feature.icon}</div>
+                    <h4>{getText(feature.title)}</h4>
+                    <p>{getText(feature.description)}</p>
                   </div>
-                </div>
-                <div className="about-feature">
-                  <div className="feature-icon">🌍</div>
-                  <div>
-                    <h4>Global Network</h4>
-                    <p>Properties across 8 countries</p>
-                  </div>
-                </div>
-                <div className="about-feature">
-                  <div className="feature-icon">🤝</div>
-                  <div>
-                    <h4>Trusted Expertise</h4>
-                    <p>15+ years of market experience</p>
-                  </div>
-                </div>
+                ))}
               </div>
 
-              <Link to="/about" className="btn-modern-secondary">
-                Learn More About Us
+              <div className="about-stat-badge">
+                <span className="stat-number">{aboutHomeData?.statNumber || '1000+'}</span>
+                <span className="stat-label">{aboutHomeData ? getText(aboutHomeData.statLabel) : 'Happy Clients'}</span>
+              </div>
+
+              <Link to="/about" className="btn-modern-light">
+                {t('home.learnMore', 'Learn More About Us')}
               </Link>
-            </div>
-
-            <div className="about-image">
-              <img src="/images/about.png" alt="Modern Architecture" />
-              <div className="about-image-overlay">
-                <div className="about-stat">
-                  <span className="stat-number">1000+</span>
-                  <span className="stat-label">Happy Clients</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>

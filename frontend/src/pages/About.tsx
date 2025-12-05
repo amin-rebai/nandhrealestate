@@ -68,79 +68,83 @@ const About: React.FC = () => {
         </div>
       </section>
 
-      {/* Vision & Mission */}
-      <section className="section section-light">
-        <div className="container">
-          <div className="section-header">
-            <h2>Vision & Mission</h2>
-          </div>
-          <div className="vision-mission-grid">
-            <div
-              className="vision-card visual-enhanced bg-card"
-              style={{
-                backgroundImage: `url(${getMeta('visionImage') || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80'})`
-              }}
-            >
-              <div className="bg-overlay" />
-              <div className="card-content overlay-content">
-                <div className="card-icon">🎯</div>
-                <h3>Our Vision</h3>
-                <p>{displayML(getMeta('vision', 'To be the region\'s most trusted and innovative real estate partner, delivering excellence and sustainable growth through professionalism, technology, and client-focused solutions.'))}</p>
-              </div>
-            </div>
-            <div
-              className="mission-card visual-enhanced bg-card"
-              style={{
-                backgroundImage: `url(${getMeta('missionImage') || 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80'})`
-              }}
-            >
-              <div className="bg-overlay" />
-              <div className="card-content overlay-content">
-                <div className="card-icon">🚀</div>
-                <h3>Our Mission</h3>
-                <p>{displayML(getMeta('mission', 'Our mission is to simplify the real estate journey through end-to-end services, delivering measurable value powered by market insights and modern tools.'))}</p>
-              </div>
-            </div>
-          </div>
+      {/* Vision Section - Full Width */}
+      <section
+        className="vision-fullwidth-section"
+        style={{
+          backgroundImage: `url(${getMeta('visionImage')?.startsWith('http') ? getMeta('visionImage') : getMeta('visionImage') ? `${process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000'}${getMeta('visionImage')}` : 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80'})`
+        }}
+      >
+        <div className="vision-fullwidth-overlay"></div>
+        <div className="vision-fullwidth-content">
+          <div className="vision-icon">🎯</div>
+          <h2>Our Vision</h2>
+          <p>{displayML(getMeta('vision', 'To be the region\'s most trusted and innovative real estate partner, delivering excellence and sustainable growth through professionalism, technology, and client-focused solutions.'))}</p>
         </div>
       </section>
 
-      {/* CEO Message */}
-      <section className="section section-dark">
-        <div className="container">
-          <div className="section-header">
-            <h2>Message from Our CEO</h2>
+      {/* Mission Section - Full Width */}
+      <section
+        className="mission-fullwidth-section"
+        style={{
+          backgroundImage: `url(${getMeta('missionImage')?.startsWith('http') ? getMeta('missionImage') : getMeta('missionImage') ? `${process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000'}${getMeta('missionImage')}` : 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80'})`
+        }}
+      >
+        <div className="mission-fullwidth-overlay"></div>
+        <div className="mission-fullwidth-content">
+          <div className="mission-icon">🚀</div>
+          <h2>Our Mission</h2>
+          <p>{displayML(getMeta('mission', 'Our mission is to simplify the real estate journey through end-to-end services, delivering measurable value powered by market insights and modern tools.'))}</p>
+        </div>
+      </section>
+
+      {/* CEO Section - Diagonal Design */}
+      <section className="ceo-section">
+        <div className="ceo-diagonal-container">
+          {/* Left Panel - Title */}
+          <div className="ceo-left-panel">
+            <div className="ceo-left-content">
+              <h2 className="ceo-section-title">
+                {displayML(getMeta('ceo.sectionTitle', 'The Vision Behind')) || 'The Vision Behind'}
+              </h2>
+              <h3 className="ceo-company-name">N&H Homes<br />Real Estate</h3>
+            </div>
           </div>
-          <div className="ceo-message" style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
-            <div style={{ background: 'rgba(197, 160, 89, 0.1)', padding: '3rem', borderRadius: '12px', border: '2px solid var(--matte-gold)' }}>
-                <p style={{ fontSize: '1.2rem', lineHeight: '1.8', marginBottom: '2rem', fontStyle: 'italic' }}>
-                {displayML(getMeta('ceo.message', '"At N&H Real Estate, we believe property is more than bricks and mortar—it represents security, prosperity, and legacy."'))}
-              </p>
-              <p style={{ fontSize: '1.1rem', lineHeight: '1.7', marginBottom: '2rem' }}>
-                "As Qatar and the wider region continue their rapid transformation, we remain committed 
-                to being at the forefront of this growth. With a focus on transparency, innovation, and 
-                excellence, N&H Real Estate is redefining what it means to be a full-service property 
-                partner across local, regional, and international markets."
-              </p>
-              <p style={{ fontSize: '1.1rem', lineHeight: '1.7', marginBottom: '2rem' }}>
-                "At N&H Real Estate, we align strategy with execution across acquisitions, leasing, 
-                marketing, asset management, and portfolio advisory. Our client-first practice integrates 
-                data-driven analysis with on-the-ground expertise in Qatar and key international gateways. 
-                We operate with integrity, agility, and precision—enabling investors, developers, and 
-                occupiers to unlock value, de-risk decisions, and sustain long-term performance."
-              </p>
-              <div style={{ borderTop: '1px solid var(--matte-gold)', paddingTop: '1.5rem', marginTop: '2rem' }}>
-                <p style={{ fontWeight: '600', color: 'var(--matte-gold)' }}>CEO – N&H Real Estate</p>
-              </div>
-              {/* optional photo */}
-              {getMeta('ceo.photo') && (
-                <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-                  <img src={getMeta('ceo.photo')} alt="CEO" style={{ width: 120, height: 120, borderRadius: '50%', objectFit: 'cover', border: '3px solid #f3e9d8' }} />
+
+          {/* Center - CEO Image */}
+          <div className="ceo-center-panel">
+            <div className="ceo-image-wrapper">
+              {getMeta('ceo.photo') ? (
+                <img
+                  src={getMeta('ceo.photo').startsWith('http') ? getMeta('ceo.photo') : `${process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000'}${getMeta('ceo.photo')}`}
+                  alt={displayML(getMeta('ceo.name', 'CEO'))}
+                  className="ceo-photo"
+                />
+              ) : (
+                <div className="ceo-photo-placeholder">
+                  <span>CEO Photo</span>
                 </div>
               )}
+            </div>
+          </div>
+
+          {/* Right Panel - Quote and Name */}
+          <div className="ceo-right-panel">
+            <div className="ceo-right-content">
+              <p className="ceo-quote">
+                {displayML(getMeta('ceo.message', 'Behind every success, there is a team of thinkers, creators, and strategists who share one belief: excellence is crafted, not claimed.'))}
+              </p>
+              <div className="ceo-signature">
+                <h4 className="ceo-name">{displayML(getMeta('ceo.name', 'Nesrine Gharbi'))}</h4>
+                <p className="ceo-title">{displayML(getMeta('ceo.title', 'Chairman of Board of Directors'))}</p>
               </div>
             </div>
           </div>
+
+          {/* Diagonal Overlays */}
+          <div className="ceo-diagonal-left"></div>
+          <div className="ceo-diagonal-right"></div>
+        </div>
       </section>
 
       {/* Global Network */}

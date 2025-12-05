@@ -463,9 +463,9 @@ const BlogForm: React.FC = () => {
                     author: { ...prev.author, avatar: value as string }
                   }))}
                   multiple={false}
-                  variant="compact"
                   label="Upload Avatar"
                   helperText="Recommended size: 200x200px"
+                  showPreview={true}
                 />
               </Box>
             </Paper>

@@ -20,11 +20,16 @@ import {
   InputLabel,
   Select,
   MenuItem
+  ,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions
 } from '@mui/material';
 import {
   Save,
   Edit,
-  PlayArrow,
   Home as HomeIcon,
   Article,
   Settings
@@ -35,15 +40,15 @@ import {
   fetchContentBySection,
   createContent,
   updateContent,
+  deleteContent,
+  toggleContentStatus,
   clearError
 } from '../store/slices/contentSlice';
 
-import axios from 'axios';
 import MultilingualTextField from '../components/MultilingualTextField';
 import ImageUpload from '../components/ImageUpload';
+import VideoUpload from '../components/VideoUpload';
 import { ensureMultilingual } from '../utils/multilingualUtils';
-
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 
 
@@ -83,6 +88,27 @@ const Content: React.FC = () => {
   const { heroSection, aboutSection, content: contentList, error, loading } = useSelector(
     (state: RootState) => state.content
   );
+
+  // Manage Sections state
+  const [selectedSection, setSelectedSection] = useState<string>('');
+  const [itemsForSelectedSection, setItemsForSelectedSection] = useState<any[]>([]);
+  const defaultEditorData: any = {
+    title: { en: '', ar: '', fr: '' },
+    subtitle: { en: '', ar: '', fr: '' },
+    content: { en: '', ar: '', fr: '' },
+    backgroundImage: '',
+    image: '',
+    ctaText: { en: '', ar: '', fr: '' },
+    ctaLink: '',
+    isActive: true,
+    order: 0,
+    section: ''
+  };
+  const [editorData, setEditorData] = useState<any>(defaultEditorData);
+  const [editMode, setEditMode] = useState(false);
+  // Delete confirmation dialog state
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
   
 
   const [tabValue, setTabValue] = useState(0);
@@ -141,6 +167,10 @@ const Content: React.FC = () => {
     dispatch(fetchContentBySection('about'));
     // also fetch others used in Page Settings
     dispatch(fetchContentBySection('services'));
+    dispatch(fetchContentBySection('goals'));
+    dispatch(fetchContentBySection('clients'));
+    dispatch(fetchContentBySection('slider'));
+    dispatch(fetchContentBySection('values'));
     dispatch(fetchContentBySection('portfolio'));
     dispatch(fetchContentBySection('contact'));
     dispatch(fetchContentBySection('home'));
@@ -289,6 +319,79 @@ const Content: React.FC = () => {
     }
   }, [contentList]);
 
+  // Sync selectedSection items from contentList
+  useEffect(() => {
+    if (!selectedSection) {
+      setItemsForSelectedSection([]);
+      return;
+    }
+    const items = contentList.filter((c: any) => c.section === selectedSection);
+    setItemsForSelectedSection(items || []);
+  }, [selectedSection, contentList]);
+
+  // Handlers for Manage Sections
+  const handleAddNew = () => {
+    if (!selectedSection) return;
+    setEditorData({ ...defaultEditorData, section: selectedSection });
+    setEditMode(false);
+  };
+
+  const handleEdit = (item: any) => {
+    setEditorData({ ...item });
+    setEditMode(true);
+  };
+
+  const handleDelete = (id: string) => {
+    // open confirmation dialog instead of using window.confirm
+    setDeleteTargetId(id);
+    setConfirmOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteTargetId) return;
+    try {
+      await dispatch(deleteContent(deleteTargetId)).unwrap();
+      setConfirmOpen(false);
+      setDeleteTargetId(null);
+      // refresh
+      if (selectedSection) dispatch(fetchContentBySection(selectedSection));
+    } catch (err) {
+      console.error('delete error', err);
+    }
+  };
+
+  const cancelDelete = () => {
+    setConfirmOpen(false);
+    setDeleteTargetId(null);
+  };
+
+  const handleToggle = async (id: string) => {
+    try {
+      await dispatch(toggleContentStatus(id)).unwrap();
+      dispatch(fetchContentBySection(selectedSection));
+    } catch (err) {
+      console.error('toggle error', err);
+    }
+  };
+
+  const saveEditorItem = async () => {
+    try {
+      const payload: any = { ...editorData };
+      if (!payload.section) payload.section = selectedSection;
+      if (editMode && editorData._id) {
+        await dispatch(updateContent({ id: editorData._id, data: payload })).unwrap();
+      } else {
+        await dispatch(createContent(payload)).unwrap();
+      }
+      // refresh
+      dispatch(fetchContentBySection(selectedSection));
+      setEditorData(defaultEditorData);
+      setEditMode(false);
+    } catch (err) {
+      console.error('save error', err);
+    }
+  };
+
   // Generic page media save helper
   const savePageMedia = async (section: string) => {
     try {
@@ -385,8 +488,9 @@ const Content: React.FC = () => {
           }}
         >
           <Tab icon={<HomeIcon />} label="Hero Section" iconPosition="start" />
-          <Tab icon={<Article />} label="About Section" iconPosition="start" />
-          <Tab icon={<Settings />} label="Page Settings" iconPosition="start" />
+            <Tab icon={<Article />} label="About Section" iconPosition="start" />
+            <Tab icon={<Settings />} label="Page Settings" iconPosition="start" />
+            <Tab icon={<Settings />} label="Manage Sections" iconPosition="start" />
         </Tabs>
       </Paper>
 
@@ -500,88 +604,14 @@ const Content: React.FC = () => {
 
                   {heroData.mediaType === 'video' && (
                     <Grid item xs={12}>
-                      <Box>
-                        <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
-                          Hero Video Upload
-                        </Typography>
-                        <Typography variant="caption" sx={{ mb: 2, display: 'block', color: '#666' }}>
-                          Recommended: 10-30 seconds, MP4 format, max 100MB
-                        </Typography>
-                        <Box
-                          sx={{
-                            border: '2px dashed #ccc',
-                            borderRadius: 2,
-                            padding: 3,
-                            textAlign: 'center',
-                            backgroundColor: heroEditing ? '#f9f9f9' : '#f5f5f5',
-                            '&:hover': heroEditing ? {
-                              borderColor: '#4B0E14',
-                              backgroundColor: '#fff'
-                            } : {},
-                            opacity: heroEditing ? 1 : 0.6
-                          }}
-                        >
-                          <input
-                            type="file"
-                            accept="video/mp4,video/webm,video/quicktime"
-                            id="hero-video-upload"
-                            disabled={!heroEditing}
-                            onChange={async (e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                if (file.size > 100 * 1024 * 1024) {
-                                  alert('Video file size must be less than 100MB');
-                                  return;
-                                }
-                                try {
-                                  const formData = new FormData();
-                                  formData.append('video', file);
-                                  // const response = await fetch('http://localhost:5000/api/upload/video', {
-                                  //   method: 'POST',
-                                  //   body: formData,
-                                  // });
-
-                                  const response = await axios.post(`${API_URL}/upload/video`, formData, {
-                                          headers: {
-                                            'Content-Type': 'multipart/form-data',
-                                            'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
-                                          },
-                                        });
-
-                                  if (response.status === 200) {
-                                    // const data = await response.json();
-                                    setHeroData({ ...heroData, videoUrl: response.data.url });
-                                  } else {
-                                    alert('Video upload failed');
-                                  }
-                                } catch (error) {
-                                  console.error('Error uploading video:', error);
-                                  alert('Error uploading video');
-                                }
-                              }
-                            }}
-                            style={{ display: 'none' }}
-                          />
-                          <label htmlFor="hero-video-upload" style={{ cursor: heroEditing ? 'pointer' : 'not-allowed' }}>
-                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-                              <PlayArrow sx={{ fontSize: 48, color: '#4B0E14' }} />
-                              <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                                Click to upload hero video
-                              </Typography>
-                              <Typography variant="caption" color="textSecondary">
-                                MP4, WebM or MOV (max 100MB)
-                              </Typography>
-                            </Box>
-                          </label>
-                        </Box>
-                        {heroData.videoUrl && (
-                          <Box sx={{ mt: 2 }}>
-                            <Typography variant="caption" sx={{ display: 'block', color: 'green', mb: 1 }}>
-                              ✓ Video uploaded
-                            </Typography>
-                          </Box>
-                        )}
-                      </Box>
+                      <VideoUpload
+                        value={heroData.videoUrl}
+                        onChange={(value) => setHeroData({ ...heroData, videoUrl: value })}
+                        disabled={!heroEditing}
+                        label="Upload Hero Video"
+                        helperText="Recommended: 10-30 seconds, MP4 format, max 100MB"
+                        showPreview={true}
+                      />
                     </Grid>
                   )}
 
@@ -592,9 +622,9 @@ const Content: React.FC = () => {
                         onChange={(value) => setHeroData({ ...heroData, backgroundImage: value as string })}
                         multiple={false}
                         disabled={!heroEditing}
-                        variant="compact"
                         label="Upload Background Image"
                         helperText="Recommended size: 1920x1080px"
+                        showPreview={true}
                       />
                     </Grid>
                   )}
@@ -1134,54 +1164,22 @@ const Content: React.FC = () => {
                   </FormControl>
 
                   {pageMedia.home.mediaType === 'video' ? (
-                    <Box>
-                      <Typography variant="caption" display="block" sx={{ mb: 1 }}>Upload or paste a video URL for the Home hero (MP4 recommended)</Typography>
-                      <TextField
-                        fullWidth
-                        placeholder="Paste video URL or upload via the file input"
-                        value={pageMedia.home.videoUrl}
-                        onChange={(e) => setPageMedia({ ...pageMedia, home: { ...pageMedia.home, videoUrl: e.target.value } })}
-                        size="small"
-                        sx={{ mb: 1 }}
-                      />
-                      <input
-                        type="file"
-                        accept="video/mp4,video/webm,video/quicktime"
-                        onChange={async (e) => {
-                          const file = e.target.files?.[0];
-                          if (!file) return;
-                          if (file.size > 100 * 1024 * 1024) {
-                            alert('Video must be less than 100MB');
-                            return;
-                          }
-                          try {
-                            const formData = new FormData();
-                            formData.append('video', file);
-                            const response = await fetch('http://localhost:5000/api/upload/video', { method: 'POST', body: formData });
-                            if (response.ok) {
-                              const data = await response.json();
-                              setPageMedia(prev => ({ ...prev, home: { ...prev.home, videoUrl: data.url } }));
-                            } else {
-                              alert('Upload failed');
-                            }
-                          } catch (err) {
-                            console.error(err);
-                            alert('Upload error');
-                          }
-                        }}
-                        style={{ display: 'block', marginTop: 8 }}
-                      />
-                    </Box>
+                    <VideoUpload
+                      value={pageMedia.home.videoUrl}
+                      onChange={(value) => setPageMedia({ ...pageMedia, home: { ...pageMedia.home, videoUrl: value } })}
+                      label="Upload Home Hero Video"
+                      helperText="Recommended: MP4 format, max 100MB"
+                      showPreview={true}
+                    />
                   ) : (
-                    <Box>
-                      <ImageUpload
-                        label="Upload Home Background Image"
-                        value={pageMedia.home.backgroundImage}
-                        onChange={(value) => setPageMedia({ ...pageMedia, home: { ...pageMedia.home, backgroundImage: value as string } })}
-                        multiple={false}
-                        helperText="Recommended size: 1920x1080px"
-                      />
-                    </Box>
+                    <ImageUpload
+                      label="Upload Home Background Image"
+                      value={pageMedia.home.backgroundImage}
+                      onChange={(value) => setPageMedia({ ...pageMedia, home: { ...pageMedia.home, backgroundImage: value as string } })}
+                      multiple={false}
+                      helperText="Recommended size: 1920x1080px"
+                      showPreview={true}
+                    />
                   )}
                 </Paper>
               </Grid>
@@ -1241,6 +1239,141 @@ const Content: React.FC = () => {
           </CardContent>
         </Card>
       </TabPanel>
+
+      {/* Manage Sections Tab */}
+      <TabPanel value={tabValue} index={3}>
+        <Card>
+          <CardContent>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+              <Typography variant="h6" sx={{ fontWeight: 600, color: '#4B0E14' }}>
+                Manage Content Sections
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 2 }}>
+                <Button variant="outlined" size="small" onClick={() => {
+                  // refresh all sections
+                  dispatch(fetchContentBySection('services'));
+                  dispatch(fetchContentBySection('goals'));
+                  dispatch(fetchContentBySection('clients'));
+                  dispatch(fetchContentBySection('slider'));
+                  dispatch(fetchContentBySection('portfolio'));
+                }}>
+                  Refresh
+                </Button>
+              </Box>
+            </Box>
+
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={4}>
+                <FormControl fullWidth>
+                  <InputLabel id="manage-section-select">Section</InputLabel>
+                  <Select
+                    labelId="manage-section-select"
+                    value={selectedSection}
+                    label="Section"
+                    onChange={(e) => setSelectedSection(e.target.value)}
+                  >
+                    <MenuItem value="services">Services</MenuItem>
+                    <MenuItem value="goals">Process / Goals</MenuItem>
+                    <MenuItem value="clients">Clients / Partners</MenuItem>
+                    <MenuItem value="slider">Slider</MenuItem>
+                    <MenuItem value="portfolio">Portfolio</MenuItem>
+                    <MenuItem value="values">Values</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12} md={8} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Button variant="contained" onClick={() => handleAddNew()} disabled={!selectedSection} sx={{ backgroundColor: '#4B0E14' }}>
+                  Add Item
+                </Button>
+                {selectedSection && (
+                  <Typography variant="caption" sx={{ color: '#666' }}>Now editing: <strong>{selectedSection}</strong></Typography>
+                )}
+              </Grid>
+
+              {/* List & Editor */}
+              <Grid item xs={12}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={6}>
+                    <Paper sx={{ p: 2, minHeight: 280 }}>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 2 }}>Items</Typography>
+                      {selectedSection ? (
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                          {(itemsForSelectedSection.length === 0) && (
+                            <Typography variant="caption" sx={{ color: '#777' }}>No items yet. Click Add Item to create one.</Typography>
+                          )}
+                          {itemsForSelectedSection.map((item: any) => (
+                            <Paper key={item._id} sx={{ p: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2 }}>
+                              <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                                <Box sx={{ width: 56, height: 42, backgroundImage: `url(${item.backgroundImage || item.image || ''})`, backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: 1, border: '1px solid #eee' }} />
+                                <Box>
+                                  <Typography sx={{ fontWeight: 700 }}>{displayMultilingual(item.title)}</Typography>
+                                  <Typography variant="caption" sx={{ color: '#666' }}>{item.section} • {item.isActive ? 'Active' : 'Inactive'}</Typography>
+                                </Box>
+                              </Box>
+
+                              <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                                <FormControlLabel control={<Switch checked={item.isActive} onChange={() => handleToggle(item._id)} />} label="" />
+                                <Button size="small" onClick={() => handleEdit(item)} startIcon={<Edit />}>
+                                  Edit
+                                </Button>
+                                <Button size="small" color="error" onClick={() => handleDelete(item._id)}>Delete</Button>
+                              </Box>
+                            </Paper>
+                          ))}
+                        </Box>
+                      ) : (
+                        <Typography variant="caption" sx={{ color: '#777' }}>Select a section to manage its items.</Typography>
+                      )}
+                    </Paper>
+                  </Grid>
+
+                  <Grid item xs={12} md={6}>
+                    <Paper sx={{ p: 2, minHeight: 280 }}>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 2 }}>Editor</Typography>
+                      {!selectedSection && (
+                        <Typography variant="caption" sx={{ color: '#666' }}>Choose a section and item to edit, or click Add Item to create a new one.</Typography>
+                      )}
+
+                      {selectedSection && (
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                          <MultilingualTextField label="Title" value={editorData.title} onChange={(value) => setEditorData({ ...editorData, title: value })} multiline />
+                          <MultilingualTextField label="Subtitle / Short" value={editorData.subtitle} onChange={(value) => setEditorData({ ...editorData, subtitle: value })} />
+                          <MultilingualTextField label="Description / Content" value={editorData.content} onChange={(value) => setEditorData({ ...editorData, content: value })} multiline rows={4} />
+                          <ImageUpload value={editorData.backgroundImage} onChange={(value) => setEditorData({ ...editorData, backgroundImage: value as string })} multiple={false} variant="compact" label="Background Image" helperText="Recommended: 1600x900" />
+                          <Box sx={{ display: 'flex', gap: 2 }}>
+                            <TextField label="CTALink" value={editorData.ctaLink || ''} onChange={(e) => setEditorData({ ...editorData, ctaLink: e.target.value })} size="small" />
+                            <TextField label="Order" value={editorData.order ?? 0} type="number" size="small" onChange={(e) => setEditorData({ ...editorData, order: Number(e.target.value) })} />
+                            <FormControlLabel control={<Switch checked={editorData.isActive} onChange={(e) => setEditorData({ ...editorData, isActive: e.target.checked })} />} label="Active" />
+                          </Box>
+
+                          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+                            <Button size="small" onClick={() => { setEditorData(defaultEditorData); setEditMode(false); }}>Reset</Button>
+                            <Button size="small" variant="contained" onClick={() => saveEditorItem()} sx={{ backgroundColor: '#4B0E14' }}>{editMode ? 'Save' : 'Create'}</Button>
+                          </Box>
+                        </Box>
+                      )}
+                    </Paper>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </TabPanel>
+      {/* Delete confirmation dialog */}
+      <Dialog open={confirmOpen} onClose={cancelDelete}>
+        <DialogTitle>Confirm delete</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this item? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={cancelDelete}>Cancel</Button>
+          <Button onClick={confirmDelete} color="error" variant="contained">Delete</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

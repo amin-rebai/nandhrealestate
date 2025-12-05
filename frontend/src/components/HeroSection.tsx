@@ -31,13 +31,16 @@ const HeroSection: React.FC = () => {
 
         // Prefer admin-managed 'home' section for site hero, fallback to legacy 'hero'
         let response = await axios.get(`${base}/api/content?section=home`);
-        if (!response.data || response.data.length === 0) {
+        let contentData = response.data?.data || response.data;
+
+        if (!contentData || contentData.length === 0) {
           response = await axios.get(`${base}/api/content?section=hero`);
+          contentData = response.data?.data || response.data;
         }
 
-        if (response.data && response.data.length > 0) {
-          const activeHero = response.data.find((item: HeroData) => item.isActive);
-          setHeroData(activeHero || response.data[0]);
+        if (contentData && contentData.length > 0) {
+          const activeHero = contentData.find((item: HeroData) => item.isActive);
+          setHeroData(activeHero || contentData[0]);
         }
       } catch (error) {
         console.error('Error fetching hero data:', error);

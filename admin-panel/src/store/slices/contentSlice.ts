@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export interface ContentItem {
   _id: string;
-  section: 'home' | 'hero' | 'about' | 'featured' | 'services' | 'goals' | 'clients' | 'vision' | 'mission' | 'values' | 'slider' | 'portfolio' | 'contact';
+  section: 'home' | 'hero' | 'about' | 'about-home' | 'featured' | 'featured-properties' | 'process-section' | 'services' | 'goals' | 'clients' | 'vision' | 'mission' | 'values' | 'slider' | 'portfolio' | 'contact';
   title: string | { en: string; ar: string; fr?: string };
   subtitle?: string | { en: string; ar: string; fr?: string };
   content?: string | { en: string; ar: string; fr?: string };

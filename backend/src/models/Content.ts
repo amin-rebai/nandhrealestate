@@ -5,18 +5,22 @@ export interface IContent extends Document {
   title: {
     en: string;
     ar: string;
+    fr?: string;
   };
   subtitle?: {
     en?: string;
     ar?: string;
+    fr?: string;
   };
   content?: {
     en?: string;
     ar?: string;
+    fr?: string;
   };
   description?: {
     en?: string;
     ar?: string;
+    fr?: string;
   };
   image?: string;
   backgroundImage?: string;
@@ -25,6 +29,7 @@ export interface IContent extends Document {
   ctaText?: {
     en?: string;
     ar?: string;
+    fr?: string;
   };
   ctaLink?: string;
   propertyType?: 'villa' | 'apartment' | 'penthouse' | 'commercial' | 'office' | 'retail';
@@ -34,6 +39,7 @@ export interface IContent extends Document {
     label: {
       en: string;
       ar: string;
+      fr?: string;
     };
     value: string;
   }>;
@@ -63,6 +69,11 @@ const ContentSchema: Schema = new Schema({
       required: [true, 'Arabic title is required'],
       trim: true,
       maxlength: [200, 'Title cannot exceed 200 characters']
+    },
+    fr: {
+      type: String,
+      trim: true,
+      maxlength: [200, 'Title cannot exceed 200 characters']
     }
   },
   subtitle: {
@@ -72,6 +83,11 @@ const ContentSchema: Schema = new Schema({
       maxlength: [300, 'Subtitle cannot exceed 300 characters']
     },
     ar: {
+      type: String,
+      trim: true,
+      maxlength: [300, 'Subtitle cannot exceed 300 characters']
+    },
+    fr: {
       type: String,
       trim: true,
       maxlength: [300, 'Subtitle cannot exceed 300 characters']
@@ -87,6 +103,11 @@ const ContentSchema: Schema = new Schema({
       type: String,
       trim: true,
       maxlength: [2000, 'Content cannot exceed 2000 characters']
+    },
+    fr: {
+      type: String,
+      trim: true,
+      maxlength: [2000, 'Content cannot exceed 2000 characters']
     }
   },
   description: {
@@ -96,6 +117,11 @@ const ContentSchema: Schema = new Schema({
       maxlength: [500, 'Description cannot exceed 500 characters']
     },
     ar: {
+      type: String,
+      trim: true,
+      maxlength: [500, 'Description cannot exceed 500 characters']
+    },
+    fr: {
       type: String,
       trim: true,
       maxlength: [500, 'Description cannot exceed 500 characters']
@@ -125,6 +151,11 @@ const ContentSchema: Schema = new Schema({
       maxlength: [50, 'CTA text cannot exceed 50 characters']
     },
     ar: {
+      type: String,
+      trim: true,
+      maxlength: [50, 'CTA text cannot exceed 50 characters']
+    },
+    fr: {
       type: String,
       trim: true,
       maxlength: [50, 'CTA text cannot exceed 50 characters']
@@ -158,6 +189,11 @@ const ContentSchema: Schema = new Schema({
       ar: {
         type: String,
         required: true,
+        trim: true,
+        maxlength: [50, 'Stat label cannot exceed 50 characters']
+      },
+      fr: {
+        type: String,
         trim: true,
         maxlength: [50, 'Stat label cannot exceed 50 characters']
       }
