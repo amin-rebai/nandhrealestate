@@ -12,17 +12,17 @@ interface ServiceItem {
   order?: number;
 }
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
 const ServicesSection: React.FC = () => {
   const { i18n, t } = useTranslation();
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await axios.get(`${API_URL}/api/content/section/services?active=true`);
+        const response = await axios.get(`${API_URL}/content/section/services?active=true`);
         if (response.data && response.data.data) {
           setServices(response.data.data);
         }
@@ -34,7 +34,7 @@ const ServicesSection: React.FC = () => {
     };
 
     fetchServices();
-  }, [API_URL]);
+  }, []);
 
   const getText = (value: string | { en: string; ar: string } | undefined): string => {
     if (!value) return '';

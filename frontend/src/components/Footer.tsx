@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 interface ContactInfo {
   phone: string;
@@ -36,7 +36,7 @@ const Footer: React.FC = () => {
   useEffect(() => {
     const fetchContactInfo = async () => {
       try {
-        const response = await axios.get(`${API_URL}/api/content/section/contact?active=true`);
+        const response = await axios.get(`${API_URL}/content/section/contact?active=true`);
         if (response.data && response.data.length > 0) {
           const data = response.data[0];
           setContactInfo({

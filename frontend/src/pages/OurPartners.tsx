@@ -11,7 +11,7 @@ interface Partner {
   order?: number;
 }
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const OurPartners: React.FC = () => {
   const { i18n } = useTranslation();

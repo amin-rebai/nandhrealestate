@@ -12,17 +12,17 @@ interface PartnerItem {
   order?: number;
 }
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
 const PartnersSection: React.FC = () => {
   const { i18n } = useTranslation();
   const [partners, setPartners] = useState<PartnerItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-
   useEffect(() => {
     const fetchPartners = async () => {
       try {
-        const response = await axios.get(`${API_URL}/api/content/section/clients?active=true`);
+        const response = await axios.get(`${API_URL}/content/section/clients?active=true`);
         if (response.data && response.data.data) {
           setPartners(response.data.data);
         }
@@ -34,7 +34,7 @@ const PartnersSection: React.FC = () => {
     };
 
     fetchPartners();
-  }, [API_URL]);
+  }, []);
 
   const getText = (value: string | { en: string; ar: string; fr?: string } | undefined): string => {
     if (!value) return '';

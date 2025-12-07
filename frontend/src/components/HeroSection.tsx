@@ -27,14 +27,14 @@ const HeroSection: React.FC = () => {
   useEffect(() => {
     const fetchHeroData = async () => {
       try {
-        const base = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+        const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
         // Prefer admin-managed 'home' section for site hero, fallback to legacy 'hero'
-        let response = await axios.get(`${base}/api/content?section=home`);
+        let response = await axios.get(`${API_URL}/content?section=home`);
         let contentData = response.data?.data || response.data;
 
         if (!contentData || contentData.length === 0) {
-          response = await axios.get(`${base}/api/content?section=hero`);
+          response = await axios.get(`${API_URL}/content?section=hero`);
           contentData = response.data?.data || response.data;
         }
 

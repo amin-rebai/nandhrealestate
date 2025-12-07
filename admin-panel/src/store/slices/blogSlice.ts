@@ -83,6 +83,8 @@ const initialState: BlogState = {
   }
 };
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
 // Async thunks
 export const fetchBlogs = createAsyncThunk(
   'blog/fetchBlogs',
@@ -96,17 +98,17 @@ export const fetchBlogs = createAsyncThunk(
     language?: string;
   } = {}) => {
     const queryParams = new URLSearchParams();
-    
+
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== '') {
         queryParams.append(key, value.toString());
       }
     });
-    
+
     // Add admin flag to get full multilingual content
     queryParams.append('admin', 'true');
 
-    const response = await fetch(`http://localhost:5000/api/blog?${queryParams}`);
+    const response = await fetch(`${API_URL}/blog?${queryParams}`);
     if (!response.ok) {
       throw new Error('Failed to fetch blog posts');
     }
@@ -117,7 +119,7 @@ export const fetchBlogs = createAsyncThunk(
 export const fetchBlogById = createAsyncThunk(
   'blog/fetchBlogById',
   async (id: string) => {
-    const response = await fetch(`http://localhost:5000/api/blog/${id}?admin=true`);
+    const response = await fetch(`${API_URL}/blog/${id}?admin=true`);
     if (!response.ok) {
       throw new Error('Failed to fetch blog post');
     }
@@ -128,7 +130,7 @@ export const fetchBlogById = createAsyncThunk(
 export const createBlog = createAsyncThunk(
   'blog/createBlog',
   async (blogData: Partial<BlogPost>) => {
-    const response = await fetch('http://localhost:5000/api/blog', {
+    const response = await fetch(`${API_URL}/blog`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -146,7 +148,7 @@ export const createBlog = createAsyncThunk(
 export const updateBlog = createAsyncThunk(
   'blog/updateBlog',
   async ({ id, data }: { id: string; data: Partial<BlogPost> }) => {
-    const response = await fetch(`http://localhost:5000/api/blog/${id}`, {
+    const response = await fetch(`${API_URL}/blog/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -164,7 +166,7 @@ export const updateBlog = createAsyncThunk(
 export const deleteBlog = createAsyncThunk(
   'blog/deleteBlog',
   async (id: string) => {
-    const response = await fetch(`http://localhost:5000/api/blog/${id}`, {
+    const response = await fetch(`${API_URL}/blog/${id}`, {
       method: 'DELETE',
     });
     if (!response.ok) {
@@ -177,7 +179,7 @@ export const deleteBlog = createAsyncThunk(
 export const toggleBlogStatus = createAsyncThunk(
   'blog/toggleBlogStatus',
   async ({ id, status }: { id: string; status: string }) => {
-    const response = await fetch(`http://localhost:5000/api/blog/${id}/status`, {
+    const response = await fetch(`${API_URL}/blog/${id}/status`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -194,7 +196,7 @@ export const toggleBlogStatus = createAsyncThunk(
 export const fetchBlogCategories = createAsyncThunk(
   'blog/fetchCategories',
   async () => {
-    const response = await fetch('http://localhost:5000/api/blog/categories');
+    const response = await fetch(`${API_URL}/blog/categories`);
     if (!response.ok) {
       throw new Error('Failed to fetch categories');
     }
@@ -205,7 +207,7 @@ export const fetchBlogCategories = createAsyncThunk(
 export const fetchBlogTags = createAsyncThunk(
   'blog/fetchTags',
   async () => {
-    const response = await fetch('http://localhost:5000/api/blog/tags');
+    const response = await fetch(`${API_URL}/blog/tags`);
     if (!response.ok) {
       throw new Error('Failed to fetch tags');
     }
@@ -244,7 +246,7 @@ const blogSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch blog posts';
       })
-      
+
       // Fetch blog by ID
       .addCase(fetchBlogById.pending, (state) => {
         state.loading = true;
@@ -258,7 +260,7 @@ const blogSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch blog post';
       })
-      
+
       // Create blog
       .addCase(createBlog.pending, (state) => {
         state.loading = true;
@@ -273,7 +275,7 @@ const blogSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to create blog post';
       })
-      
+
       // Update blog
       .addCase(updateBlog.pending, (state) => {
         state.loading = true;
@@ -293,7 +295,7 @@ const blogSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to update blog post';
       })
-      
+
       // Delete blog
       .addCase(deleteBlog.pending, (state) => {
         state.loading = true;
@@ -311,7 +313,7 @@ const blogSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to delete blog post';
       })
-      
+
       // Toggle blog status
       .addCase(toggleBlogStatus.fulfilled, (state, action) => {
         const index = state.posts.findIndex(post => post._id === action.payload.data._id);
@@ -322,12 +324,12 @@ const blogSlice = createSlice({
           state.currentPost = action.payload.data;
         }
       })
-      
+
       // Fetch categories
       .addCase(fetchBlogCategories.fulfilled, (state, action) => {
         state.categories = action.payload.data;
       })
-      
+
       // Fetch tags
       .addCase(fetchBlogTags.fulfilled, (state, action) => {
         state.tags = action.payload.data;

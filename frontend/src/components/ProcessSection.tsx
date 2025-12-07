@@ -18,12 +18,12 @@ const ProcessSection: React.FC = () => {
   const [processSteps, setProcessSteps] = useState<ProcessItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
   useEffect(() => {
     const fetchProcess = async () => {
       try {
-        const response = await axios.get(`${API_URL}/api/content/section/goals?active=true`);
+        const response = await axios.get(`${API_URL}/content/section/goals?active=true`);
         if (response.data && response.data.data) {
           setProcessSteps(response.data.data);
         }
@@ -35,7 +35,7 @@ const ProcessSection: React.FC = () => {
     };
 
     fetchProcess();
-  }, [API_URL]);
+  }, []);
 
   const getText = (value: string | { en: string; ar: string } | undefined): string => {
     if (!value) return '';

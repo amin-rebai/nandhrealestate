@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { API_URL } from '../../utils/api';
 
 // Multilingual text interface
 interface MultilingualText {
@@ -94,14 +95,14 @@ export const fetchBlogs = createAsyncThunk(
     language?: string;
   } = {}) => {
     const queryParams = new URLSearchParams();
-    
+
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== '') {
         queryParams.append(key, value.toString());
       }
     });
 
-    const response = await fetch(`http://localhost:5000/api/blog?${queryParams}`);
+    const response = await fetch(`${API_URL}/blog?${queryParams}`);
     if (!response.ok) {
       throw new Error('Failed to fetch blog posts');
     }
@@ -117,7 +118,7 @@ export const fetchBlogBySlug = createAsyncThunk(
       queryParams.append('language', params.language);
     }
 
-    const response = await fetch(`http://localhost:5000/api/blog/slug/${params.slug}?${queryParams}`);
+    const response = await fetch(`${API_URL}/blog/slug/${params.slug}?${queryParams}`);
     if (!response.ok) {
       throw new Error('Failed to fetch blog post');
     }
@@ -131,7 +132,7 @@ export const fetchFeaturedBlogs = createAsyncThunk(
     const queryParams = new URLSearchParams();
     queryParams.append('featured', 'true');
     queryParams.append('status', 'published');
-    
+
     if (params.language) {
       queryParams.append('language', params.language);
     }
@@ -139,7 +140,7 @@ export const fetchFeaturedBlogs = createAsyncThunk(
       queryParams.append('limit', params.limit.toString());
     }
 
-    const response = await fetch(`http://localhost:5000/api/blog?${queryParams}`);
+    const response = await fetch(`${API_URL}/blog?${queryParams}`);
     if (!response.ok) {
       throw new Error('Failed to fetch featured blog posts');
     }
@@ -150,7 +151,7 @@ export const fetchFeaturedBlogs = createAsyncThunk(
 export const likeBlog = createAsyncThunk(
   'blog/likeBlog',
   async (blogId: string) => {
-    const response = await fetch(`http://localhost:5000/api/blog/${blogId}/like`, {
+    const response = await fetch(`${API_URL}/blog/${blogId}/like`, {
       method: 'POST',
     });
     if (!response.ok) {
@@ -168,7 +169,7 @@ export const fetchBlogCategories = createAsyncThunk(
       queryParams.append('language', language);
     }
 
-    const response = await fetch(`http://localhost:5000/api/blog/categories?${queryParams}`);
+    const response = await fetch(`${API_URL}/blog/categories?${queryParams}`);
     if (!response.ok) {
       throw new Error('Failed to fetch categories');
     }
@@ -184,7 +185,7 @@ export const fetchBlogTags = createAsyncThunk(
       queryParams.append('language', language);
     }
 
-    const response = await fetch(`http://localhost:5000/api/blog/tags?${queryParams}`);
+    const response = await fetch(`${API_URL}/blog/tags?${queryParams}`);
     if (!response.ok) {
       throw new Error('Failed to fetch tags');
     }
@@ -231,7 +232,7 @@ const blogSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch blog posts';
       })
-      
+
       // Fetch blog by slug
       .addCase(fetchBlogBySlug.pending, (state) => {
         state.loading = true;
@@ -245,7 +246,7 @@ const blogSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch blog post';
       })
-      
+
       // Fetch featured blogs
       .addCase(fetchFeaturedBlogs.pending, (state) => {
         state.loading = true;
@@ -259,31 +260,31 @@ const blogSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch featured blog posts';
       })
-      
+
       // Like blog
       .addCase(likeBlog.fulfilled, (state, action) => {
         if (state.currentPost && state.currentPost._id === action.payload.data._id) {
           state.currentPost.likes = action.payload.data.likes;
         }
-        
+
         // Update in posts array if present
         const postIndex = state.posts.findIndex(post => post._id === action.payload.data._id);
         if (postIndex !== -1) {
           state.posts[postIndex].likes = action.payload.data.likes;
         }
-        
+
         // Update in featured posts if present
         const featuredIndex = state.featuredPosts.findIndex(post => post._id === action.payload.data._id);
         if (featuredIndex !== -1) {
           state.featuredPosts[featuredIndex].likes = action.payload.data.likes;
         }
       })
-      
+
       // Fetch categories
       .addCase(fetchBlogCategories.fulfilled, (state, action) => {
         state.categories = action.payload.data || [];
       })
-      
+
       // Fetch tags
       .addCase(fetchBlogTags.fulfilled, (state, action) => {
         state.tags = action.payload.data || [];

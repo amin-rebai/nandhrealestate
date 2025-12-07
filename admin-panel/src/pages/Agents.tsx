@@ -50,6 +50,7 @@ import {
   clearError,
   User
 } from '../store/slices/userSlice';
+import { API_URL, BASE_URL } from '../utils/api';
 
 const Agents: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -141,7 +142,7 @@ const Agents: React.FC = () => {
     formDataUpload.append('image', file);
 
     try {
-      const response = await fetch('http://localhost:5000/api/upload', {
+      const response = await fetch(`${API_URL}/upload`, {
         method: 'POST',
         body: formDataUpload,
       });
@@ -328,7 +329,7 @@ const Agents: React.FC = () => {
                     <TableCell>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Avatar
-                          src={(agent as any).avatar ? ((agent as any).avatar.startsWith('http') ? (agent as any).avatar : `http://localhost:5000${(agent as any).avatar}`) : undefined}
+                          src={(agent as any).avatar ? ((agent as any).avatar.startsWith('http') ? (agent as any).avatar : `${BASE_URL}${(agent as any).avatar}`) : undefined}
                           sx={{
                             backgroundColor: '#4B0E14',
                             width: 50,
@@ -440,7 +441,7 @@ const Agents: React.FC = () => {
             <Grid item xs={12}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, mb: 1 }}>
                 <Avatar
-                  src={avatarPreview ? (avatarPreview.startsWith('http') ? avatarPreview : `http://localhost:5000${avatarPreview}`) : undefined}
+                  src={avatarPreview ? (avatarPreview.startsWith('http') ? avatarPreview : `${BASE_URL}${avatarPreview}`) : undefined}
                   sx={{ width: 100, height: 100, backgroundColor: '#4B0E14' }}
                 >
                   {formData.name ? formData.name.charAt(0).toUpperCase() : 'A'}

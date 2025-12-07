@@ -19,12 +19,13 @@ const OurServices: React.FC = () => {
   const [heroImage, setHeroImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+  const BASE_URL = API_URL.replace('/api', '');
 
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await axios.get(`${API_URL}/api/content/section/services?active=true`);
+        const response = await axios.get(`${API_URL}/content/section/services?active=true`);
         if (response.data && response.data.data) {
             const data = response.data.data as ServiceItem[];
             setServices(data);
@@ -33,7 +34,7 @@ const OurServices: React.FC = () => {
             const activeBg = data.find(d => d.isActive && (d.backgroundImage || d.image)) || data.find(d => d.backgroundImage || d.image);
             if (activeBg) {
               const image = (activeBg.backgroundImage || activeBg.image) || '';
-              if (image) setHeroImage(image.startsWith('http') ? image : `${API_URL}${image}`);
+              if (image) setHeroImage(image.startsWith('http') ? image : `${BASE_URL}${image}`);
             }
         }
       } catch (error) {

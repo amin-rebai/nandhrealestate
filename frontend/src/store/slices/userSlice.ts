@@ -27,11 +27,13 @@ const initialState: UserState = {
   error: null,
 };
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
 // Async thunks
 export const loginUser = createAsyncThunk(
   'user/login',
   async (credentials: { email: string; password: string }) => {
-    const response = await axios.post('http://localhost:5000/api/auth/login', credentials);
+    const response = await axios.post(`${API_URL}/auth/login`, credentials);
     localStorage.setItem('token', response.data.token);
     return response.data.user;
   }
@@ -40,7 +42,7 @@ export const loginUser = createAsyncThunk(
 export const registerUser = createAsyncThunk(
   'user/register',
   async (userData: { name: string; email: string; password: string }) => {
-    const response = await axios.post('http://localhost:5000/api/auth/register', userData);
+    const response = await axios.post(`${API_URL}/auth/register`, userData);
     localStorage.setItem('token', response.data.token);
     return response.data.user;
   }
@@ -52,7 +54,7 @@ export const getCurrentUser = createAsyncThunk(
     const token = localStorage.getItem('token');
     if (!token) throw new Error('No token found');
 
-    const response = await axios.get('http://localhost:5000/api/auth/me', {
+    const response = await axios.get(`${API_URL}/auth/me`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     return response.data;
@@ -63,7 +65,7 @@ export const fetchAgents = createAsyncThunk(
   'user/fetchAgents',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('http://localhost:5000/api/users?role=agent');
+      const response = await axios.get(`${API_URL}/users?role=agent`);
       return response.data.data;
     } catch (error: any) {
       const message = error.response?.data?.error || error.message || 'Failed to fetch agents';

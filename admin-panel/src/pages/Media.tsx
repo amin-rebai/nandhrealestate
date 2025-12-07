@@ -50,6 +50,7 @@ const Media: React.FC = () => {
   const [previewFile, setPreviewFile] = useState<UploadedFile | null>(null);
 
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+  const BASE_URL = API_URL.replace('/api', '');
 
   useEffect(() => {
     fetchFiles();
@@ -238,8 +239,7 @@ console.log("fetchFiles-------------2")
                 <CardMedia
                   component="img"
                   height="200"
-                  image={`${ 'http://localhost:5000'}${file.url}`}
-                  // image={`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${file.url}`}
+                  image={`${BASE_URL}${file.url}`}
                   alt={file.filename}
                   sx={{ objectFit: 'cover' }}
                 />
@@ -450,8 +450,7 @@ console.log("fetchFiles-------------2")
             <Box sx={{ textAlign: 'center' }}>
               {isImageFile(previewFile.filename) ? (
                 <img
-                  src={`${ 'http://localhost:5000'}${previewFile.url}`}
-                  // src={`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${previewFile.url}`}
+                  src={`${BASE_URL}${previewFile.url}`}
                   alt={previewFile.filename}
                   style={{
                     maxWidth: '100%',
@@ -483,7 +482,7 @@ console.log("fetchFiles-------------2")
                     wordBreak: 'break-all'
                   }}
                 >
-                  {`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${previewFile.url}`}
+                  {`${BASE_URL}${previewFile.url}`}
                 </Typography>
               </Box>
             </Box>

@@ -12,7 +12,7 @@ interface ProcessStep {
   order?: number;
 }
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 const OurProcess: React.FC = () => {
   const { i18n } = useTranslation();

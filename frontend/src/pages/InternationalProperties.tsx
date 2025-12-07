@@ -9,7 +9,7 @@ const InternationalProperties: React.FC = () => {
   const navigate = useNavigate();
   const { properties, loading, error } = useSelector((state: RootState) => state.properties);
 
-  const API_URL = 'http://localhost:5000';
+  const API_URL = process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000';
 
   // International countries (outside Qatar)
   const internationalCountries = [
