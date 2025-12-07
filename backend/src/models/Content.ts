@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IContent extends Document {
-  section: 'home' | 'hero' | 'about' | 'featured' | 'services' | 'goals' | 'clients' | 'vision' | 'mission' | 'values' | 'slider' | 'portfolio' | 'contact';
+  section: 'home' | 'hero' | 'about' | 'featured' | 'featured-properties' | 'services' | 'goals' | 'clients' | 'vision' | 'mission' | 'values' | 'slider' | 'portfolio' | 'contact';
   title: {
     en: string;
     ar: string;
@@ -54,7 +54,7 @@ const ContentSchema: Schema = new Schema({
   section: {
     type: String,
     required: [true, 'Section type is required'],
-    enum: ['home', 'hero', 'about', 'featured', 'services', 'goals', 'clients', 'vision', 'mission', 'values', 'slider', 'portfolio', 'contact'],
+    enum: ['home', 'hero', 'about', 'featured', 'featured-properties', 'services', 'goals', 'clients', 'vision', 'mission', 'values', 'slider', 'portfolio', 'contact'],
     index: true
   },
   title: {

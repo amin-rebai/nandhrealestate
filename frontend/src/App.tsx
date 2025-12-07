@@ -6,6 +6,7 @@ import { store } from './store/store';
 import Home from './pages/Home';
 import About from './pages/About';
 import Properties from './pages/Properties';
+import InternationalProperties from './pages/InternationalProperties';
 import Agents from './pages/Agents';
 import Services from './pages/Services';
 import OurServices from './pages/OurServices';
@@ -35,6 +36,7 @@ function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/properties" element={<Properties />} />
+                  <Route path="/international-properties" element={<InternationalProperties />} />
                   <Route path="/agents" element={<Agents />} />
                   <Route path="/services" element={<Services />} />
                   <Route path="/our-services" element={<OurServices />} />

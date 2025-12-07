@@ -6,7 +6,24 @@ export interface Agent {
   name: string;
   email: string;
   phone: string;
+  avatar?: string;
 }
+
+// Property category types
+export type PropertyCategory = 'residential' | 'commercial' | 'industrial' | 'land';
+
+// Expanded property types
+export type PropertyType =
+  // Residential
+  | 'Apartment' | 'Villa' | 'Penthouse' | 'Studio' | 'Townhouse' | 'Duplex'
+  | 'Hotel Apartment' | 'Chalet' | 'Compound Villa' | 'Standalone Villa'
+  // Commercial
+  | 'Office' | 'Shop' | 'Showroom' | 'Retail Shop' | 'Commercial Villa'
+  | 'Restaurant' | 'Whole Building' | 'Hotel'
+  // Industrial
+  | 'Warehouse' | 'Factory' | 'Labor Camp' | 'Industrial Land'
+  // Land
+  | 'Land' | 'Land Plot' | 'Residential Land' | 'Commercial Land';
 
 export interface Property {
   _id: string;
@@ -22,9 +39,10 @@ export interface Property {
   status: 'available' | 'sold' | 'rented';
   createdAt: string;
   updatedAt: string;
-  // Additional fields for compatibility with mock data
-  category?: string;
-  propertyType?: string;
+  // Property classification
+  category?: PropertyCategory;
+  propertyType?: PropertyType | string;
+  // Additional fields
   country?: string;
   priceText?: string;
   yearBuilt?: number;
@@ -33,6 +51,7 @@ export interface Property {
   agentPhone?: string;
   dateAdded?: string;
   verified?: boolean;
+  // Off-plan specific fields
   completionDate?: string;
   paymentPlan?: string;
   video?: string;
@@ -42,6 +61,17 @@ export interface Property {
   startingPrice?: number;
   downPayment?: string;
   installmentPlan?: string;
+  // Additional FGRealty-style fields
+  referenceNumber?: string;
+  serviceCharge?: number;
+  transferFee?: string;
+  titleDeed?: boolean;
+  tenanted?: boolean;
+  availableFrom?: string;
+  propertyBrochure?: string;
+  layoutImage?: string;
+  roi?: string;
+  guaranteedReturns?: string;
 }
 
 interface PropertyState {

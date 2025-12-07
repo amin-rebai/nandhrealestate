@@ -1168,7 +1168,7 @@ const Content: React.FC = () => {
                       value={pageMedia.home.videoUrl}
                       onChange={(value) => setPageMedia({ ...pageMedia, home: { ...pageMedia.home, videoUrl: value } })}
                       label="Upload Home Hero Video"
-                      helperText="Recommended: MP4 format, max 100MB"
+                      helperText="Recommended: MP4 format, max 150MB"
                       showPreview={true}
                     />
                   ) : (

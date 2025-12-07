@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 interface SearchFilters {
-  type: 'sale' | 'rent' | 'residential';
+  type: 'sale' | 'rent' | 'off-plan';
   location: string;
   propertyType: string;
   bedrooms: string;
@@ -13,8 +13,8 @@ interface SearchFilters {
 const PropertySearchWidget: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  
-  const [activeTab, setActiveTab] = useState<'sale' | 'rent' | 'residential'>('sale');
+
+  const [activeTab, setActiveTab] = useState<'sale' | 'rent' | 'off-plan'>('sale');
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = () => {
@@ -52,8 +52,8 @@ const PropertySearchWidget: React.FC = () => {
             Rent
           </button>
           <button
-            className={`search-tab ${activeTab === 'residential' ? 'active' : ''}`}
-            onClick={() => setActiveTab('residential')}
+            className={`search-tab ${activeTab === 'off-plan' ? 'active' : ''}`}
+            onClick={() => setActiveTab('off-plan')}
           >
             Off-Plan
           </button>

@@ -46,7 +46,11 @@ import {
   AttachMoney,
   ExpandMore,
   CloudUpload,
-  Close as CloseIcon
+  Close as CloseIcon,
+  Star,
+  StarBorder,
+  Collections,
+  CollectionsBookmark
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { RootState, AppDispatch } from '../store/store';
@@ -116,7 +120,22 @@ const Properties: React.FC = () => {
     startingPrice: '',
     downPayment: '',
     installmentPlan: '',
-    propertyType: 'Apartment'
+    category: 'residential' as 'residential' | 'commercial' | 'industrial' | 'land',
+    propertyType: 'Apartment',
+    // Additional FGRealty-style fields
+    referenceNumber: '',
+    serviceCharge: '',
+    transferFee: '',
+    titleDeed: false,
+    tenanted: false,
+    availableFrom: '',
+    propertyBrochure: '',
+    layoutImage: '',
+    roi: '',
+    guaranteedReturns: '',
+    // Featured options
+    featured: false,
+    featuredInPortfolio: false
   });
 
   useEffect(() => {
@@ -184,7 +203,22 @@ const Properties: React.FC = () => {
         startingPrice: (property as any).startingPrice?.toString() || '',
         downPayment: (property as any).downPayment || '',
         installmentPlan: (property as any).installmentPlan || '',
-        propertyType: (property as any).propertyType || 'Apartment'
+        category: (property as any).category || 'residential',
+        propertyType: (property as any).propertyType || 'Apartment',
+        // Additional FGRealty-style fields
+        referenceNumber: (property as any).referenceNumber || '',
+        serviceCharge: (property as any).serviceCharge?.toString() || '',
+        transferFee: (property as any).transferFee || '',
+        titleDeed: (property as any).titleDeed || false,
+        tenanted: (property as any).tenanted || false,
+        availableFrom: (property as any).availableFrom || '',
+        propertyBrochure: (property as any).propertyBrochure || '',
+        layoutImage: (property as any).layoutImage || '',
+        roi: (property as any).roi || '',
+        guaranteedReturns: (property as any).guaranteedReturns || '',
+        // Featured options
+        featured: (property as any).featured || false,
+        featuredInPortfolio: (property as any).featuredInPortfolio || false
       });
     } else {
       setEditingProperty(null);
@@ -215,7 +249,22 @@ const Properties: React.FC = () => {
         startingPrice: '',
         downPayment: '',
         installmentPlan: '',
-        propertyType: 'Apartment'
+        category: 'residential',
+        propertyType: 'Apartment',
+        // Additional FGRealty-style fields
+        referenceNumber: '',
+        serviceCharge: '',
+        transferFee: '',
+        titleDeed: false,
+        tenanted: false,
+        availableFrom: '',
+        propertyBrochure: '',
+        layoutImage: '',
+        roi: '',
+        guaranteedReturns: '',
+        // Featured options
+        featured: false,
+        featuredInPortfolio: false
       });
     }
     setOpen(true);
@@ -270,6 +319,7 @@ const Properties: React.FC = () => {
       },
       agent: formData.agent,
       verified: formData.verified,
+      category: formData.category,
       propertyType: formData.propertyType
     };
 
@@ -285,7 +335,23 @@ const Properties: React.FC = () => {
       propertyData.startingPrice = formData.startingPrice ? Number(formData.startingPrice) : undefined;
       propertyData.downPayment = formData.downPayment;
       propertyData.installmentPlan = formData.installmentPlan;
+      propertyData.availableFrom = formData.availableFrom;
+      propertyData.roi = formData.roi;
+      propertyData.guaranteedReturns = formData.guaranteedReturns;
     }
+
+    // Add additional property fields (applicable to all types)
+    propertyData.referenceNumber = formData.referenceNumber || undefined;
+    propertyData.serviceCharge = formData.serviceCharge ? Number(formData.serviceCharge) : undefined;
+    propertyData.transferFee = formData.transferFee || undefined;
+    propertyData.titleDeed = formData.titleDeed;
+    propertyData.tenanted = formData.tenanted;
+    propertyData.propertyBrochure = formData.propertyBrochure || undefined;
+    propertyData.layoutImage = formData.layoutImage || undefined;
+
+    // Featured options
+    propertyData.featured = formData.featured;
+    propertyData.featuredInPortfolio = formData.featuredInPortfolio;
 
     try {
       console.log('Dispatching createProperty/updateProperty...');
@@ -320,6 +386,38 @@ const Properties: React.FC = () => {
       } catch (error) {
         // Error handled by slice
       }
+    }
+  };
+
+  // Toggle featured status
+  const handleToggleFeatured = async (property: Property) => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      await axios.put(
+        `${API_URL}/properties/${property._id}/featured`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      // Refetch properties to update the list
+      dispatch(fetchProperties({ page: currentPage, limit: 10 }));
+    } catch (error) {
+      console.error('Error toggling featured status:', error);
+    }
+  };
+
+  // Toggle portfolio status
+  const handleTogglePortfolio = async (property: Property) => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      await axios.put(
+        `${API_URL}/properties/${property._id}/portfolio`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      // Refetch properties to update the list
+      dispatch(fetchProperties({ page: currentPage, limit: 10 }));
+    } catch (error) {
+      console.error('Error toggling portfolio status:', error);
     }
   };
 
@@ -513,6 +611,7 @@ const Properties: React.FC = () => {
               <TableCell sx={{ fontWeight: 600 }}>Price</TableCell>
               <TableCell sx={{ fontWeight: 600 }}>Type</TableCell>
               <TableCell sx={{ fontWeight: 600 }}>Status</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Featured</TableCell>
               <TableCell sx={{ fontWeight: 600 }}>Agent</TableCell>
               <TableCell sx={{ fontWeight: 600 }}>Actions</TableCell>
             </TableRow>
@@ -574,6 +673,34 @@ const Properties: React.FC = () => {
                       fontWeight: 600
                     }}
                   />
+                </TableCell>
+                <TableCell>
+                  <Box sx={{ display: 'flex', gap: 0.5 }}>
+                    <Tooltip title={(property as any).featured ? "Remove from Featured" : "Add to Featured"}>
+                      <IconButton
+                        size="small"
+                        onClick={() => handleToggleFeatured(property)}
+                        sx={{
+                          color: (property as any).featured ? '#FFD700' : '#ccc',
+                          '&:hover': { color: '#FFD700' }
+                        }}
+                      >
+                        {(property as any).featured ? <Star /> : <StarBorder />}
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title={(property as any).featuredInPortfolio ? "Remove from Portfolio" : "Add to Portfolio"}>
+                      <IconButton
+                        size="small"
+                        onClick={() => handleTogglePortfolio(property)}
+                        sx={{
+                          color: (property as any).featuredInPortfolio ? '#4B0E14' : '#ccc',
+                          '&:hover': { color: '#4B0E14' }
+                        }}
+                      >
+                        {(property as any).featuredInPortfolio ? <CollectionsBookmark /> : <Collections />}
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
                 </TableCell>
                 <TableCell>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -669,6 +796,20 @@ const Properties: React.FC = () => {
               </AccordionSummary>
               <AccordionDetails>
                 <Grid container spacing={2}>
+                  <Grid item xs={6} md={4}>
+                    <TextField
+                      select
+                      fullWidth
+                      label="Listing Type"
+                      value={formData.type}
+                      onChange={(e) => setFormData({ ...formData, type: e.target.value as any })}
+                      required
+                    >
+                      <MenuItem value="sale">For Sale</MenuItem>
+                      <MenuItem value="rent">For Rent</MenuItem>
+                      <MenuItem value="off-plan">Off-Plan</MenuItem>
+                    </TextField>
+                  </Grid>
                   <Grid item xs={12}>
                     <TextField
                       fullWidth
@@ -828,25 +969,75 @@ const Properties: React.FC = () => {
                     <TextField
                       select
                       fullWidth
-                      label="Property Type"
-                      value={formData.propertyType}
-                      onChange={(e) => setFormData({ ...formData, propertyType: e.target.value })}
+                      label="Category"
+                      value={formData.category}
+                      onChange={(e) => setFormData({ ...formData, category: e.target.value as any })}
                       required
                     >
-                      <MenuItem value="Apartment">Apartment</MenuItem>
-                      <MenuItem value="Villa">Villa</MenuItem>
-                      <MenuItem value="Penthouse">Penthouse</MenuItem>
-                      <MenuItem value="Studio">Studio</MenuItem>
-                      <MenuItem value="Townhouse">Townhouse</MenuItem>
-                      <MenuItem value="Office">Office</MenuItem>
-                      <MenuItem value="Shop">Shop</MenuItem>
+                      <MenuItem value="residential">Residential</MenuItem>
+                      <MenuItem value="commercial">Commercial</MenuItem>
+                      <MenuItem value="industrial">Industrial</MenuItem>
+                      <MenuItem value="land">Land</MenuItem>
                     </TextField>
                   </Grid>
                   <Grid item xs={6} md={4}>
                     <TextField
                       select
                       fullWidth
-                      label="Type"
+                      label="Property Type"
+                      value={formData.propertyType}
+                      onChange={(e) => setFormData({ ...formData, propertyType: e.target.value })}
+                      required
+                    >
+                      {formData.category === 'residential' && (
+                        <>
+                          <MenuItem value="Apartment">Apartment</MenuItem>
+                          <MenuItem value="Villa">Villa</MenuItem>
+                          <MenuItem value="Penthouse">Penthouse</MenuItem>
+                          <MenuItem value="Studio">Studio</MenuItem>
+                          <MenuItem value="Townhouse">Townhouse</MenuItem>
+                          <MenuItem value="Duplex">Duplex</MenuItem>
+                          <MenuItem value="Hotel Apartment">Hotel Apartment</MenuItem>
+                          <MenuItem value="Chalet">Chalet</MenuItem>
+                          <MenuItem value="Compound Villa">Compound Villa</MenuItem>
+                          <MenuItem value="Standalone Villa">Standalone Villa</MenuItem>
+                        </>
+                      )}
+                      {formData.category === 'commercial' && (
+                        <>
+                          <MenuItem value="Office">Office</MenuItem>
+                          <MenuItem value="Shop">Shop</MenuItem>
+                          <MenuItem value="Showroom">Showroom</MenuItem>
+                          <MenuItem value="Retail Shop">Retail Shop</MenuItem>
+                          <MenuItem value="Commercial Villa">Commercial Villa</MenuItem>
+                          <MenuItem value="Restaurant">Restaurant</MenuItem>
+                          <MenuItem value="Whole Building">Whole Building</MenuItem>
+                          <MenuItem value="Hotel">Hotel</MenuItem>
+                        </>
+                      )}
+                      {formData.category === 'industrial' && (
+                        <>
+                          <MenuItem value="Warehouse">Warehouse</MenuItem>
+                          <MenuItem value="Factory">Factory</MenuItem>
+                          <MenuItem value="Labor Camp">Labor Camp</MenuItem>
+                          <MenuItem value="Industrial Land">Industrial Land</MenuItem>
+                        </>
+                      )}
+                      {formData.category === 'land' && (
+                        <>
+                          <MenuItem value="Land">Land</MenuItem>
+                          <MenuItem value="Land Plot">Land Plot</MenuItem>
+                          <MenuItem value="Residential Land">Residential Land</MenuItem>
+                          <MenuItem value="Commercial Land">Commercial Land</MenuItem>
+                        </>
+                      )}
+                    </TextField>
+                  </Grid>
+                  {/* <Grid item xs={6} md={4}>
+                    <TextField
+                      select
+                      fullWidth
+                      label="Listing Type"
                       value={formData.type}
                       onChange={(e) => setFormData({ ...formData, type: e.target.value as any })}
                       required
@@ -855,7 +1046,7 @@ const Properties: React.FC = () => {
                       <MenuItem value="rent">For Rent</MenuItem>
                       <MenuItem value="off-plan">Off-Plan</MenuItem>
                     </TextField>
-                  </Grid>
+                  </Grid> */}
                   <Grid item xs={6} md={4}>
                     <TextField
                       select
@@ -906,6 +1097,74 @@ const Properties: React.FC = () => {
                       onChange={(e) => setFormData({ ...formData, features: e.target.value })}
                       placeholder="e.g. Swimming Pool, Gym, Parking, Garden"
                       helperText="Enter features separated by commas"
+                    />
+                  </Grid>
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
+
+            {/* Featured Options */}
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMore />}>
+                <Typography variant="h6">
+                  <Star sx={{ verticalAlign: 'middle', mr: 1, color: '#FFD700' }} />
+                  Featured Options
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Alert severity="info" sx={{ mb: 2 }}>
+                      Featured properties will appear in the "Featured Properties" section on the home page.
+                      Portfolio properties will appear in the "Our Portfolio" showcase section.
+                    </Alert>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={formData.featured}
+                          onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
+                          sx={{
+                            '& .MuiSwitch-switchBase.Mui-checked': {
+                              color: '#FFD700',
+                            },
+                            '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                              backgroundColor: '#FFD700',
+                            },
+                          }}
+                        />
+                      }
+                      label={
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <Star sx={{ color: formData.featured ? '#FFD700' : '#ccc' }} />
+                          Show in Featured Properties (Home Page)
+                        </Box>
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={formData.featuredInPortfolio}
+                          onChange={(e) => setFormData({ ...formData, featuredInPortfolio: e.target.checked })}
+                          sx={{
+                            '& .MuiSwitch-switchBase.Mui-checked': {
+                              color: '#4B0E14',
+                            },
+                            '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                              backgroundColor: '#4B0E14',
+                            },
+                          }}
+                        />
+                      }
+                      label={
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <CollectionsBookmark sx={{ color: formData.featuredInPortfolio ? '#4B0E14' : '#ccc' }} />
+                          Show in Our Portfolio Section
+                        </Box>
+                      }
                     />
                   </Grid>
                 </Grid>
@@ -1008,10 +1267,128 @@ const Properties: React.FC = () => {
                         helperText="Detailed installment options and payment flexibility"
                       />
                     </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        fullWidth
+                        label="Available From"
+                        value={formData.availableFrom}
+                        onChange={(e) => setFormData({ ...formData, availableFrom: e.target.value })}
+                        placeholder="e.g. 2025"
+                        helperText="Year/date when property will be available"
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        fullWidth
+                        label="ROI"
+                        value={formData.roi}
+                        onChange={(e) => setFormData({ ...formData, roi: e.target.value })}
+                        placeholder="e.g. 6.5%"
+                        helperText="Expected Return on Investment"
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        label="Guaranteed Returns"
+                        value={formData.guaranteedReturns}
+                        onChange={(e) => setFormData({ ...formData, guaranteedReturns: e.target.value })}
+                        placeholder="e.g. Guaranteed rental returns for 3 years"
+                        helperText="Details about guaranteed rental returns if applicable"
+                      />
+                    </Grid>
                   </Grid>
                 </AccordionDetails>
               </Accordion>
             )}
+
+            {/* Additional Property Details */}
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMore />}>
+                <Typography variant="h6">Additional Property Details</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      fullWidth
+                      label="Reference Number"
+                      value={formData.referenceNumber}
+                      onChange={(e) => setFormData({ ...formData, referenceNumber: e.target.value })}
+                      placeholder="e.g. AS-002138-2863"
+                      helperText="Custom property reference number"
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      fullWidth
+                      label="Service Charge"
+                      type="number"
+                      value={formData.serviceCharge}
+                      onChange={(e) => setFormData({ ...formData, serviceCharge: e.target.value })}
+                      placeholder="e.g. 14"
+                      helperText="Service charge per sqm (QAR)"
+                      InputProps={{
+                        startAdornment: <InputAdornment position="start">QAR</InputAdornment>,
+                        endAdornment: <InputAdornment position="end">/sqm</InputAdornment>,
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      fullWidth
+                      label="Transfer Fee"
+                      value={formData.transferFee}
+                      onChange={(e) => setFormData({ ...formData, transferFee: e.target.value })}
+                      placeholder="e.g. 0% or 2%"
+                      helperText="Property transfer fee percentage"
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={formData.titleDeed}
+                          onChange={(e) => setFormData({ ...formData, titleDeed: e.target.checked })}
+                        />
+                      }
+                      label="Title Deed Available"
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={formData.tenanted}
+                          onChange={(e) => setFormData({ ...formData, tenanted: e.target.checked })}
+                        />
+                      }
+                      label="Currently Tenanted"
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <ImageUpload
+                      value={formData.layoutImage}
+                      onChange={(value) => setFormData(prev => ({ ...prev, layoutImage: Array.isArray(value) ? value[0] : value }))}
+                      multiple={false}
+                      label="Layout / Floor Plan Image"
+                      helperText="Upload floor plan or layout image"
+                      showPreview={true}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <ImageUpload
+                      value={formData.propertyBrochure}
+                      onChange={(value) => setFormData(prev => ({ ...prev, propertyBrochure: Array.isArray(value) ? value[0] : value }))}
+                      multiple={false}
+                      label="Property Brochure (PDF/Image)"
+                      helperText="Upload property brochure document"
+                      showPreview={true}
+                    />
+                  </Grid>
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
 
             {/* Images Section */}
             <Accordion>

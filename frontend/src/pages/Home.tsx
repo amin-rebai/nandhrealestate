@@ -109,18 +109,36 @@ const Home: React.FC = () => {
     fetchFeaturedPropertiesConfig();
   }, []);
 
-  // Fetch actual properties from database when config is ready
+  // Fetch featured properties from database
   useEffect(() => {
     const fetchProperties = async () => {
       if (!featuredPropertiesConfig?.fetchFromDatabase) return;
       try {
-        const response = await axios.get(`${API_URL}/properties?limit=${featuredPropertiesConfig.propertyCount}&sortBy=createdAt&order=desc`);
+        // First try to fetch properties marked as featured
+        const response = await axios.get(`${API_URL}/properties/featured?limit=${featuredPropertiesConfig.propertyCount}`);
         const data = response.data?.data || response.data;
-        if (data && Array.isArray(data)) {
+        if (data && Array.isArray(data) && data.length > 0) {
           setFeaturedProperties(data);
+        } else {
+          // Fallback to newest properties if no featured properties found
+          const fallbackResponse = await axios.get(`${API_URL}/properties?limit=${featuredPropertiesConfig.propertyCount}&sortBy=createdAt&order=desc`);
+          const fallbackData = fallbackResponse.data?.data || fallbackResponse.data;
+          if (fallbackData && Array.isArray(fallbackData)) {
+            setFeaturedProperties(fallbackData);
+          }
         }
       } catch (error) {
-        console.error('Error fetching properties:', error);
+        console.error('Error fetching featured properties:', error);
+        // Fallback to newest properties on error
+        try {
+          const fallbackResponse = await axios.get(`${API_URL}/properties?limit=${featuredPropertiesConfig?.propertyCount || 3}&sortBy=createdAt&order=desc`);
+          const fallbackData = fallbackResponse.data?.data || fallbackResponse.data;
+          if (fallbackData && Array.isArray(fallbackData)) {
+            setFeaturedProperties(fallbackData);
+          }
+        } catch (fallbackError) {
+          console.error('Error fetching fallback properties:', fallbackError);
+        }
       }
     };
     fetchProperties();

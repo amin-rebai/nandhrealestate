@@ -1,5 +1,21 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
+// Property type categories
+export type PropertyCategory = 'residential' | 'commercial' | 'industrial' | 'land';
+
+// Expanded property types based on FGRealty
+export type PropertyType =
+  // Residential
+  | 'Apartment' | 'Villa' | 'Penthouse' | 'Studio' | 'Townhouse' | 'Duplex'
+  | 'Hotel Apartment' | 'Chalet' | 'Compound Villa' | 'Standalone Villa'
+  // Commercial
+  | 'Office' | 'Shop' | 'Showroom' | 'Retail Shop' | 'Commercial Villa'
+  | 'Restaurant' | 'Whole Building' | 'Hotel'
+  // Industrial
+  | 'Warehouse' | 'Factory' | 'Labor Camp' | 'Industrial Land'
+  // Land
+  | 'Land' | 'Land Plot' | 'Residential Land' | 'Commercial Land';
+
 export interface IProperty extends Document {
   title: {
     en: string;
@@ -29,6 +45,11 @@ export interface IProperty extends Document {
   };
   agent: mongoose.Types.ObjectId;
   verified: boolean;
+  featured: boolean;
+  featuredInPortfolio: boolean;
+  // Property classification
+  category: PropertyCategory;
+  propertyType: PropertyType;
   // Off-plan specific fields
   completionDate?: string;
   paymentPlan?: string;
@@ -38,7 +59,17 @@ export interface IProperty extends Document {
   startingPrice?: number;
   downPayment?: string;
   installmentPlan?: string;
-  propertyType: string;
+  // Additional property fields (FGRealty-style)
+  referenceNumber?: string;
+  serviceCharge?: number;
+  transferFee?: string;
+  titleDeed?: boolean;
+  tenanted?: boolean;
+  availableFrom?: string;
+  propertyBrochure?: string;
+  layoutImage?: string;
+  roi?: string;
+  guaranteedReturns?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -150,6 +181,16 @@ const PropertySchema: Schema = new Schema({
     type: Boolean,
     default: false
   },
+  featured: {
+    type: Boolean,
+    default: false,
+    index: true
+  },
+  featuredInPortfolio: {
+    type: Boolean,
+    default: false,
+    index: true
+  },
   completionDate: {
     type: String,
     required: function (this: IProperty) {
@@ -186,10 +227,68 @@ const PropertySchema: Schema = new Schema({
     type: String,
     trim: true
   },
+  // Additional property fields (FGRealty-style)
+  referenceNumber: {
+    type: String,
+    trim: true
+  },
+  serviceCharge: {
+    type: Number,
+    min: [0, 'Service charge cannot be negative']
+  },
+  transferFee: {
+    type: String,
+    trim: true
+  },
+  titleDeed: {
+    type: Boolean,
+    default: false
+  },
+  tenanted: {
+    type: Boolean,
+    default: false
+  },
+  availableFrom: {
+    type: String,
+    trim: true
+  },
+  propertyBrochure: {
+    type: String,
+    trim: true
+  },
+  layoutImage: {
+    type: String,
+    trim: true
+  },
+  roi: {
+    type: String,
+    trim: true
+  },
+  guaranteedReturns: {
+    type: String,
+    trim: true
+  },
+  category: {
+    type: String,
+    enum: ['residential', 'commercial', 'industrial', 'land'],
+    default: 'residential',
+    required: [true, 'Property category is required']
+  },
   propertyType: {
     type: String,
     required: [true, 'Property type is required'],
-    enum: ['Apartment', 'Villa', 'Penthouse', 'Studio', 'Townhouse', 'Office', 'Shop'],
+    enum: [
+      // Residential
+      'Apartment', 'Villa', 'Penthouse', 'Studio', 'Townhouse', 'Duplex',
+      'Hotel Apartment', 'Chalet', 'Compound Villa', 'Standalone Villa',
+      // Commercial
+      'Office', 'Shop', 'Showroom', 'Retail Shop', 'Commercial Villa',
+      'Restaurant', 'Whole Building', 'Hotel',
+      // Industrial
+      'Warehouse', 'Factory', 'Labor Camp', 'Industrial Land',
+      // Land
+      'Land', 'Land Plot', 'Residential Land', 'Commercial Land'
+    ],
     default: 'Apartment'
   }
 }, {
@@ -201,5 +300,7 @@ PropertySchema.index({ location: 1 });
 PropertySchema.index({ type: 1 });
 PropertySchema.index({ status: 1 });
 PropertySchema.index({ price: 1 });
+PropertySchema.index({ category: 1 });
+PropertySchema.index({ propertyType: 1 });
 
 export default mongoose.model<IProperty>('Property', PropertySchema);

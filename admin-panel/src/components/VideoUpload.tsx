@@ -34,7 +34,7 @@ interface VideoUploadProps {
 const VideoUpload: React.FC<VideoUploadProps> = ({
   value,
   onChange,
-  maxSize = 100,
+  maxSize = 150,
   accept = 'video/mp4,video/webm,video/quicktime',
   label = 'Upload Video',
   helperText,

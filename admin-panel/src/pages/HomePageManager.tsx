@@ -354,7 +354,7 @@ const HomePageManager: React.FC = () => {
                         onChange={(value) => setHeroData({ ...heroData, videoUrl: value })}
                         disabled={!heroEditing}
                         label="Upload Hero Video"
-                        helperText="Recommended: MP4 format, max 100MB"
+                        helperText="Recommended: MP4 format, max 150MB"
                         showPreview={true}
                       />
                     </Grid>

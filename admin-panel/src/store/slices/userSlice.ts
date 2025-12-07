@@ -8,6 +8,9 @@ export interface User {
   role: 'user' | 'agent' | 'admin';
   phone?: string;
   avatar?: string;
+  title?: string;
+  location?: string;
+  rating?: number;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;

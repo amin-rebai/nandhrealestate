@@ -8,6 +8,9 @@ export interface IUser extends Document {
   role: 'user' | 'agent' | 'admin';
   phone?: string;
   avatar?: string;
+  title?: string;  // Agent title e.g. "Real Estate Consultant"
+  location?: string;  // Agent location e.g. "Doha, Qatar"
+  rating?: number;  // Agent rating (1-5)
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -51,6 +54,22 @@ const UserSchema: Schema = new Schema({
   avatar: {
     type: String,
     default: ''
+  },
+  title: {
+    type: String,
+    trim: true,
+    default: 'Real Estate Consultant'
+  },
+  location: {
+    type: String,
+    trim: true,
+    default: 'Doha, Qatar'
+  },
+  rating: {
+    type: Number,
+    min: 1,
+    max: 5,
+    default: 5
   },
   isActive: {
     type: Boolean,

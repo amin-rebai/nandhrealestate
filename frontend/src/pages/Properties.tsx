@@ -26,13 +26,36 @@ const Properties: React.FC = () => {
 
   const getDefaultPropertyImage = (propertyType: string) => {
     const defaultImages: { [key: string]: string } = {
+      // Residential
       "Apartment": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
       "Villa": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      "Office": "https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      "Shop": "https://images.unsplash.com/photo-1555636222-cae831e670b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
       "Penthouse": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
       "Studio": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      "Townhouse": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+      "Townhouse": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Duplex": "https://images.unsplash.com/photo-1600585154526-990dced4db0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Hotel Apartment": "https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Chalet": "https://images.unsplash.com/photo-1518780664697-55e3ad937233?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Compound Villa": "https://images.unsplash.com/photo-1613977257363-707ba9348227?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Standalone Villa": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      // Commercial
+      "Office": "https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Shop": "https://images.unsplash.com/photo-1555636222-cae831e670b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Showroom": "https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Retail Shop": "https://images.unsplash.com/photo-1555636222-cae831e670b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Commercial Villa": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Restaurant": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Whole Building": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Hotel": "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      // Industrial
+      "Warehouse": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Factory": "https://images.unsplash.com/photo-1513828583688-c52646db42da?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Labor Camp": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Industrial Land": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      // Land
+      "Land": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Land Plot": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Residential Land": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      "Commercial Land": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
     };
     return defaultImages[propertyType] || "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80";
   };
@@ -55,6 +78,7 @@ const Properties: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'sale' | 'rent' | 'off-plan'>('sale');
   const [filters, setFilters] = useState({
     location: 'all',
+    category: 'all',
     propertyType: 'all',
     bedrooms: 'all',
     priceRange: 'all',
@@ -62,19 +86,25 @@ const Properties: React.FC = () => {
   });
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  // Transform backend properties to match frontend format
-  const allProperties = properties.map((property: any) => ({
-    ...property,
-    title: getText(property.title),
-    description: getText(property.description),
-    location: getText(property.location),
-    features: getArray(property.features),
-    category: property.type, // Map 'type' to 'category' for filtering
-    priceText: `QAR ${property.price.toLocaleString()}`,
-    dateAdded: property.createdAt,
-    agent: typeof property.agent === 'string' ? 'Agent' : property.agent?.name || 'Agent',
-    agentPhone: typeof property.agent === 'string' ? '' : property.agent?.phone || ''
-  }));
+  // Transform backend properties to match frontend format - ONLY Qatar properties
+  const allProperties = properties
+    .filter((property: any) => {
+      const country = (property.country || '').toLowerCase();
+      return country === 'qatar' || country === '';
+    })
+    .map((property: any) => ({
+      ...property,
+      title: getText(property.title),
+      description: getText(property.description),
+      location: getText(property.location),
+      features: getArray(property.features),
+      listingType: property.type, // Map 'type' to 'listingType' for filtering (sale, rent, off-plan)
+      propertyCategory: property.category || 'residential', // Property category (residential, commercial, industrial, land)
+      priceText: `QAR ${property.price.toLocaleString()}`,
+      dateAdded: property.createdAt,
+      agent: typeof property.agent === 'string' ? 'Agent' : property.agent?.name || 'Agent',
+      agentPhone: typeof property.agent === 'string' ? '' : property.agent?.phone || ''
+    }));
 
   // Handle URL search parameters
   useEffect(() => {
@@ -116,21 +146,18 @@ const Properties: React.FC = () => {
 
   // Filter properties based on active tab and filters
   const filteredProperties = allProperties.filter(property => {
-    if (property.category !== activeTab) return false;
+    if (property.listingType !== activeTab) return false;
 
-    // Enhanced location filtering - search in both location and country
+    // Location filtering for Qatar areas
     if (filters.location !== 'all') {
       const searchLocation = filters.location.toLowerCase();
       const propertyLocation = property.location.toLowerCase();
-      const propertyCountry = property.country.toLowerCase();
 
-      const locationMatch = propertyLocation.includes(searchLocation) ||
-                           propertyCountry.includes(searchLocation) ||
-                           searchLocation.includes(propertyLocation) ||
-                           searchLocation.includes(propertyCountry);
-
-      if (!locationMatch) return false;
+      if (!propertyLocation.includes(searchLocation)) return false;
     }
+
+    // Filter by property category (residential, commercial, industrial, land)
+    if (filters.category !== 'all' && property.propertyCategory !== filters.category) return false;
 
     if (filters.propertyType !== 'all' && property.propertyType !== filters.propertyType) return false;
     if (filters.bedrooms !== 'all') {
@@ -176,9 +203,12 @@ const Properties: React.FC = () => {
         </div>
         <div className="hero-content">
           <div className="container">
-            <h1 className="hero-title">Premium Properties</h1>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
+              <span style={{ fontSize: '2.5rem' }}>🇶🇦</span>
+              <h1 className="hero-title" style={{ margin: 0 }}>Qatar Properties</h1>
+            </div>
             <p className="hero-subtitle">
-              Discover exceptional real estate opportunities across multiple markets
+              Discover exceptional real estate opportunities in Qatar
             </p>
           </div>
         </div>
@@ -269,15 +299,46 @@ const Properties: React.FC = () => {
                   border: '2px solid var(--border-light)',
                   borderRadius: '6px',
                   fontSize: '0.95rem',
+                  minWidth: '160px'
+                }}
+              >
+                <option value="all">All Qatar Locations</option>
+                <option value="Lusail">Lusail</option>
+                <option value="The Pearl">The Pearl</option>
+                <option value="West Bay">West Bay</option>
+                <option value="Downtown Doha">Downtown Doha</option>
+                <option value="Al Wakrah">Al Wakrah</option>
+                <option value="Al Khor">Al Khor</option>
+                <option value="Duhail">Duhail</option>
+                <option value="Al Sadd">Al Sadd</option>
+                <option value="Bin Mahmoud">Bin Mahmoud</option>
+                <option value="Old Airport">Old Airport</option>
+                <option value="Msheireb">Msheireb</option>
+                <option value="Fox Hills">Fox Hills</option>
+              </select>
+            </div>
+
+            <div className="filter-group">
+              <label style={{ fontSize: '0.9rem', fontWeight: '500', color: 'var(--luxury-burgundy)', marginBottom: '0.5rem', display: 'block' }}>Category</label>
+              <select
+                value={filters.category}
+                onChange={(e) => {
+                  handleFilterChange('category', e.target.value);
+                  handleFilterChange('propertyType', 'all'); // Reset property type when category changes
+                }}
+                style={{
+                  padding: '0.7rem',
+                  border: '2px solid var(--border-light)',
+                  borderRadius: '6px',
+                  fontSize: '0.95rem',
                   minWidth: '140px'
                 }}
               >
-                <option value="all">All Locations</option>
-                <option value="Qatar">Qatar</option>
-                <option value="UAE">UAE</option>
-                <option value="Egypt">Egypt</option>
-                <option value="Saudi Arabia">Saudi Arabia</option>
-                <option value="France">France</option>
+                <option value="all">All Categories</option>
+                <option value="residential">Residential</option>
+                <option value="commercial">Commercial</option>
+                <option value="industrial">Industrial</option>
+                <option value="land">Land</option>
               </select>
             </div>
 
@@ -295,10 +356,48 @@ const Properties: React.FC = () => {
                 }}
               >
                 <option value="all">All Types</option>
-                <option value="Apartment">Apartment</option>
-                <option value="Villa">Villa</option>
-                <option value="Penthouse">Penthouse</option>
-                <option value="Studio">Studio</option>
+                {(filters.category === 'all' || filters.category === 'residential') && (
+                  <>
+                    <option value="Apartment">Apartment</option>
+                    <option value="Villa">Villa</option>
+                    <option value="Penthouse">Penthouse</option>
+                    <option value="Studio">Studio</option>
+                    <option value="Townhouse">Townhouse</option>
+                    <option value="Duplex">Duplex</option>
+                    <option value="Hotel Apartment">Hotel Apartment</option>
+                    <option value="Chalet">Chalet</option>
+                    <option value="Compound Villa">Compound Villa</option>
+                    <option value="Standalone Villa">Standalone Villa</option>
+                  </>
+                )}
+                {(filters.category === 'all' || filters.category === 'commercial') && (
+                  <>
+                    <option value="Office">Office</option>
+                    <option value="Shop">Shop</option>
+                    <option value="Showroom">Showroom</option>
+                    <option value="Retail Shop">Retail Shop</option>
+                    <option value="Commercial Villa">Commercial Villa</option>
+                    <option value="Restaurant">Restaurant</option>
+                    <option value="Whole Building">Whole Building</option>
+                    <option value="Hotel">Hotel</option>
+                  </>
+                )}
+                {(filters.category === 'all' || filters.category === 'industrial') && (
+                  <>
+                    <option value="Warehouse">Warehouse</option>
+                    <option value="Factory">Factory</option>
+                    <option value="Labor Camp">Labor Camp</option>
+                    <option value="Industrial Land">Industrial Land</option>
+                  </>
+                )}
+                {(filters.category === 'all' || filters.category === 'land') && (
+                  <>
+                    <option value="Land">Land</option>
+                    <option value="Land Plot">Land Plot</option>
+                    <option value="Residential Land">Residential Land</option>
+                    <option value="Commercial Land">Commercial Land</option>
+                  </>
+                )}
               </select>
             </div>
 
@@ -435,10 +534,10 @@ const Properties: React.FC = () => {
                       <div className={`property-badge ${property.verified ? 'verified' : 'pending'}`}>
                         {property.verified ? '✓ Verified' : 'Pending'}
                       </div>
-                      <div className={`property-category-badge ${property.category}`}>
-                        {property.category === 'off-plan' ? 'Off-Plan' : `For ${property.category}`}
+                      <div className={`property-category-badge ${property.listingType}`}>
+                        {property.listingType === 'off-plan' ? 'Off-Plan' : `For ${property.listingType}`}
                       </div>
-                      {property.category === 'off-plan' && (
+                      {property.listingType === 'off-plan' && (
                         <div style={{
                           position: 'absolute',
                           bottom: '1rem',
@@ -516,7 +615,7 @@ const Properties: React.FC = () => {
                         </div>
                       </div>
 
-                      {property.category === 'off-plan' && (
+                      {property.listingType === 'off-plan' && (
                         <div style={{
                           background: 'var(--off-white)',
                           padding: '1rem',
@@ -615,7 +714,7 @@ const Properties: React.FC = () => {
                         fontSize: '0.9rem',
                         textTransform: 'capitalize'
                       }}>
-                        {property.category === 'off-plan' ? 'Off-Plan' : `For ${property.category}`}
+                        {property.listingType === 'off-plan' ? 'Off-Plan' : `For ${property.listingType}`}
                       </div>
                     </div>
 

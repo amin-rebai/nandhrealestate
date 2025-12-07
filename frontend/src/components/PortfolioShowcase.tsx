@@ -30,13 +30,38 @@ const PortfolioShowcase: React.FC = () => {
     return (value as any)[lang] || value.en || (value as any).fr || '';
   };
 
-  // Fetch portfolio data from API
+  // Fetch portfolio data from API - first try properties marked for portfolio, then fall back to content
   useEffect(() => {
     const fetchPortfolioData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/content/section/portfolio?active=true`);
-        
+        const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
+        // First try to fetch properties marked for portfolio
+        const propertiesResponse = await axios.get(`${API_URL}/properties/portfolio?limit=6`);
+        if (propertiesResponse.data.success && propertiesResponse.data.data.length > 0) {
+          // Convert properties to portfolio item format
+          const portfolioFromProperties = propertiesResponse.data.data.map((property: any, index: number) => ({
+            _id: property._id,
+            title: property.title,
+            description: property.description,
+            backgroundImage: property.images?.[0]?.startsWith('http')
+              ? property.images[0]
+              : `${API_URL.replace('/api', '')}${property.images?.[0] || ''}`,
+            ctaText: { en: 'View Property', ar: 'عرض العقار', fr: 'Voir la propriété' },
+            ctaLink: `/property/${property._id}`,
+            propertyType: property.propertyType?.toLowerCase() || 'villa',
+            isActive: true,
+            order: index + 1
+          }));
+          setPortfolioItems(portfolioFromProperties);
+          setLoading(false);
+          return;
+        }
+
+        // Fall back to content-based portfolio
+        const response = await axios.get(`${API_URL}/content/section/portfolio?active=true`);
+
         if (response.data.success && response.data.data.length > 0) {
           // Sort by order
           const sortedItems = response.data.data.sort((a: PortfolioItem, b: PortfolioItem) => (a.order || 0) - (b.order || 0));

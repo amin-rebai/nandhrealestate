@@ -26,7 +26,10 @@ import {
   Email as EmailIcon,
   Phone as PhoneIcon,
   Person as PersonIcon,
-  Mail as MailIcon
+  Mail as MailIcon,
+  Star as StarIcon,
+  LocationOn as LocationIcon,
+  Verified as VerifiedIcon
 } from '@mui/icons-material';
 import { RootState, AppDispatch } from '../store/store';
 import { fetchAgents } from '../store/slices/userSlice';
@@ -180,6 +183,9 @@ const Agents: React.FC = () => {
                       height: '100%',
                       display: 'flex',
                       flexDirection: 'column',
+                      borderRadius: '16px',
+                      overflow: 'hidden',
+                      boxShadow: '0 2px 12px rgba(0, 0, 0, 0.08)',
                       transition: 'all 0.3s ease',
                       '&:hover': {
                         transform: 'translateY(-8px)',
@@ -187,99 +193,113 @@ const Agents: React.FC = () => {
                       }
                     }}
                   >
-                    {/* Agent Avatar Placeholder */}
-                    <CardMedia
+                    {/* Agent Photo - Large */}
+                    <Box
                       sx={{
-                        height: 200,
-                        backgroundColor: 'linear-gradient(135deg, #4B0E14 0%, #C5A059 100%)',
+                        position: 'relative',
+                        height: 320,
+                        backgroundColor: '#f5f5f5',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        color: 'white'
+                        overflow: 'hidden'
                       }}
                     >
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          width: 80,
-                          height: 80,
-                          borderRadius: '50%',
-                          backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                          fontSize: 40
-                        }}
-                      >
-                        <PersonIcon sx={{ fontSize: 40 }} />
-                      </Box>
-                    </CardMedia>
-
-                    <CardContent sx={{ flexGrow: 1 }}>
-                      {/* Agent Name */}
-                      <Typography
-                        variant="h6"
-                        component="h3"
-                        sx={{
-                          fontWeight: 700,
-                          color: '#4B0E14',
-                          mb: 1
-                        }}
-                      >
-                        {agent.name}
-                      </Typography>
-
-                      {/* Status Chip */}
-                      <Box sx={{ mb: 2 }}>
-                        <Chip
-                          label={agent.isActive ? 'Active' : 'Inactive'}
-                          size="small"
-                          color={agent.isActive ? 'success' : 'default'}
-                          sx={{ fontWeight: 600 }}
+                      {agent.avatar ? (
+                        <Box
+                          component="img"
+                          src={agent.avatar.startsWith('http') ? agent.avatar : `http://localhost:5000${agent.avatar}`}
+                          alt={agent.name}
+                          sx={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            objectPosition: 'top center'
+                          }}
                         />
-                      </Box>
-
-                      {/* Contact Information */}
-                      <Box sx={{ mb: 2 }}>
+                      ) : (
                         <Box
                           sx={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: 1,
-                            mb: 1,
-                            color: '#666'
+                            justifyContent: 'center',
+                            width: '100%',
+                            height: '100%',
+                            background: 'linear-gradient(135deg, #f8f8f8 0%, #e8e8e8 100%)'
                           }}
                         >
-                          <EmailIcon sx={{ fontSize: 18 }} />
-                          <Typography variant="body2">{agent.email}</Typography>
+                          <PersonIcon sx={{ fontSize: 100, color: '#ccc' }} />
                         </Box>
-                        {agent.phone && (
-                          <Box
-                            sx={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: 1,
-                              color: '#666'
-                            }}
-                          >
-                            <PhoneIcon sx={{ fontSize: 18 }} />
-                            <Typography variant="body2">{agent.phone}</Typography>
-                          </Box>
-                        )}
+                      )}
+                    </Box>
+
+                    <CardContent sx={{ p: 3 }}>
+                      {/* Agent Name with Verified Badge */}
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+                        <VerifiedIcon sx={{ fontSize: 20, color: '#1da1f2' }} />
+                        <Typography
+                          variant="h6"
+                          component="h3"
+                          sx={{
+                            fontWeight: 700,
+                            color: '#1a1a1a',
+                            fontSize: '1.1rem'
+                          }}
+                        >
+                          {agent.name}
+                        </Typography>
+                        {/* Rating */}
+                        <Box sx={{ display: 'flex', alignItems: 'center', ml: 'auto' }}>
+                          <StarIcon sx={{ fontSize: 18, color: '#1a1a1a' }} />
+                          <Typography sx={{ fontWeight: 600, color: '#1a1a1a', ml: 0.5, fontSize: '0.95rem' }}>
+                            5.0
+                          </Typography>
+                          <Typography sx={{ color: '#888', fontSize: '0.85rem', ml: 0.3 }}>/5</Typography>
+                        </Box>
+                      </Box>
+
+                      {/* Title */}
+                      <Typography
+                        sx={{
+                          color: '#C5A059',
+                          fontSize: '0.9rem',
+                          mb: 1
+                        }}
+                      >
+                        {agent.title || 'Real Estate Consultant'}
+                      </Typography>
+
+                      {/* Location */}
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, color: '#666', mb: 2 }}>
+                        <LocationIcon sx={{ fontSize: 16 }} />
+                        <Typography variant="body2" sx={{ fontSize: '0.85rem' }}>
+                          {agent.location || 'Doha, Qatar'}
+                        </Typography>
                       </Box>
                     </CardContent>
 
-                    {/* Action Buttons */}
-                    <Box sx={{ p: 2, pt: 0, display: 'flex', gap: 1 }}>
+                    {/* Action Button */}
+                    <Box sx={{ p: 3, pt: 0 }}>
                       <Button
                         fullWidth
-                        variant="contained"
+                        variant="outlined"
                         sx={{
-                          backgroundColor: '#4B0E14',
-                          '&:hover': { backgroundColor: '#3a0b10' }
+                          borderColor: '#1a1a1a',
+                          color: '#1a1a1a',
+                          borderRadius: '8px',
+                          py: 1.2,
+                          fontWeight: 600,
+                          textTransform: 'none',
+                          fontSize: '0.95rem',
+                          '&:hover': {
+                            backgroundColor: '#1a1a1a',
+                            color: 'white',
+                            borderColor: '#1a1a1a'
+                          }
                         }}
                         onClick={() => handleContactOpen(agent)}
                       >
-                        {t('common.contact', 'Contact')}
+                        Start working with {agent.name.split(' ')[0]}
                       </Button>
                     </Box>
                   </Card>

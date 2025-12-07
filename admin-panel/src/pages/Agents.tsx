@@ -37,7 +37,9 @@ import {
   Phone,
   Email,
   Save,
-  Close
+  Close,
+  CloudUpload,
+  LocationOn
 } from '@mui/icons-material';
 import { RootState, AppDispatch } from '../store/store';
 import {
@@ -67,8 +69,13 @@ const Agents: React.FC = () => {
     email: '',
     password: '',
     phone: '',
+    title: 'Real Estate Consultant',
+    location: 'Doha, Qatar',
+    avatar: '',
     isActive: true
   });
+
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
 
   // Filter to only show agents
   const agents = users.filter((user) => user.role === 'agent');
@@ -98,8 +105,12 @@ const Agents: React.FC = () => {
         email: user.email,
         password: '',
         phone: user.phone || '',
+        title: (user as any).title || 'Real Estate Consultant',
+        location: (user as any).location || 'Doha, Qatar',
+        avatar: (user as any).avatar || '',
         isActive: user.isActive
       });
+      setAvatarPreview((user as any).avatar || null);
     } else {
       setEditingUser(null);
       setFormData({
@@ -107,8 +118,12 @@ const Agents: React.FC = () => {
         email: '',
         password: '',
         phone: '',
+        title: 'Real Estate Consultant',
+        location: 'Doha, Qatar',
+        avatar: '',
         isActive: true
       });
+      setAvatarPreview(null);
     }
     setOpen(true);
   };
@@ -116,6 +131,28 @@ const Agents: React.FC = () => {
   const handleCloseDialog = () => {
     setOpen(false);
     setEditingUser(null);
+  };
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formDataUpload = new FormData();
+    formDataUpload.append('image', file);
+
+    try {
+      const response = await fetch('http://localhost:5000/api/upload', {
+        method: 'POST',
+        body: formDataUpload,
+      });
+      const data = await response.json();
+      if (data.url) {
+        setFormData({ ...formData, avatar: data.url });
+        setAvatarPreview(data.url);
+      }
+    } catch (error) {
+      console.error('Error uploading avatar:', error);
+    }
   };
 
   const handleSaveAgent = async () => {
@@ -134,6 +171,9 @@ const Agents: React.FC = () => {
               email: formData.email,
               ...(formData.password && { password: formData.password }),
               phone: formData.phone,
+              title: formData.title,
+              location: formData.location,
+              avatar: formData.avatar,
               isActive: formData.isActive
             }
           })
@@ -149,6 +189,9 @@ const Agents: React.FC = () => {
             email: formData.email,
             password: formData.password,
             phone: formData.phone,
+            title: formData.title,
+            location: formData.location,
+            avatar: formData.avatar,
             role: 'agent',
             isActive: formData.isActive
           })
@@ -253,9 +296,9 @@ const Agents: React.FC = () => {
           <Table>
             <TableHead>
               <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
-                <TableCell sx={{ fontWeight: 700, color: '#4B0E14' }}>Name</TableCell>
-                <TableCell sx={{ fontWeight: 700, color: '#4B0E14' }}>Email</TableCell>
-                <TableCell sx={{ fontWeight: 700, color: '#4B0E14' }}>Phone</TableCell>
+                <TableCell sx={{ fontWeight: 700, color: '#4B0E14' }}>Agent</TableCell>
+                <TableCell sx={{ fontWeight: 700, color: '#4B0E14' }}>Contact</TableCell>
+                <TableCell sx={{ fontWeight: 700, color: '#4B0E14' }}>Location</TableCell>
                 <TableCell sx={{ fontWeight: 700, color: '#4B0E14' }}>Status</TableCell>
                 <TableCell sx={{ fontWeight: 700, color: '#4B0E14' }}>Actions</TableCell>
               </TableRow>
@@ -285,33 +328,43 @@ const Agents: React.FC = () => {
                     <TableCell>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Avatar
+                          src={(agent as any).avatar ? ((agent as any).avatar.startsWith('http') ? (agent as any).avatar : `http://localhost:5000${(agent as any).avatar}`) : undefined}
                           sx={{
                             backgroundColor: '#4B0E14',
-                            width: 36,
-                            height: 36,
-                            fontSize: '0.9rem'
+                            width: 50,
+                            height: 50,
+                            fontSize: '1rem'
                           }}
                         >
                           {agent.name.charAt(0).toUpperCase()}
                         </Avatar>
-                        <Typography sx={{ fontWeight: 600 }}>{agent.name}</Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#666' }}>
-                        <Email sx={{ fontSize: 18 }} />
-                        {agent.email}
-                      </Box>
-                    </TableCell>
-                    <TableCell>
-                      {agent.phone ? (
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#666' }}>
-                          <Phone sx={{ fontSize: 18 }} />
-                          {agent.phone}
+                        <Box>
+                          <Typography sx={{ fontWeight: 600 }}>{agent.name}</Typography>
+                          <Typography sx={{ fontSize: '0.85rem', color: '#C5A059' }}>
+                            {(agent as any).title || 'Real Estate Consultant'}
+                          </Typography>
                         </Box>
-                      ) : (
-                        <Typography sx={{ color: '#999' }}>-</Typography>
-                      )}
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#666' }}>
+                          <Email sx={{ fontSize: 16 }} />
+                          <Typography variant="body2">{agent.email}</Typography>
+                        </Box>
+                        {agent.phone && (
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#666' }}>
+                            <Phone sx={{ fontSize: 16 }} />
+                            <Typography variant="body2">{agent.phone}</Typography>
+                          </Box>
+                        )}
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, color: '#666' }}>
+                        <LocationOn sx={{ fontSize: 16 }} />
+                        <Typography variant="body2">{(agent as any).location || 'Doha, Qatar'}</Typography>
+                      </Box>
                     </TableCell>
                     <TableCell>
                       <Chip
@@ -383,6 +436,36 @@ const Agents: React.FC = () => {
         </DialogTitle>
         <DialogContent sx={{ pt: 2 }}>
           <Grid container spacing={2}>
+            {/* Avatar Upload */}
+            <Grid item xs={12}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, mb: 1 }}>
+                <Avatar
+                  src={avatarPreview ? (avatarPreview.startsWith('http') ? avatarPreview : `http://localhost:5000${avatarPreview}`) : undefined}
+                  sx={{ width: 100, height: 100, backgroundColor: '#4B0E14' }}
+                >
+                  {formData.name ? formData.name.charAt(0).toUpperCase() : 'A'}
+                </Avatar>
+                <Box>
+                  <Button
+                    variant="outlined"
+                    component="label"
+                    startIcon={<CloudUpload />}
+                    sx={{ borderColor: '#4B0E14', color: '#4B0E14' }}
+                  >
+                    Upload Photo
+                    <input
+                      type="file"
+                      hidden
+                      accept="image/*"
+                      onChange={handleAvatarUpload}
+                    />
+                  </Button>
+                  <Typography variant="caption" display="block" sx={{ mt: 1, color: '#666' }}>
+                    Recommended: Square image, at least 400x400px
+                  </Typography>
+                </Box>
+              </Box>
+            </Grid>
             <Grid item xs={12}>
               <TextField
                 fullWidth
@@ -390,6 +473,24 @@ const Agents: React.FC = () => {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 placeholder="Agent's full name"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Title"
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                placeholder="Real Estate Consultant"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Location"
+                value={formData.location}
+                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                placeholder="Doha, Qatar"
               />
             </Grid>
             <Grid item xs={12}>

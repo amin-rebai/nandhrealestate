@@ -17,6 +17,10 @@ const Header: React.FC = () => {
     return ['/services', '/our-services', '/our-process', '/our-partners'].includes(location.pathname) ? 'active' : '';
   };
 
+  const isPropertiesActive = () => {
+    return ['/properties', '/international-properties'].includes(location.pathname) ? 'active' : '';
+  };
+
   const handleDropdownToggle = (dropdown: string) => {
     setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
   };
@@ -71,7 +75,46 @@ const Header: React.FC = () => {
         <ul className={`nav-links ${mobileMenuOpen ? 'mobile-active' : ''}`}>
           <li><Link to="/" className={isActive('/')} onClick={closeMobileMenu}>{t('navigation.home')}</Link></li>
           <li><Link to="/about" className={isActive('/about')} onClick={closeMobileMenu}>{t('navigation.about')}</Link></li>
-          <li><Link to="/properties" className={isActive('/properties')} onClick={closeMobileMenu}>{t('navigation.properties')}</Link></li>
+          {/* Properties Dropdown */}
+          <li
+            className={`nav-item-dropdown ${isPropertiesActive()}`}
+            onMouseEnter={() => handleDropdownToggle('properties')}
+            onMouseLeave={handleDropdownClose}
+          >
+            <div
+              className={`nav-link-dropdown ${isPropertiesActive()}`}
+              onClick={() => handleMobileDropdownToggle('properties')}
+            >
+              <Link to="/properties" onClick={closeMobileMenu}>
+                {t('navigation.properties')}
+              </Link>
+              <svg
+                className={`dropdown-arrow ${activeDropdown === 'properties' ? 'rotated' : ''}`}
+                width="12"
+                height="12"
+                viewBox="0 0 12 12"
+                fill="none"
+              >
+                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <div className={`dropdown-menu ${activeDropdown === 'properties' ? 'show' : ''}`}>
+              <Link to="/properties" className="dropdown-item" onClick={closeMobileMenu}>
+                <span className="dropdown-icon">🏠</span>
+                <div>
+                  <div className="dropdown-title">Qatar Properties</div>
+                  <div className="dropdown-desc">Browse properties in Qatar</div>
+                </div>
+              </Link>
+              <Link to="/international-properties" className="dropdown-item" onClick={closeMobileMenu}>
+                <span className="dropdown-icon">🌍</span>
+                <div>
+                  <div className="dropdown-title">International Properties</div>
+                  <div className="dropdown-desc">Explore global real estate markets</div>
+                </div>
+              </Link>
+            </div>
+          </li>
           <li><Link to="/agents" className={isActive('/agents')} onClick={closeMobileMenu}>Agents</Link></li>
 
           {/* Services Dropdown */}

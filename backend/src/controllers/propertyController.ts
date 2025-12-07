@@ -81,6 +81,128 @@ export const getProperties = async (req: Request, res: Response) => {
   }
 };
 
+// @desc    Get featured properties (for home page)
+// @route   GET /api/properties/featured
+// @access  Public
+export const getFeaturedProperties = async (req: Request, res: Response) => {
+  try {
+    const { limit = 6 } = req.query;
+    const language = getLanguageFromRequest(req);
+
+    const properties = await Property.find({ featured: true })
+      .populate('agent', 'name email phone')
+      .sort({ createdAt: -1 })
+      .limit(Number(limit));
+
+    const transformedProperties = properties.map(property =>
+      transformContentForLanguage(property.toObject(), language)
+    );
+
+    return res.status(200).json({
+      success: true,
+      count: transformedProperties.length,
+      data: transformedProperties,
+      language
+    });
+  } catch (error: any) {
+    return res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+};
+
+// @desc    Get portfolio properties (for portfolio section)
+// @route   GET /api/properties/portfolio
+// @access  Public
+export const getPortfolioProperties = async (req: Request, res: Response) => {
+  try {
+    const { limit = 6 } = req.query;
+    const language = getLanguageFromRequest(req);
+
+    const properties = await Property.find({ featuredInPortfolio: true })
+      .populate('agent', 'name email phone')
+      .sort({ createdAt: -1 })
+      .limit(Number(limit));
+
+    const transformedProperties = properties.map(property =>
+      transformContentForLanguage(property.toObject(), language)
+    );
+
+    return res.status(200).json({
+      success: true,
+      count: transformedProperties.length,
+      data: transformedProperties,
+      language
+    });
+  } catch (error: any) {
+    return res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+};
+
+// @desc    Toggle featured status
+// @route   PUT /api/properties/:id/featured
+// @access  Private (Admin)
+export const toggleFeatured = async (req: AuthRequest, res: Response) => {
+  try {
+    const property = await Property.findById(req.params.id);
+
+    if (!property) {
+      return res.status(404).json({
+        success: false,
+        error: 'Property not found'
+      });
+    }
+
+    property.featured = !property.featured;
+    await property.save();
+
+    return res.status(200).json({
+      success: true,
+      data: property,
+      message: `Property ${property.featured ? 'added to' : 'removed from'} featured`
+    });
+  } catch (error: any) {
+    return res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+};
+
+// @desc    Toggle portfolio status
+// @route   PUT /api/properties/:id/portfolio
+// @access  Private (Admin)
+export const togglePortfolio = async (req: AuthRequest, res: Response) => {
+  try {
+    const property = await Property.findById(req.params.id);
+
+    if (!property) {
+      return res.status(404).json({
+        success: false,
+        error: 'Property not found'
+      });
+    }
+
+    property.featuredInPortfolio = !property.featuredInPortfolio;
+    await property.save();
+
+    return res.status(200).json({
+      success: true,
+      data: property,
+      message: `Property ${property.featuredInPortfolio ? 'added to' : 'removed from'} portfolio`
+    });
+  } catch (error: any) {
+    return res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+};
+
 // @desc    Get single property
 // @route   GET /api/properties/:id
 // @access  Public
