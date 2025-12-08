@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+import { compressVideo } from '../utils/videoCompressor';
 
 interface AuthRequest extends Request {
   user?: any;
@@ -136,19 +137,36 @@ export const handleVideoUpload = async (req: AuthRequest, res: Response) => {
       });
     }
 
+    const videoPath = path.join(__dirname, '../../public/uploads', req.file.filename);
+
+    // Compress the video
+    console.log(`Processing video upload: ${req.file.originalname}`);
+    const compressionResult = await compressVideo(videoPath);
+
+    if (!compressionResult.success) {
+      console.warn(`Video compression failed: ${compressionResult.error}, using original file`);
+    } else if (compressionResult.compressionRatio > 1) {
+      console.log(`Video compressed successfully. Ratio: ${compressionResult.compressionRatio.toFixed(2)}x`);
+    }
+
     const videoUrl = `/uploads/${req.file.filename}`;
+    const finalSize = compressionResult.compressedSize;
 
     return res.status(200).json({
       success: true,
       data: {
         filename: req.file.filename,
         originalName: req.file.originalname,
-        size: req.file.size,
+        originalSize: req.file.size,
+        size: finalSize,
         url: videoUrl,
-        type: 'video'
+        type: 'video',
+        compressed: compressionResult.success && compressionResult.compressionRatio > 1,
+        compressionRatio: compressionResult.compressionRatio
       }
     });
   } catch (error: any) {
+    console.error('Video upload error:', error);
     return res.status(400).json({
       success: false,
       error: error.message
@@ -168,17 +186,39 @@ export const handleMediaUpload = async (req: AuthRequest, res: Response) => {
     const mediaUrl = `/uploads/${req.file.filename}`;
     const mediaType = req.file.mimetype.startsWith('image/') ? 'image' : 'video';
 
+    let finalSize = req.file.size;
+    let compressed = false;
+    let compressionRatio = 1;
+
+    // Compress video files
+    if (mediaType === 'video') {
+      const videoPath = path.join(__dirname, '../../public/uploads', req.file.filename);
+      console.log(`Processing media video upload: ${req.file.originalname}`);
+      const compressionResult = await compressVideo(videoPath);
+
+      if (compressionResult.success && compressionResult.compressionRatio > 1) {
+        finalSize = compressionResult.compressedSize;
+        compressed = true;
+        compressionRatio = compressionResult.compressionRatio;
+        console.log(`Video compressed successfully. Ratio: ${compressionRatio.toFixed(2)}x`);
+      }
+    }
+
     return res.status(200).json({
       success: true,
       data: {
         filename: req.file.filename,
         originalName: req.file.originalname,
-        size: req.file.size,
+        originalSize: req.file.size,
+        size: finalSize,
         url: mediaUrl,
-        type: mediaType
+        type: mediaType,
+        compressed,
+        compressionRatio
       }
     });
   } catch (error: any) {
+    console.error('Media upload error:', error);
     return res.status(400).json({
       success: false,
       error: error.message

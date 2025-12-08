@@ -59,22 +59,30 @@ const HeroSection: React.FC = () => {
     return (value as any)[lang] || value.en || (value as any).fr || '';
   };
 
+  // Get base URL without /api suffix for static files
+  const getBaseUrl = (): string => {
+    const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+    return apiUrl.replace('/api', '');
+  };
+
   const getVideoUrl = (): string => {
+    const baseUrl = getBaseUrl();
     // If hero data exists and has a video URL, use it
     if (heroData?.videoUrl) {
-      return heroData.videoUrl.startsWith('http') 
-        ? heroData.videoUrl 
-        : `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${heroData.videoUrl}`;
+      return heroData.videoUrl.startsWith('http')
+        ? heroData.videoUrl
+        : `${baseUrl}${heroData.videoUrl.startsWith('/') ? '' : '/'}${heroData.videoUrl}`;
     }
     // Otherwise, use the default video
-    return `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${DEFAULT_VIDEO_URL}`;
+    return `${baseUrl}${DEFAULT_VIDEO_URL}`;
   };
 
   const getBackgroundImage = (): string => {
+    const baseUrl = getBaseUrl();
     if (heroData?.backgroundImage) {
       return heroData.backgroundImage.startsWith('http')
         ? heroData.backgroundImage
-        : `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${heroData.backgroundImage}`;
+        : `${baseUrl}${heroData.backgroundImage.startsWith('/') ? '' : '/'}${heroData.backgroundImage}`;
     }
     return '';
   };
