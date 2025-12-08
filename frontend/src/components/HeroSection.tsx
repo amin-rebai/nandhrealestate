@@ -61,7 +61,7 @@ const HeroSection: React.FC = () => {
 
   // Get base URL without /api suffix for static files
   const getBaseUrl = (): string => {
-    const apiUrl = 'https://api.nandhrealestate.qa' || 'http://localhost:5000/api';
+    const apiUrl = 'https://api.nandhrealestate.qa' || 'http://localhost:5000';
     return apiUrl;
   };
 
