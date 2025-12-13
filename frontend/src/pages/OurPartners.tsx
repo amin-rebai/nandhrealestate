@@ -11,7 +11,7 @@ interface Partner {
   order?: number;
 }
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 const OurPartners: React.FC = () => {
   const { i18n } = useTranslation();
@@ -76,7 +76,7 @@ const OurPartners: React.FC = () => {
     const fetchPartners = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${API_URL}/api/content/section/clients?active=true`);
+        const response = await axios.get(`${API_URL}/content/section/clients?active=true`);
         if (response.data && response.data.length > 0) {
           setPartners(response.data.sort((a: Partner, b: Partner) => (a.order || 0) - (b.order || 0)));
         } else {

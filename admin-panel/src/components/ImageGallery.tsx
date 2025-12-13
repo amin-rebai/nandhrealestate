@@ -59,7 +59,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [selected, setSelected] = useState<string[]>([]);
 
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   // Initialize selected images
   useEffect(() => {
@@ -238,7 +238,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
           <Grid container spacing={2}>
             {filteredImages.map((image) => {
               const isSelected = selected.includes(image.url);
-              const fullImageUrl = `${process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000'}${image.url}`;
+              const fullImageUrl = `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${image.url}`;
               
 
               return (

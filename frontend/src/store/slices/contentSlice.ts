@@ -43,7 +43,7 @@ const initialState: ContentState = {
   error: null,
 };
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 // Async thunks
 export const fetchContent = createAsyncThunk(
@@ -99,7 +99,7 @@ const contentSlice = createSlice({
       .addCase(fetchContent.fulfilled, (state, action) => {
         state.loading = false;
         state.content = action.payload.data;
-        
+
         // Organize content by sections
         state.heroSection = action.payload.data.find((item: ContentItem) => item.section === 'hero' && item.isActive) || null;
         state.aboutSection = action.payload.data.find((item: ContentItem) => item.section === 'about' && item.isActive) || null;
@@ -117,7 +117,7 @@ const contentSlice = createSlice({
       .addCase(fetchContentBySection.fulfilled, (state, action) => {
         state.loading = false;
         const { section, data } = action.payload;
-        
+
         if (section === 'hero') {
           state.heroSection = data.data.find((item: ContentItem) => item.isActive) || null;
         } else if (section === 'about') {

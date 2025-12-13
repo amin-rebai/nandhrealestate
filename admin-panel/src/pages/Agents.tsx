@@ -142,17 +142,25 @@ const Agents: React.FC = () => {
     formDataUpload.append('image', file);
 
     try {
-      const response = await fetch(`${API_URL}/upload`, {
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch(`${API_URL}/upload/image`, {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
         body: formDataUpload,
       });
       const data = await response.json();
-      if (data.url) {
-        setFormData({ ...formData, avatar: data.url });
-        setAvatarPreview(data.url);
+      if (data.success && data.data?.url) {
+        setFormData({ ...formData, avatar: data.data.url });
+        setAvatarPreview(data.data.url);
+      } else {
+        console.error('Upload failed:', data.error);
+        alert(data.error || 'Failed to upload image');
       }
     } catch (error) {
       console.error('Error uploading avatar:', error);
+      alert('Error uploading avatar');
     }
   };
 

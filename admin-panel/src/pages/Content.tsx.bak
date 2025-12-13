@@ -881,7 +881,7 @@ const Content: React.FC = () => {
                                 try {
                                   const formData = new FormData();
                                   formData.append('video', file);
-                                  const response = await fetch('/api/upload/video', {
+                                  const response = await fetch('/upload/video', {
                                     method: 'POST',
                                     body: formData,
                                   });
@@ -1029,7 +1029,7 @@ const Content: React.FC = () => {
                           variant="contained"
                           size="small"
                           sx={{
-                            backgroundColor: '#C1A88A',
+                            backgroundColor: '#B89C4C',
                             '&:hover': { backgroundColor: '#a08970' }
                           }}
                         >
@@ -2160,7 +2160,7 @@ const Content: React.FC = () => {
                               const formData = new FormData();
                               formData.append('video', file);
 
-                              const response = await fetch('/api/upload/video', {
+                              const response = await fetch('/upload/video', {
                                 method: 'POST',
                                 body: formData,
                               });
@@ -2409,7 +2409,7 @@ const Content: React.FC = () => {
                               const formData = new FormData();
                               formData.append('video', file);
 
-                              const response = await fetch('/api/upload/video', {
+                              const response = await fetch('/upload/video', {
                                 method: 'POST',
                                 body: formData,
                               });

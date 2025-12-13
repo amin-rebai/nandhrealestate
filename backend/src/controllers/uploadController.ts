@@ -57,6 +57,30 @@ const mediaFileFilter = (req: any, file: any, cb: any) => {
   }
 };
 
+// File filter for PDF documents
+const pdfFileFilter = (req: any, file: any, cb: any) => {
+  // Check file type
+  if (file.mimetype === 'application/pdf') {
+    cb(null, true);
+  } else {
+    cb(new Error('Please upload only PDF files.'), false);
+  }
+};
+
+// File filter for documents (PDF and common document types)
+const documentFileFilter = (req: any, file: any, cb: any) => {
+  const allowedMimes = [
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  ];
+  if (allowedMimes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error('Please upload only PDF or Word documents.'), false);
+  }
+};
+
 // Configure multer for images
 const imageUpload = multer({
   storage: storage,
@@ -84,6 +108,24 @@ const mediaUpload = multer({
   fileFilter: mediaFileFilter
 });
 
+// Configure multer for PDF uploads (brochures)
+const pdfUpload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 50 * 1024 * 1024, // 50MB limit for PDF brochures
+  },
+  fileFilter: pdfFileFilter
+});
+
+// Configure multer for document uploads
+const documentUpload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 20 * 1024 * 1024, // 20MB limit for documents
+  },
+  fileFilter: documentFileFilter
+});
+
 // @desc    Upload single image
 // @route   POST /api/upload/image
 // @access  Private
@@ -98,6 +140,16 @@ export const uploadVideo = videoUpload.single('video');
 // @route   POST /api/upload/media
 // @access  Private
 export const uploadMedia = mediaUpload.single('media');
+
+// @desc    Upload single PDF (brochure)
+// @route   POST /api/upload/pdf
+// @access  Private
+export const uploadPdf = pdfUpload.single('pdf');
+
+// @desc    Upload single document
+// @route   POST /api/upload/document
+// @access  Private
+export const uploadDocument = documentUpload.single('document');
 
 export const handleImageUpload = async (req: AuthRequest, res: Response) => {
   try {
@@ -219,6 +271,67 @@ export const handleMediaUpload = async (req: AuthRequest, res: Response) => {
     });
   } catch (error: any) {
     console.error('Media upload error:', error);
+    return res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+};
+
+// Handle PDF upload (brochure)
+export const handlePdfUpload = async (req: AuthRequest, res: Response) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        error: 'Please upload a PDF file'
+      });
+    }
+
+    const pdfUrl = `/uploads/${req.file.filename}`;
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        filename: req.file.filename,
+        originalName: req.file.originalname,
+        size: req.file.size,
+        url: pdfUrl,
+        type: 'pdf'
+      }
+    });
+  } catch (error: any) {
+    return res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+};
+
+// Handle document upload
+export const handleDocumentUpload = async (req: AuthRequest, res: Response) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        error: 'Please upload a document'
+      });
+    }
+
+    const docUrl = `/uploads/${req.file.filename}`;
+    const docType = req.file.mimetype === 'application/pdf' ? 'pdf' : 'word';
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        filename: req.file.filename,
+        originalName: req.file.originalname,
+        size: req.file.size,
+        url: docUrl,
+        type: docType
+      }
+    });
+  } catch (error: any) {
     return res.status(400).json({
       success: false,
       error: error.message

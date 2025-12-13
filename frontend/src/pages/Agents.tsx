@@ -208,7 +208,7 @@ const Agents: React.FC = () => {
                       {agent.avatar ? (
                         <Box
                           component="img"
-                          src={agent.avatar.startsWith('http') ? agent.avatar : `${process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000'}${agent.avatar}`}
+                          src={agent.avatar.startsWith('http') ? agent.avatar : `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${agent.avatar}`}
                           alt={agent.name}
                           sx={{
                             width: '100%',

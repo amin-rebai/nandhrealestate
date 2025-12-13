@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 interface ContactInfo {
   title: { en: string; ar: string; fr?: string };
@@ -39,7 +39,7 @@ const Contact: React.FC = () => {
   useEffect(() => {
     const fetchContactInfo = async () => {
       try {
-        const response = await axios.get(`${API_URL}/api/content/section/contact?active=true`);
+        const response = await axios.get(`${API_URL}content/section/contact?active=true`);
         if (response.data && response.data.length > 0) {
           const data = response.data[0];
           // Page-level hero image configuration may come as backgroundImage or image

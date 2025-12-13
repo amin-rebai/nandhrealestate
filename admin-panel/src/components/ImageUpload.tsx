@@ -74,7 +74,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   // Convert value to array for consistent handling
   const imageUrls = multiple
@@ -398,14 +398,14 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                 <CardMedia
                   component="img"
                   height="120"
-                  image={`${process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000'}${url}`}
+                  image={`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${url}`}
                   alt={`Upload ${index + 1}`}
                   sx={{ objectFit: 'cover' }}
                 />
                 <CardActions sx={{ p: 1, justifyContent: 'center' }}>
                   <IconButton
                     size="small"
-                    onClick={() => handlePreview(`${process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000'}${url}`)}
+                    onClick={() => handlePreview(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${url}`)}
                   >
                     <Visibility />
                   </IconButton>

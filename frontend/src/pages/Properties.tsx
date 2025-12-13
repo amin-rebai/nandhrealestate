@@ -11,7 +11,7 @@ const Properties: React.FC = () => {
   const { properties, loading, error } = useSelector((state: RootState) => state.properties);
 
   // API URL for images
-  const API_URL = process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000';
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
   const [heroImage, setHeroImage] = useState<string | null>(null);
 
   // Helper functions for property images
@@ -128,7 +128,7 @@ const Properties: React.FC = () => {
     // Try to fetch a page-level hero image for the properties page (portfolio section)
     const fetchPortfolioHero = async () => {
       try {
-        const res = await fetch(`${API_URL}/api/content/section/portfolio?active=true`);
+        const res = await fetch(`${API_URL}/content/section/portfolio?active=true`);
         if (!res.ok) return;
         const data = await res.json();
         if (Array.isArray(data) && data.length > 0) {

@@ -4,7 +4,7 @@
   gap: 0.5rem;
   padding: 0.5rem 1rem;
   background: transparent;
-  border: 2px solid #C1A88A;
+  border: 2px solid #B89C4C;
   border-radius: 25px;
   color: #000000;
   font-size: 0.9rem;
@@ -16,7 +16,7 @@
 }
 
 .language-switcher:hover {
-  background: #C1A88A;
+  background: #B89C4C;
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(193, 168, 138, 0.3);
@@ -69,12 +69,12 @@
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .language-switcher {
-    border-color: #C1A88A;
-    color: #C1A88A;
+    border-color: #B89C4C;
+    color: #B89C4C;
   }
 
   .language-switcher:hover {
-    background: #C1A88A;
+    background: #B89C4C;
     color: #1a1a1a;
   }
 }

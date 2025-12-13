@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 interface MultilingualText {
   en: string;
@@ -212,7 +212,7 @@ const Services: React.FC = () => {
         className="process-section-bg"
         style={{
           backgroundImage: processSectionData?.backgroundImage
-            ? `linear-gradient(rgba(75, 14, 20, 0.85), rgba(75, 14, 20, 0.9)), url(${processSectionData.backgroundImage.startsWith('http') ? processSectionData.backgroundImage : `${API_URL.replace('/api', '')}${processSectionData.backgroundImage}`})`
+            ? `linear-gradient(rgba(75, 14, 20, 0.85), rgba(75, 14, 20, 0.9)), url(${processSectionData.backgroundImage.startsWith('http') ? processSectionData.backgroundImage : `${API_URL}${processSectionData.backgroundImage}`})`
             : 'linear-gradient(rgba(75, 14, 20, 0.95), rgba(75, 14, 20, 0.95))',
           backgroundSize: 'cover',
           backgroundPosition: 'center',

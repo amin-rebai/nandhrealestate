@@ -49,8 +49,8 @@ const Media: React.FC = () => {
   const [previewDialogOpen, setPreviewDialogOpen] = useState(false);
   const [previewFile, setPreviewFile] = useState<UploadedFile | null>(null);
 
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-  const BASE_URL = API_URL.replace('/api', '');
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+  const BASE_URL = API_URL;
 
   useEffect(() => {
     fetchFiles();

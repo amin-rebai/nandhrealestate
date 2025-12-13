@@ -17,7 +17,7 @@ const PropertyDetail: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // API URL for images
-  const API_URL = process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000';
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   // Helper function to get text from multilingual field
   const getText = (field: any, defaultValue: string = '') => {

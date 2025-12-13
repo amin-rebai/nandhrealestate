@@ -19,8 +19,8 @@ const OurServices: React.FC = () => {
   const [heroImage, setHeroImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-  const BASE_URL = API_URL.replace('/api', '');
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+  const BASE_URL = API_URL;
 
   useEffect(() => {
     const fetchServices = async () => {

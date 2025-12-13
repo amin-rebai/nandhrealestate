@@ -46,15 +46,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
 // Routes
-app.use('/api/properties', propertyRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/upload', uploadRoutes);
-app.use('/api/content', contentRoutes);
-app.use('/api/blog', blogRoutes);
+app.use('/properties', propertyRoutes);
+app.use('/auth', authRoutes);
+app.use('/users', userRoutes);
+app.use('/upload', uploadRoutes);
+app.use('/content', contentRoutes);
+app.use('/blog', blogRoutes);
 
 // Health check endpoint
-app.get('/api/health', (_req, res) => {
+app.get('/health', (_req, res) => {
   res.status(200).json({ message: 'Server is running!' });
 });
 

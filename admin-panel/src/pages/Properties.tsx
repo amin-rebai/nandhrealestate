@@ -65,9 +65,10 @@ import {
 import { fetchAgents } from '../store/slices/userSlice';
 import ImageUpload from '../components/ImageUpload';
 import VideoUpload from '../components/VideoUpload';
+import PdfUpload from '../components/PdfUpload';
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 // Type for property data sent to API (agent is string ID)
 type PropertyFormData = Omit<Property, '_id' | 'agent' | 'createdAt' | 'updatedAt' | 'images'> & {
@@ -1377,13 +1378,11 @@ const Properties: React.FC = () => {
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    <ImageUpload
+                    <PdfUpload
                       value={formData.propertyBrochure}
-                      onChange={(value) => setFormData(prev => ({ ...prev, propertyBrochure: Array.isArray(value) ? value[0] : value }))}
-                      multiple={false}
-                      label="Property Brochure (PDF/Image)"
-                      helperText="Upload property brochure document"
-                      showPreview={true}
+                      onChange={(value) => setFormData(prev => ({ ...prev, propertyBrochure: value }))}
+                      label="Upload Property Brochure"
+                      helperText="PDF files only. Max size: 50MB"
                     />
                   </Grid>
                 </Grid>

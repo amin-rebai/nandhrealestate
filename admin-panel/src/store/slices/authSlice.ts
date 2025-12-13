@@ -28,7 +28,7 @@ const initialState: AuthState = {
 };
 
 // Set up axios defaults
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 // Async thunks
 export const loginAdmin = createAsyncThunk(
@@ -36,17 +36,17 @@ export const loginAdmin = createAsyncThunk(
   async (credentials: { email: string; password: string }, { rejectWithValue }) => {
     try {
       const response = await axios.post(`${API_URL}/auth/login`, credentials);
-      
+
       // Check if user is admin or agent
       if (!['admin', 'agent'].includes(response.data.user.role)) {
         throw new Error('Access denied. Admin or Agent role required.');
       }
-      
+
       localStorage.setItem('adminToken', response.data.token);
-      
+
       // Set default authorization header
       axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
-      
+
       return response.data;
     } catch (error: any) {
       const message = error.response?.data?.error || error.message || 'Login failed';
@@ -63,15 +63,15 @@ export const getCurrentUser = createAsyncThunk(
       if (!token) {
         throw new Error('No token found');
       }
-      
+
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       const response = await axios.get(`${API_URL}/auth/me`);
-      
+
       // Check if user is admin or agent
       if (!['admin', 'agent'].includes(response.data.data.role)) {
         throw new Error('Access denied. Admin or Agent role required.');
       }
-      
+
       return response.data.data;
     } catch (error: any) {
       const message = error.response?.data?.error || error.message || 'Failed to get user';

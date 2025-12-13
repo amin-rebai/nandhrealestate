@@ -35,7 +35,7 @@ const PortfolioShowcase: React.FC = () => {
     const fetchPortfolioData = async () => {
       try {
         setLoading(true);
-        const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+        const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
         // First try to fetch properties marked for portfolio
         const propertiesResponse = await axios.get(`${API_URL}/properties/portfolio?limit=6`);
@@ -47,7 +47,7 @@ const PortfolioShowcase: React.FC = () => {
             description: property.description,
             backgroundImage: property.images?.[0]?.startsWith('http')
               ? property.images[0]
-              : `${API_URL.replace('/api', '')}${property.images?.[0] || ''}`,
+              : `${API_URL}${property.images?.[0] || ''}`,
             ctaText: { en: 'View Property', ar: 'عرض العقار', fr: 'Voir la propriété' },
             ctaLink: `/property/${property._id}`,
             propertyType: property.propertyType?.toLowerCase() || 'villa',

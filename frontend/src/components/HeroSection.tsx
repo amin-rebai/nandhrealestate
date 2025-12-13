@@ -27,7 +27,7 @@ const HeroSection: React.FC = () => {
   useEffect(() => {
     const fetchHeroData = async () => {
       try {
-        const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+        const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
         // Prefer admin-managed 'home' section for site hero, fallback to legacy 'hero'
         let response = await axios.get(`${API_URL}/content?section=home`);
@@ -61,7 +61,7 @@ const HeroSection: React.FC = () => {
 
   // Get base URL without /api suffix for static files
   const getBaseUrl = (): string => {
-    const apiUrl = 'https://api.nandhrealestate.qa' || 'http://localhost:5000';
+    const apiUrl = process.env.REACT_APP_API_URL  || 'http://localhost:5000';
     return apiUrl;
   };
 
@@ -206,7 +206,7 @@ const HeroSection: React.FC = () => {
                   style={{
                     display: 'inline-block',
                     padding: '1rem 2.5rem',
-                    backgroundColor: '#C1A88A',
+                    backgroundColor: '#B89C4C',
                     color: 'white',
                     textDecoration: 'none',
                     borderRadius: '4px',
@@ -221,7 +221,7 @@ const HeroSection: React.FC = () => {
                     e.currentTarget.style.boxShadow = '0 6px 20px rgba(193, 168, 138, 0.4)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#C1A88A';
+                    e.currentTarget.style.backgroundColor = '#B89C4C';
                     e.currentTarget.style.transform = 'translateY(0)';
                     e.currentTarget.style.boxShadow = '0 4px 15px rgba(193, 168, 138, 0.3)';
                   }}

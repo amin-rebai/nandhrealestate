@@ -12,7 +12,7 @@ interface PartnerItem {
   order?: number;
 }
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 const PartnersSection: React.FC = () => {
   const { i18n } = useTranslation();
@@ -142,7 +142,7 @@ const PartnersSection: React.FC = () => {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = 'white';
-                e.currentTarget.style.borderColor = '#C1A88A';
+                e.currentTarget.style.borderColor = '#B89C4C';
                 e.currentTarget.style.transform = 'translateY(-5px)';
                 e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.1)';
               }}
@@ -208,21 +208,21 @@ const PartnersSection: React.FC = () => {
               display: 'inline-block',
               padding: '1rem 2.5rem',
               backgroundColor: 'transparent',
-              color: '#C1A88A',
+              color: '#B89C4C',
               textDecoration: 'none',
               borderRadius: '4px',
               fontSize: '1.1rem',
               fontWeight: 600,
-              border: '2px solid #C1A88A',
+              border: '2px solid #B89C4C',
               transition: 'all 0.3s ease'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#C1A88A';
+              e.currentTarget.style.backgroundColor = '#B89C4C';
               e.currentTarget.style.color = 'white';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.color = '#C1A88A';
+              e.currentTarget.style.color = '#B89C4C';
             }}
           >
             View All Partners

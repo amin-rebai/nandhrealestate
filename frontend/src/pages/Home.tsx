@@ -9,7 +9,7 @@ import ServicesSection from '../components/ServicesSection';
 import ProcessSection from '../components/ProcessSection';
 import PartnersSection from '../components/PartnersSection';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 interface MultilingualText {
   en: string;
@@ -183,7 +183,7 @@ const Home: React.FC = () => {
                 <Link to={`/properties/${property._id}`} key={property._id} className="featured-property-card">
                   <div className="property-image">
                     <img
-                      src={property.images?.[0]?.startsWith('http') ? property.images[0] : `${API_URL.replace('/api', '')}${property.images?.[0] || ''}`}
+                      src={property.images?.[0]?.startsWith('http') ? property.images[0] : `${API_URL}${property.images?.[0] || ''}`}
                       alt={getText(property.title)}
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
@@ -282,7 +282,7 @@ const Home: React.FC = () => {
         className="about-section-bg"
         style={{
           backgroundImage: aboutHomeData?.backgroundImage
-            ? `url(${aboutHomeData.backgroundImage.startsWith('http') ? aboutHomeData.backgroundImage : `${API_URL.replace('/api', '')}${aboutHomeData.backgroundImage}`})`
+            ? `url(${aboutHomeData.backgroundImage.startsWith('http') ? aboutHomeData.backgroundImage : `${API_URL}${aboutHomeData.backgroundImage}`})`
             : 'url(/images/about.png)'
         }}
       >

@@ -72,7 +72,7 @@ const About: React.FC = () => {
       <section
         className="vision-fullwidth-section"
         style={{
-          backgroundImage: `url(${getMeta('visionImage')?.startsWith('http') ? getMeta('visionImage') : getMeta('visionImage') ? `${process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000'}${getMeta('visionImage')}` : 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80'})`
+          backgroundImage: `url(${getMeta('visionImage')?.startsWith('http') ? getMeta('visionImage') : getMeta('visionImage') ? `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${getMeta('visionImage')}` : 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80'})`
         }}
       >
         <div className="vision-fullwidth-overlay"></div>
@@ -87,7 +87,7 @@ const About: React.FC = () => {
       <section
         className="mission-fullwidth-section"
         style={{
-          backgroundImage: `url(${getMeta('missionImage')?.startsWith('http') ? getMeta('missionImage') : getMeta('missionImage') ? `${process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000'}${getMeta('missionImage')}` : 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80'})`
+          backgroundImage: `url(${getMeta('missionImage')?.startsWith('http') ? getMeta('missionImage') : getMeta('missionImage') ? `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${getMeta('missionImage')}` : 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80'})`
         }}
       >
         <div className="mission-fullwidth-overlay"></div>
@@ -116,7 +116,7 @@ const About: React.FC = () => {
             <div className="ceo-image-wrapper">
               {getMeta('ceo.photo') ? (
                 <img
-                  src={getMeta('ceo.photo').startsWith('http') ? getMeta('ceo.photo') : `${process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000'}${getMeta('ceo.photo')}`}
+                  src={getMeta('ceo.photo').startsWith('http') ? getMeta('ceo.photo') : `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${getMeta('ceo.photo')}`}
                   alt={displayML(getMeta('ceo.name', 'CEO'))}
                   className="ceo-photo"
                 />

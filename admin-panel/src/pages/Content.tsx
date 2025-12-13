@@ -708,7 +708,7 @@ const Content: React.FC = () => {
                           variant="contained"
                           size="small"
                           sx={{
-                            backgroundColor: '#C1A88A',
+                            backgroundColor: '#B89C4C',
                             '&:hover': { backgroundColor: '#a08970' }
                           }}
                         >

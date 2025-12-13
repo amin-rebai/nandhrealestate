@@ -103,22 +103,22 @@ HNrealstate/
 ## API Endpoints
 
 ### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - Login user
-- `GET /api/auth/me` - Get current user
+- `POST /auth/register` - Register new user
+- `POST /auth/login` - Login user
+- `GET /auth/me` - Get current user
 
 ### Properties
-- `GET /api/properties` - Get all properties
-- `GET /api/properties/:id` - Get property by ID
-- `POST /api/properties` - Create new property (auth required)
-- `PUT /api/properties/:id` - Update property (auth required)
-- `DELETE /api/properties/:id` - Delete property (auth required)
+- `GET /properties` - Get all properties
+- `GET /properties/:id` - Get property by ID
+- `POST /properties` - Create new property (auth required)
+- `PUT /properties/:id` - Update property (auth required)
+- `DELETE /properties/:id` - Delete property (auth required)
 
 ### Users (Admin only)
-- `GET /api/users` - Get all users
-- `GET /api/users/:id` - Get user by ID
-- `PUT /api/users/:id` - Update user
-- `DELETE /api/users/:id` - Delete user
+- `GET /users` - Get all users
+- `GET /users/:id` - Get user by ID
+- `PUT /users/:id` - Update user
+- `DELETE /users/:id` - Delete user
 
 ## Features
 

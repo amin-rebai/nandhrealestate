@@ -93,7 +93,7 @@ export const fetchProperties = createAsyncThunk(
   'properties/fetchProperties',
   async (params: any = {}, { rejectWithValue }) => {
     try {
-      const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+      const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
       const queryString = new URLSearchParams(params).toString();
       const response = await axios.get(`${API_URL}/properties?${queryString}`);
       return response.data.data || response.data;
@@ -108,7 +108,7 @@ export const fetchPropertyById = createAsyncThunk(
   'properties/fetchPropertyById',
   async (id: string, { rejectWithValue }) => {
     try {
-      const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+      const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
       const response = await axios.get(`${API_URL}/properties/${id}`);
       return response.data.data || response.data;
     } catch (error: any) {

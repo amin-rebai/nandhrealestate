@@ -12,7 +12,7 @@ interface ProcessStep {
   order?: number;
 }
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 const OurProcess: React.FC = () => {
   const { i18n } = useTranslation();
@@ -73,7 +73,7 @@ const OurProcess: React.FC = () => {
       ];
       try {
         setLoading(true);
-        const response = await axios.get(`${API_URL}/api/content/section/goals?active=true`);
+        const response = await axios.get(`${API_URL}/content/section/goals?active=true`);
         if (response.data && response.data.length > 0) {
           setProcessSteps(response.data.sort((a: ProcessStep, b: ProcessStep) => (a.order || 0) - (b.order || 0)));
         } else {

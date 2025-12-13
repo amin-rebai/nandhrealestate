@@ -35,7 +35,7 @@ interface SlideData {
     const fetchSliderData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/content/section/slider?active=true`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/content/section/slider?active=true`);
 
         if (response.data.success && response.data.data.length > 0) {
           // Sort by order

@@ -27,7 +27,7 @@ const initialState: UserState = {
   error: null,
 };
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 // Async thunks
 export const loginUser = createAsyncThunk(
@@ -65,7 +65,8 @@ export const fetchAgents = createAsyncThunk(
   'user/fetchAgents',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_URL}/users?role=agent`);
+      // Use the public /agents endpoint (no auth required)
+      const response = await axios.get(`${API_URL}/users/agents`);
       return response.data.data;
     } catch (error: any) {
       const message = error.response?.data?.error || error.message || 'Failed to fetch agents';

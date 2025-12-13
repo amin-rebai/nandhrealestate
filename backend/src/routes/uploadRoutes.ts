@@ -8,6 +8,10 @@ import {
   handleMediaUpload,
   uploadImages,
   handleImagesUpload,
+  uploadPdf,
+  handlePdfUpload,
+  uploadDocument,
+  handleDocumentUpload,
   deleteImage,
   getUploadedImages
 } from '../controllers/uploadController';
@@ -26,6 +30,12 @@ router.post('/video', uploadVideo, handleVideoUpload);
 
 // Single media upload (image or video)
 router.post('/media', uploadMedia, handleMediaUpload);
+
+// Single PDF upload (brochure)
+router.post('/pdf', uploadPdf, handlePdfUpload);
+
+// Single document upload (PDF or Word)
+router.post('/document', uploadDocument, handleDocumentUpload);
 
 // Multiple images upload
 router.post('/images', uploadImages, handleImagesUpload);

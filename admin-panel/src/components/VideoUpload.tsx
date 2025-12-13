@@ -48,7 +48,7 @@ const VideoUpload: React.FC<VideoUploadProps> = ({
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   const handleFileSelect = useCallback(async (files: FileList) => {
     if (disabled) return;
@@ -133,7 +133,7 @@ const VideoUpload: React.FC<VideoUploadProps> = ({
   };
 
   const getVideoUrl = (url: string) => {
-    return url.startsWith('http') ? url : `${API_URL.replace('/api', '')}${url}`;
+    return url.startsWith('http') ? url : `${API_URL}${url}`;
   };
 
   return (

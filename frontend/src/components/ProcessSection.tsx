@@ -18,7 +18,7 @@ const ProcessSection: React.FC = () => {
   const [processSteps, setProcessSteps] = useState<ProcessItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   useEffect(() => {
     const fetchProcess = async () => {
@@ -164,7 +164,7 @@ const ProcessSection: React.FC = () => {
             style={{
               display: 'inline-block',
               padding: '1rem 2.5rem',
-              backgroundColor: '#C1A88A',
+              backgroundColor: '#B89C4C',
               color: 'white',
               textDecoration: 'none',
               borderRadius: '4px',

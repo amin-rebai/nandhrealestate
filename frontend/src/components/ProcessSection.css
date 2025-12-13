@@ -33,7 +33,7 @@
   font-size: 3rem;
   opacity: 0.1;
   font-weight: bold;
-  color: #C1A88A;
+  color: #B89C4C;
 }
 
 .process-step-card img {
@@ -70,7 +70,7 @@
 .process-section .btn-modern-primary {
   display: inline-block;
   padding: 1rem 2.5rem;
-  background-color: #C1A88A;
+  background-color: #B89C4C;
   color: white;
   text-decoration: none;
   border-radius: 4px;

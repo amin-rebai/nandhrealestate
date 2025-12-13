@@ -103,7 +103,7 @@ blogSlice.ts; // Admin blog management
 **Patterns**:
 
 - Async operations use `createAsyncThunk` → `extraReducers` pattern
-- API base URL: `http://localhost:5000/api/` (frontend), same for admin
+- API base URL: `http://localhost:5000/` (frontend), same for admin
 - Error handling: Store errors in slice state, display in component
 - Thunk example: `export const fetchProperties = createAsyncThunk('properties/fetchProperties', async ...)` with rejection handling
 
@@ -112,23 +112,23 @@ blogSlice.ts; // Admin blog management
 Backend follows RESTful conventions:
 
 ```
-GET    /api/properties              # List (with filters, pagination)
-GET    /api/properties/:id          # Single item
-POST   /api/properties              # Create (auth required)
-PUT    /api/properties/:id          # Update (auth required)
-DELETE /api/properties/:id          # Delete (auth required)
+GET    /properties              # List (with filters, pagination)
+GET    /properties/:id          # Single item
+POST   /properties              # Create (auth required)
+PUT    /properties/:id          # Update (auth required)
+DELETE /properties/:id          # Delete (auth required)
 
-GET    /api/auth/me                 # Current user
-POST   /api/auth/register           # User registration
-POST   /api/auth/login              # User login
+GET    /auth/me                 # Current user
+POST   /auth/register           # User registration
+POST   /auth/login              # User login
 
-GET    /api/users                   # List users (admin only)
-PUT    /api/users/:id               # Update user
-DELETE /api/users/:id               # Delete user
+GET    /users                   # List users (admin only)
+PUT    /users/:id               # Update user
+DELETE /users/:id               # Delete user
 
-GET/POST /api/upload                # File upload
-GET/POST /api/content               # Static content
-GET/POST /api/blog                  # Blog posts
+GET/POST /upload                # File upload
+GET/POST /content               # Static content
+GET/POST /blog                  # Blog posts
 ```
 
 **Response format**:
@@ -222,7 +222,7 @@ Admin panel now focuses on managing individual frontend page sections instead of
 
 - **Edit Mode Toggle**: Click "Edit" to unlock fields, "Save Changes" to persist
 - **Hero Media**: Choose between video (recommended) or image background
-- **Video Upload**: Direct video upload to backend (`/api/upload/video`)
+- **Video Upload**: Direct video upload to backend (`/upload/video`)
 - **Image Upload**: Reusable `<ImageUpload />` component with preview
 - **Live Preview**: Side-by-side preview showing how content appears on frontend
 - **Multilingual**: All text fields support EN/AR via `<MultilingualTextField />`
@@ -250,10 +250,10 @@ Admin panel now focuses on managing individual frontend page sections instead of
 
 **Backend Agents Endpoint**:
 
-- `GET /api/users?role=agent` - List all agents (public route)
-- `POST /api/users` with `role: 'agent'` - Create new agent (admin only)
-- `PUT /api/users/:id` - Update agent details (admin only)
-- `DELETE /api/users/:id` - Remove agent (admin only)
+- `GET /users?role=agent` - List all agents (public route)
+- `POST /users` with `role: 'agent'` - Create new agent (admin only)
+- `PUT /users/:id` - Update agent details (admin only)
+- `DELETE /users/:id` - Remove agent (admin only)
 
 **Admin Agents Management** (`admin-panel/src/pages/Agents.tsx`):
 
@@ -308,7 +308,7 @@ Admin panel now focuses on managing individual frontend page sections instead of
 
 - **Backend**: `npm test` runs Jest (configure in `backend/tsconfig.json`)
 - **Frontend/Admin**: `npm test` runs Create React App tests
-- **API testing**: Backend health check: `GET http://localhost:5000/api/health`
+- **API testing**: Backend health check: `GET http://localhost:5000/health`
 - **Redux DevTools**: Install browser extension for Redux debugging
 - **i18next debug**: Set `debug: true` in `src/i18n/index.ts` for language resolution logs
 
