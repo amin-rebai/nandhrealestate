@@ -1,21 +1,27 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { SupportedLanguage } from './languageSlice';
+
+// Multilingual field type
+export interface MultilingualField {
+  en: string;
+  ar: string;
+  fr?: string;
+}
 
 export interface ContentItem {
   _id: string;
   section: 'hero' | 'about' | 'featured';
-  title: string;
-  subtitle?: string;
-  content?: string;
-  description?: string;
+  title: string | MultilingualField;
+  subtitle?: string | MultilingualField;
+  content?: string | MultilingualField;
+  description?: string | MultilingualField;
   image?: string;
   backgroundImage?: string;
-  ctaText?: string;
+  ctaText?: string | MultilingualField;
   isActive: boolean;
   order?: number;
   stats?: Array<{
-    label: string;
+    label: string | MultilingualField;
     value: string;
   }>;
   metadata?: {
@@ -45,13 +51,12 @@ const initialState: ContentState = {
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
-// Async thunks
+// Async thunks - fetch content with all languages (frontend handles language selection)
 export const fetchContent = createAsyncThunk(
   'content/fetchContent',
-  async (params: { language?: SupportedLanguage; section?: string; active?: boolean } = {}, { rejectWithValue }) => {
+  async (params: { section?: string; active?: boolean } = {}, { rejectWithValue }) => {
     try {
       const queryParams = new URLSearchParams();
-      if (params.language) queryParams.append('lang', params.language);
       if (params.section) queryParams.append('section', params.section);
       if (params.active !== undefined) queryParams.append('active', params.active.toString());
 
@@ -66,10 +71,9 @@ export const fetchContent = createAsyncThunk(
 
 export const fetchContentBySection = createAsyncThunk(
   'content/fetchContentBySection',
-  async (params: { section: string; language?: SupportedLanguage; active?: boolean }, { rejectWithValue }) => {
+  async (params: { section: string; active?: boolean }, { rejectWithValue }) => {
     try {
       const queryParams = new URLSearchParams();
-      if (params.language) queryParams.append('lang', params.language);
       if (params.active !== undefined) queryParams.append('active', params.active.toString());
 
       const response = await axios.get(`${API_URL}/content/section/${params.section}?${queryParams.toString()}`);

@@ -1,18 +1,16 @@
 import { Request, Response } from 'express';
 import Content from '../models/Content';
-import { getLanguageFromRequest, transformContentForLanguage, SupportedLanguage } from '../utils/languageUtils';
 
 interface AuthRequest extends Request {
   user?: any;
 }
 
-// @desc    Get all content sections
+// @desc    Get all content sections (returns all languages - frontend handles language selection)
 // @route   GET /api/content
 // @access  Public
 export const getContent = async (req: Request, res: Response) => {
   try {
     const { section, active } = req.query;
-    const language = getLanguageFromRequest(req);
 
     // Build filter object
     const filter: any = {};
@@ -21,16 +19,11 @@ export const getContent = async (req: Request, res: Response) => {
 
     const content = await Content.find(filter).sort({ section: 1, order: 1 });
 
-    // Transform content for the requested language
-    const transformedContent = content.map(item =>
-      transformContentForLanguage(item.toObject(), language)
-    );
-
+    // Return full multilingual content - frontend handles language selection
     return res.status(200).json({
       success: true,
-      count: transformedContent.length,
-      data: transformedContent,
-      language
+      count: content.length,
+      data: content
     });
   } catch (error: any) {
     return res.status(400).json({
@@ -40,12 +33,11 @@ export const getContent = async (req: Request, res: Response) => {
   }
 };
 
-// @desc    Get single content section
+// @desc    Get single content section (returns all languages)
 // @route   GET /api/content/:id
 // @access  Public
 export const getContentById = async (req: Request, res: Response) => {
   try {
-    const language = getLanguageFromRequest(req);
     const content = await Content.findById(req.params.id);
 
     if (!content) {
@@ -55,13 +47,10 @@ export const getContentById = async (req: Request, res: Response) => {
       });
     }
 
-    // Transform content for the requested language
-    const transformedContent = transformContentForLanguage(content.toObject(), language);
-
+    // Return full multilingual content
     return res.status(200).json({
       success: true,
-      data: transformedContent,
-      language
+      data: content
     });
   } catch (error: any) {
     return res.status(400).json({
@@ -149,30 +138,24 @@ export const deleteContent = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// @desc    Get content by section type
+// @desc    Get content by section type (returns all languages - frontend handles language selection)
 // @route   GET /api/content/section/:section
 // @access  Public
 export const getContentBySection = async (req: Request, res: Response) => {
   try {
     const { section } = req.params;
     const { active = 'true' } = req.query;
-    const language = getLanguageFromRequest(req);
 
     const filter: any = { section };
     if (active !== undefined) filter.isActive = active === 'true';
 
     const content = await Content.find(filter).sort({ order: 1 });
 
-    // Transform content for the requested language
-    const transformedContent = content.map(item =>
-      transformContentForLanguage(item.toObject(), language)
-    );
-
+    // Return full multilingual content - frontend handles language selection
     return res.status(200).json({
       success: true,
-      count: transformedContent.length,
-      data: transformedContent,
-      language
+      count: content.length,
+      data: content
     });
   } catch (error: any) {
     return res.status(400).json({

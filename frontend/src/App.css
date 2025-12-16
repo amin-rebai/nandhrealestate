@@ -4201,7 +4201,7 @@ main {
 .vision-fullwidth-section,
 .mission-fullwidth-section {
   position: relative;
-  min-height: 500px;
+  min-height: 750px;
   background-size: cover;
   background-position: center;
   background-attachment: fixed;

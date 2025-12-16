@@ -73,6 +73,11 @@ export const transformContentForLanguage = (
     transformed.features = extractLanguageContent(transformed.features, language);
   }
 
+  // Handle metadata object - recursively transform all multilingual fields
+  if (transformed.metadata && typeof transformed.metadata === 'object') {
+    transformed.metadata = extractLanguageContent(transformed.metadata, language);
+  }
+
   return transformed;
 };
 

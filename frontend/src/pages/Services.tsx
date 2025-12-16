@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
@@ -17,6 +18,7 @@ interface ProcessSectionData {
 }
 
 const Services: React.FC = () => {
+  const { i18n } = useTranslation();
   const [processSectionData, setProcessSectionData] = useState<ProcessSectionData | null>(null);
 
   useEffect(() => {
@@ -39,10 +41,12 @@ const Services: React.FC = () => {
     fetchProcessSection();
   }, []);
 
+  // Get text based on current language
   const getText = (text: MultilingualText | string | undefined): string => {
     if (!text) return '';
     if (typeof text === 'string') return text;
-    return text.en || '';
+    const lang = i18n.language as 'en' | 'ar' | 'fr';
+    return text[lang] || text.en || text.ar || text.fr || '';
   };
   return (
     <div className="services-page">

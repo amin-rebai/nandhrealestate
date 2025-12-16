@@ -1,18 +1,19 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { RootState, AppDispatch } from '../store/store';
 import { fetchContentBySection } from '../store/slices/contentSlice';
 
 const About: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const { i18n } = useTranslation();
   const { aboutSection, heroSection } = useSelector((state: RootState) => state.content);
-  const language = useSelector((s: RootState) => s.language.currentLanguage);
 
   useEffect(() => {
-    // Fetch both hero and about sections (active only) for current language
-    dispatch(fetchContentBySection({ section: 'hero', language, active: true }));
-    dispatch(fetchContentBySection({ section: 'about', language, active: true }));
-  }, [dispatch, language]);
+    // Fetch both hero and about sections (active only) - fetches all languages once
+    dispatch(fetchContentBySection({ section: 'hero', active: true }));
+    dispatch(fetchContentBySection({ section: 'about', active: true }));
+  }, [dispatch]); // No language dependency - fetch once, switch language client-side
 
   // Safe access helpers
   const getMeta = (path: string, fallback: any = '') => {
@@ -30,12 +31,14 @@ const About: React.FC = () => {
     }
   };
 
+  // Display multilingual content based on current language (uses i18n.language directly)
   const displayML = (value: any) => {
     if (value === null || value === undefined) return '';
     if (typeof value === 'string' || typeof value === 'number') return String(value);
-    // multilingual object { en, ar }
+    // multilingual object { en, ar, fr }
     if (typeof value === 'object') {
-      return value[language] ?? value.en ?? '';
+      const lang = i18n.language as 'en' | 'ar' | 'fr';
+      return value[lang] ?? value.en ?? value.ar ?? value.fr ?? '';
     }
     return '';
   };
@@ -44,24 +47,30 @@ const About: React.FC = () => {
 
   return (
     <div className="about-page">
-      {/* Enhanced Hero Section */}
+      {/* Enhanced Hero Section - Fetched from Backend */}
       <section className="about-hero">
         <div className="hero-background">
           <div className="hero-overlay"></div>
           <img
-            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
-            alt="About N&H Real Estate"
+            src={
+              hero?.backgroundImage?.startsWith('http')
+                ? hero.backgroundImage
+                : hero?.backgroundImage
+                ? `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${hero.backgroundImage}`
+                : 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'
+            }
+            alt={displayML(hero?.title) || 'About N&H Real Estate'}
             className="hero-bg-image"
           />
         </div>
         <div className="hero-content hero-left">
           <div className="container hero-inner">
-            <div className="hero-pretitle">Who&apos;s Redefining the...</div>
-            <h1 className="hero-title big">{(hero?.title as string) || 'Future of Real Estate ?'}</h1>
+            <div className="hero-pretitle">{displayML(hero?.metadata?.pretitle) || "Who's Redefining the..."}</div>
+            <h1 className="hero-title big">{displayML(hero?.title) || 'Future of Real Estate ?'}</h1>
 
             <div className="hero-description-block">
               <p className="hero-description">
-                {(hero?.description as string) || 'N&H Homes Real Estate is reshaping how people discover, invest, and experience property. We combine human expertise with smart technology to deliver faster decisions, clearer insights, and exceptional client journeys.'}
+                {displayML(hero?.description) || 'N&H Homes Real Estate is reshaping how people discover, invest, and experience property. We combine human expertise with smart technology to deliver faster decisions, clearer insights, and exceptional client journeys.'}
               </p>
             </div>
           </div>
