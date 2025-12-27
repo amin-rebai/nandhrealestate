@@ -52,7 +52,7 @@ ${data.budget ? `💰 *Budget:* ${data.budget}` : ''}
 ${data.message}
 
 ---
-N&H Real Estate
+N&H Homes Real Estate
     `.trim();
 
     const message = await client.messages.create({
@@ -88,7 +88,7 @@ export const sendUserWhatsAppConfirmation = async (data: ContactData) => {
     }
 
     const messageBody = `
-👋 *Thank you for contacting N&H Real Estate!*
+👋 *Thank you for contacting N&H Homes Real Estate!*
 
 We have received your inquiry and will get back to you as soon as possible, typically within 24 hours.
 
@@ -96,7 +96,7 @@ If your matter is urgent, please call us at:
 📞 +974 7070 4504
 
 Best regards,
-N&H Real Estate Team
+N&H Homes Real Estate Team
 🏢 Doha, Qatar
     `.trim();
 

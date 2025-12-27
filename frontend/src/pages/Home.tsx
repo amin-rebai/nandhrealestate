@@ -69,7 +69,7 @@ const Home: React.FC = () => {
         if (data && data.length > 0) {
           const item = data[0];
           setAboutHomeData({
-            badge: item.metadata?.badge || { en: 'About N&H Real Estate', ar: 'عن N&H العقارية', fr: 'À propos de N&H Immobilier' },
+            badge: item.metadata?.badge || { en: 'About N&H Homes Real Estate', ar: 'عن N&H العقارية', fr: 'À propos de N&H Immobilier' },
             title: item.title || { en: 'Your Trusted Real Estate Partner', ar: 'شريكك العقاري الموثوق', fr: 'Votre partenaire immobilier de confiance' },
             description: item.description || { en: '', ar: '', fr: '' },
             description2: item.metadata?.description2 || { en: '', ar: '', fr: '' },
@@ -290,7 +290,7 @@ const Home: React.FC = () => {
           <div className="container">
             <div className="about-content-centered">
               <div className="section-badge">
-                {aboutHomeData ? getText(aboutHomeData.badge) : 'About N&H Real Estate'}
+                {aboutHomeData ? getText(aboutHomeData.badge) : 'About N&H Homes Real Estate'}
               </div>
               <h2 className="section-title-modern">
                 {aboutHomeData ? getText(aboutHomeData.title) : 'Your Trusted Real Estate Partner'}
@@ -345,7 +345,7 @@ const Home: React.FC = () => {
         <div className="container">
           <div className="stats-grid-modern">
             <div className="stat-card-modern">
-              <div className="stat-number-modern">15+</div>
+              <div className="stat-number-modern">6+</div>
               <div className="stat-label-modern">Years Experience</div>
             </div>
             <div className="stat-card-modern">

@@ -161,9 +161,9 @@ const PropertyDetail: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>{title} - N&H Real Estate</title>
+        <title>{title} - N&H Homes Real Estate</title>
         <meta name="description" content={description} />
-        <meta property="og:title" content={`${title} - N&H Real Estate`} />
+        <meta property="og:title" content={`${title} - N&H Homes Real Estate`} />
         <meta property="og:description" content={description} />
         {property.images && property.images.length > 0 && (
           <meta property="og:image" content={getPropertyImage(property.images[0])} />
@@ -477,7 +477,7 @@ const PropertyDetail: React.FC = () => {
                     </div>
                     <div className="agent-info-fg">
                       <h3 className="agent-name-fg">
-                        {typeof property.agent === 'string' ? 'N&H Real Estate' : property.agent?.name || 'N&H Real Estate'}
+                        {typeof property.agent === 'string' ? 'N&H Homes Real Estate' : property.agent?.name || 'N&H Homes Real Estate'}
                       </h3>
                       <p className="agent-title-fg">{t('property.propertyConsultant', 'Property Consultant')}</p>
                     </div>

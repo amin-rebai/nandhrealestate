@@ -59,7 +59,7 @@ const About: React.FC = () => {
                 ? `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${hero.backgroundImage}`
                 : 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'
             }
-            alt={displayML(hero?.title) || 'About N&H Real Estate'}
+            alt={displayML(hero?.title) || 'About N&H Homes Real Estate'}
             className="hero-bg-image"
           />
         </div>
@@ -162,7 +162,7 @@ const About: React.FC = () => {
           <div className="section-header">
             <h2>Our Worldwide Network</h2>
             <p>
-              N&H Real Estate operates across a global network of premium real estate markets, 
+              N&H Homes Real Estate operates across a global network of premium real estate markets, 
               connecting clients to opportunities in the Gulf, MENA, and Europe.
             </p>
           </div>
@@ -189,7 +189,7 @@ const About: React.FC = () => {
       <section className="section section-dark">
         <div className="container">
           <div className="section-header">
-            <h2>Why Choose N&H Real Estate</h2>
+            <h2>Why Choose N&H Homes Real Estate</h2>
             <p>What sets us apart in the competitive real estate market</p>
           </div>
           <div className="why-choose-grid values-grid">
@@ -239,7 +239,7 @@ const About: React.FC = () => {
           <div className="testimonials-grid">
             <div className="testimonial-card">
               <p className="testimonial-text">
-                N&H Real Estate guided us through our first investment in Qatar with professionalism 
+                N&H Homes Real Estate guided us through our first investment in Qatar with professionalism 
                 and transparency. Every step was clear and well-managed.
               </p>
               <div className="testimonial-author">Private Investor</div>
@@ -255,7 +255,7 @@ const About: React.FC = () => {
             </div>
             <div className="testimonial-card">
               <p className="testimonial-text">
-                N&H Real Estate manages our properties in Lusail with complete efficiency. We have 
+                N&H Homes Real Estate manages our properties in Lusail with complete efficiency. We have 
                 higher occupancy and better tenant satisfaction than ever before.
               </p>
               <div className="testimonial-author">Property Owner</div>
@@ -263,7 +263,7 @@ const About: React.FC = () => {
             </div>
             <div className="testimonial-card">
               <p className="testimonial-text">
-                From market insights to after-sales support, N&H Real Estate exceeded our expectations. 
+                From market insights to after-sales support, N&H Homes Real Estate exceeded our expectations. 
                 They truly care about long-term client success.
               </p>
               <div className="testimonial-author">Developer Partner</div>

@@ -81,7 +81,7 @@ const Footer: React.FC = () => {
             <div className="footer-logo">
               <img
                 src="/images/logo/logo.png"
-                alt="N&H Real Estate"
+                alt="N&H Homes Real Estate"
                 className="footer-logo-image"
               />
             </div>
@@ -134,6 +134,7 @@ const Footer: React.FC = () => {
               <li>🇲🇦 Morocco - Casablanca</li>
               <li>🇴🇲 Oman - Muscat</li>
               <li>🇹🇷 Turkey - Istanbul</li>
+              <li>LN London - Englands</li>
             </ul>
           </div>
         </div>
@@ -184,7 +185,7 @@ const Footer: React.FC = () => {
               </a>
             )}
           </div>
-          <p>&copy; 2025 N&H Real Estate. {t('home.allRightsReserved')}</p>
+          <p>&copy; 2025 N&H Homes Real Estate. {t('home.allRightsReserved')}</p>
           <p style={{ fontSize: '0.9rem', marginTop: '0.5rem' }}>
             {t('home.licensedCompany')}
           </p>

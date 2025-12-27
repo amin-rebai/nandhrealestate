@@ -240,7 +240,7 @@ const AboutPageManager: React.FC = () => {
         <Card>
           <CardContent>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-              <Typography variant="h6" sx={{ fontWeight: 600, color: '#4B0E14' }}>Why Choose N&H Real Estate</Typography>
+              <Typography variant="h6" sx={{ fontWeight: 600, color: '#4B0E14' }}>Why Choose N&H Homes Real Estate</Typography>
               <Box>
                 {aboutEditing && <Button size="small" variant="outlined" onClick={() => setAboutData({ ...aboutData, metadata: { ...aboutData.metadata, whyChoose: [...aboutData.metadata.whyChoose, { title: { en: '', ar: '', fr: '' }, description: { en: '', ar: '', fr: '' } }] } })} sx={{ mr: 2 }}>Add Item</Button>}
                 <Button variant="contained" startIcon={aboutEditing ? <Save /> : <Edit />} onClick={() => aboutEditing ? handleSaveAbout() : setAboutEditing(true)} disabled={loading} sx={{ backgroundColor: '#4B0E14', '&:hover': { backgroundColor: '#3a0b10' } }}>

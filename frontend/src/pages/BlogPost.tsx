@@ -530,7 +530,7 @@ const BlogPost: React.FC = () => {
     <>
       {/* SEO Meta Tags */}
       <Helmet>
-        <title>{post.seo.metaTitle || post.title} - N&H Real Estate</title>
+        <title>{post.seo.metaTitle || post.title} - N&H Homes Real Estate</title>
         <meta name="description" content={post.seo.metaDescription || post.excerpt} />
         <meta name="keywords" content={post.seo.keywords} />
         {post.seo.canonicalUrl && <link rel="canonical" href={post.seo.canonicalUrl} />}

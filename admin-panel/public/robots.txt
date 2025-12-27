@@ -1,4 +1,4 @@
-# N&H Real Estate Admin Panel
+# N&H Homes Real Estate Admin Panel
 # This is a private admin interface
 User-agent: *
 Disallow: /

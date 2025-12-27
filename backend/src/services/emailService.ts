@@ -34,7 +34,7 @@ export const sendAdminNotificationEmail = async (data: ContactEmailData) => {
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #c1a88a 0%, #8b7355 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
           <h1 style="margin: 0;">New Contact Request</h1>
-          <p style="margin: 10px 0 0 0; opacity: 0.9;">N&H Real Estate</p>
+          <p style="margin: 10px 0 0 0; opacity: 0.9;">N&H Homes Real Estate</p>
         </div>
         
         <div style="background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px;">
@@ -81,7 +81,7 @@ export const sendAdminNotificationEmail = async (data: ContactEmailData) => {
           </div>
 
           <p style="color: #999; font-size: 12px; margin-top: 25px; text-align: center;">
-            This is an automated message from N&H Real Estate contact form.
+            This is an automated message from N&H Homes Real Estate contact form.
           </p>
         </div>
       </div>
@@ -112,14 +112,14 @@ export const sendUserConfirmationEmail = async (data: ContactEmailData) => {
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #c1a88a 0%, #8b7355 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
           <h1 style="margin: 0;">Thank You for Contacting Us</h1>
-          <p style="margin: 10px 0 0 0; opacity: 0.9;">N&H Real Estate</p>
+          <p style="margin: 10px 0 0 0; opacity: 0.9;">N&H Homes Real Estate</p>
         </div>
         
         <div style="background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px;">
           <p style="color: #333; font-size: 16px;">Dear ${data.name},</p>
           
           <p style="color: #555; line-height: 1.6;">
-            Thank you for reaching out to N&H Real Estate. We have received your inquiry and appreciate your interest in our services.
+            Thank you for reaching out to N&H Homes Real Estate. We have received your inquiry and appreciate your interest in our services.
           </p>
 
           <p style="color: #555; line-height: 1.6;">
@@ -136,12 +136,12 @@ export const sendUserConfirmationEmail = async (data: ContactEmailData) => {
 
           <p style="color: #555; line-height: 1.6;">
             Best regards,<br>
-            <strong>N&H Real Estate Team</strong><br>
+            <strong>N&H Homes Real Estate Team</strong><br>
             Doha, Qatar
           </p>
 
           <p style="color: #999; font-size: 12px; margin-top: 25px; text-align: center; border-top: 1px solid #ddd; padding-top: 15px;">
-            © 2024 N&H Real Estate. All rights reserved.
+            © 2024 N&H Homes Real Estate. All rights reserved.
           </p>
         </div>
       </div>
@@ -150,7 +150,7 @@ export const sendUserConfirmationEmail = async (data: ContactEmailData) => {
     const mailOptions = {
       from: process.env.SMTP_EMAIL,
       to: data.email,
-      subject: 'We Received Your Inquiry - N&H Real Estate',
+      subject: 'We Received Your Inquiry - N&H Homes Real Estate',
       html: htmlContent
     };
 

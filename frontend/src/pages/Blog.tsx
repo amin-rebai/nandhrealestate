@@ -195,8 +195,8 @@ const Blog: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Real Estate Blog - N&H Real Estate</title>
-        <meta name="description" content="Stay updated with the latest trends, insights, and news from Qatar's real estate market. Expert analysis and investment guides from N&H Real Estate." />
+        <title>Real Estate Blog - N&H Homes Real Estate</title>
+        <meta name="description" content="Stay updated with the latest trends, insights, and news from Qatar's real estate market. Expert analysis and investment guides from N&H Homes Real Estate." />
       </Helmet>
 
       <div className="blog-page">

@@ -27,7 +27,7 @@ const Contact: React.FC = () => {
   });
 
   const [contactInfo, setContactInfo] = useState<ContactInfo>({
-    title: { en: 'Contact N&H Real Estate', ar: 'اتصل بـ N&H العقارية', fr: 'Contactez N&H Immobilier' },
+    title: { en: 'Contact N&H Homes Real Estate', ar: 'اتصل بـ N&H العقارية', fr: 'Contactez N&H Immobilier' },
     description: { en: 'Get in touch with our expert team', ar: 'تواصل مع فريقنا المتخصص', fr: "Contactez notre équipe d'experts" },
     phone: '+974 7070 4504',
     email: 'info@nhrealestate.qa',
@@ -48,7 +48,7 @@ const Contact: React.FC = () => {
           const bg = data.backgroundImage || data.image || data.metadata?.backgroundImage || data.metadata?.image || '';
           if (bg) setHeroImage(bg.startsWith('http') ? bg : `${API_URL}${bg}`);
           setContactInfo({
-            title: data.title || { en: 'Contact N&H Real Estate', ar: 'اتصل بـ N&H العقارية' },
+            title: data.title || { en: 'Contact N&H Homes Real Estate', ar: 'اتصل بـ N&H العقارية' },
             description: data.description || { en: 'Get in touch with our expert team', ar: 'تواصل مع فريقنا المتخصص' },
             phone: data.metadata?.phone || '+974 7070 4504',
             email: data.metadata?.email || 'info@nhrealestate.qa',
@@ -134,9 +134,9 @@ const Contact: React.FC = () => {
     <div className="contact-page">
       {/* SEO Meta Tags */}
       <Helmet>
-        <title>Contact Us - N&H Real Estate | Get in Touch</title>
-        <meta name="description" content="Contact N&H Real Estate for personalized real estate solutions across Qatar, UAE, Saudi Arabia, and beyond. Expert consultation available." />
-        <meta name="keywords" content="contact N&H Real Estate, Qatar real estate contact, property consultation, real estate inquiry" />
+        <title>Contact Us - N&H Homes Real Estate | Get in Touch</title>
+        <meta name="description" content="Contact N&H Homes Real Estate for personalized real estate solutions across Qatar, UAE, Saudi Arabia, and beyond. Expert consultation available." />
+        <meta name="keywords" content="contact N&H Homes Real Estate, Qatar real estate contact, property consultation, real estate inquiry" />
       </Helmet>
 
       {/* Hero Section with Same Style as Other Pages */}
@@ -145,7 +145,7 @@ const Contact: React.FC = () => {
           <div className="hero-overlay"></div>
           <img
             src={heroImage || 'https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'}
-            alt="Contact N&H Real Estate"
+            alt="Contact N&H Homes Real Estate"
             className="hero-bg-image"
           />
         </div>

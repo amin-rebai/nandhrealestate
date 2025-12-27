@@ -76,7 +76,7 @@ const HomePageManager: React.FC = () => {
 
   // About Section State (for Home Page)
   const [aboutHomeData, setAboutHomeData] = useState({
-    badge: { en: 'About N&H Real Estate', ar: 'عن N&H العقارية', fr: 'À propos de N&H Immobilier' },
+    badge: { en: 'About N&H Homes Real Estate', ar: 'عن N&H العقارية', fr: 'À propos de N&H Immobilier' },
     title: { en: 'Your Trusted Real Estate Partner', ar: 'شريكك العقاري الموثوق', fr: 'Votre partenaire immobilier de confiance' },
     description: { en: 'We provide a comprehensive portfolio of services designed for individuals, families, developers, corporate tenants, and institutional investors.', ar: 'نقدم مجموعة شاملة من الخدمات المصممة للأفراد والعائلات والمطورين والمستأجرين من الشركات والمستثمرين المؤسسيين.', fr: 'Nous proposons un portefeuille complet de services conçus pour les particuliers, les familles, les promoteurs, les locataires corporatifs et les investisseurs institutionnels.' },
     description2: { en: 'With over 15 years of experience across Qatar, UAE, Saudi Arabia, Egypt, France, Morocco, Oman, and Turkey, we deliver world-class real estate solutions tailored to your needs.', ar: 'مع أكثر من 15 عامًا من الخبرة في قطر والإمارات والسعودية ومصر وفرنسا والمغرب وعمان وتركيا، نقدم حلولاً عقارية عالمية مصممة خصيصًا لاحتياجاتك.', fr: 'Avec plus de 15 ans d\'expérience au Qatar, aux EAU, en Arabie Saoudite, en Égypte, en France, au Maroc, à Oman et en Turquie, nous fournissons des solutions immobilières de classe mondiale adaptées à vos besoins.' },
@@ -454,7 +454,7 @@ const HomePageManager: React.FC = () => {
             </Box>
             <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
-                <MultilingualTextField label="Section Badge" value={aboutHomeData.badge} onChange={(value) => setAboutHomeData({ ...aboutHomeData, badge: value })} disabled={!aboutHomeEditing} helperText="e.g., About N&H Real Estate" />
+                <MultilingualTextField label="Section Badge" value={aboutHomeData.badge} onChange={(value) => setAboutHomeData({ ...aboutHomeData, badge: value })} disabled={!aboutHomeEditing} helperText="e.g., About N&H Homes Real Estate" />
               </Grid>
               <Grid item xs={12} md={6}>
                 <MultilingualTextField label="Section Title" value={aboutHomeData.title} onChange={(value) => setAboutHomeData({ ...aboutHomeData, title: value })} disabled={!aboutHomeEditing} />

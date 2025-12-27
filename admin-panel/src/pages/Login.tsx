@@ -92,7 +92,7 @@ const Login: React.FC = () => {
                 fontFamily: '"Inter", sans-serif'
               }}
             >
-              N&H Real Estate
+              N&H Homes Real Estate
             </Typography>
             <Typography
               variant="h5"

@@ -48,7 +48,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
             mb: 1
           }}
         >
-          N&H Real Estate
+          N&H Homes Real Estate
         </Typography>
         <Typography
           variant="body2"

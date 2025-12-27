@@ -179,7 +179,7 @@ const HeroSection: React.FC = () => {
                 marginBottom: '1.5rem',
                 textShadow: '0 4px 8px rgba(0,0,0,0.3)'
               }}>
-                {getText(heroData?.title) || 'Welcome to N&H Real Estate'}
+                {getText(heroData?.title) || 'Welcome to N&H Homes Real Estate'}
               </h1>
               <p className="slide-subtitle" style={{
                 fontSize: 'clamp(1.1rem, 2vw, 1.5rem)',

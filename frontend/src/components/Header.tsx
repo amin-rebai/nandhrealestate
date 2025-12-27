@@ -56,7 +56,7 @@ const Header: React.FC = () => {
         <Link to="/" className="logo" onClick={closeMobileMenu}>
           <img
             src="/images/logo/logo.png"
-            alt="N&H Real Estate"
+            alt="N&H Homes Real Estate"
             className="logo-image"
           />
         </Link>

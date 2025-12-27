@@ -864,12 +864,12 @@ const Content: React.FC = () => {
                     />
                   </Grid>
 
-                  {/* Why Choose N&H Real Estate */}
+                  {/* Why Choose N&H Homes Real Estate */}
                   <Grid item xs={12}>
                     <Divider sx={{ my: 2 }} />
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>
-                        Why Choose N&H Real Estate
+                        Why Choose N&H Homes Real Estate
                       </Typography>
                       {aboutEditing && (
                         <Button
@@ -1077,7 +1077,7 @@ const Content: React.FC = () => {
                 {/* Why choose preview */}
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-                    Why Choose N&H Real Estate
+                    Why Choose N&H Homes Real Estate
                   </Typography>
                   <Grid container spacing={1}>
                     {aboutData.metadata?.whyChoose?.map((item: any, i: number) => (

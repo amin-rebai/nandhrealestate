@@ -150,7 +150,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             mb: 1
           }}
         >
-          N&H Real Estate
+          N&H Homes Real Estate
         </Typography>
         <Typography
           variant="body2"
