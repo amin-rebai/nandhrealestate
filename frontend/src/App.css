@@ -1811,27 +1811,116 @@ main {
 
 .social-links {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   justify-content: center;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
 }
 
 .social-links a {
-  width: 40px;
-  height: 40px;
-  background: rgba(197, 160, 89, 0.2);
+  width: 45px;
+  height: 45px;
+  background: rgba(184, 156, 76, 0.15);
+  border: 2px solid rgba(184, 156, 76, 0.3);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--champagne-taupe);
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.social-links a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--champagne-taupe);
+  border-radius: 50%;
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
 }
 
 .social-links a:hover {
-  background: var(--champagne-taupe);
   color: var(--black);
-  transform: translateY(-2px);
+  border-color: var(--champagne-taupe);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(184, 156, 76, 0.3);
+}
+
+.social-links a:hover::before {
+  left: 0;
+}
+
+.social-links a svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.social-links a:hover svg {
+  transform: scale(1.1);
+}
+
+/* Individual social media icon colors */
+.social-icon.facebook:hover {
+  border-color: #1877f2;
+  box-shadow: 0 8px 20px rgba(24, 119, 242, 0.3);
+}
+
+.social-icon.facebook:hover::before {
+  background: #1877f2;
+}
+
+.social-icon.instagram:hover {
+  border-color: #e4405f;
+  box-shadow: 0 8px 20px rgba(228, 64, 95, 0.3);
+}
+
+.social-icon.instagram:hover::before {
+  background: #e4405f;
+}
+
+.social-icon.tiktok:hover {
+  border-color: #000000;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.social-icon.tiktok:hover::before {
+  background: #000000;
+}
+
+.social-icon.linkedin:hover {
+  border-color: #0a66c2;
+  box-shadow: 0 8px 20px rgba(10, 102, 194, 0.3);
+}
+
+.social-icon.linkedin:hover::before {
+  background: #0a66c2;
+}
+
+.social-icon.youtube:hover {
+  border-color: #ff0000;
+  box-shadow: 0 8px 20px rgba(255, 0, 0, 0.3);
+}
+
+.social-icon.youtube:hover::before {
+  background: #ff0000;
+}
+
+.social-icon.snapchat:hover {
+  border-color: #fffc00;
+  box-shadow: 0 8px 20px rgba(255, 252, 0, 0.3);
+}
+
+.social-icon.snapchat:hover::before {
+  background: #fffc00;
 }
 
 /* Testimonials */

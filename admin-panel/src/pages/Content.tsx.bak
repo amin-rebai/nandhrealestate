@@ -206,7 +206,7 @@ const Content: React.FC = () => {
     socialMedia: {
       facebook: '',
       instagram: '',
-      twitter: '',
+      tiktok: '',
       linkedin: '',
       youtube: ''
     },
@@ -290,7 +290,7 @@ const Content: React.FC = () => {
         socialMedia: {
           facebook: contactSection.metadata?.socialMedia?.facebook || '',
           instagram: contactSection.metadata?.socialMedia?.instagram || '',
-          twitter: contactSection.metadata?.socialMedia?.twitter || '',
+          tiktok: contactSection.metadata?.socialMedia?.tiktok || '',
           linkedin: contactSection.metadata?.socialMedia?.linkedin || '',
           youtube: contactSection.metadata?.socialMedia?.youtube || ''
         },
@@ -1937,12 +1937,12 @@ const Content: React.FC = () => {
                     <TextField
                       fullWidth
                       label="Twitter/X URL"
-                      value={contactData.socialMedia.twitter}
+                      value={contactData.socialMedia.tiktok}
                       onChange={(e) => setContactData({
                         ...contactData,
-                        socialMedia: { ...contactData.socialMedia, twitter: e.target.value }
+                        socialMedia: { ...contactData.socialMedia, tiktok: e.target.value }
                       })}
-                      placeholder="https://twitter.com/nhrealestate"
+                      placeholder="https://tiktok.com/nhrealestate"
                     />
                   </Box>
 

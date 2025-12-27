@@ -75,9 +75,9 @@ const BlogForm: React.FC = () => {
       ogTitle: { en: '', ar: '', fr: '' },
       ogDescription: { en: '', ar: '', fr: '' },
       ogImage: '',
-      twitterTitle: { en: '', ar: '', fr: '' },
-      twitterDescription: { en: '', ar: '', fr: '' },
-      twitterImage: ''
+      tiktokTitle: { en: '', ar: '', fr: '' },
+      tiktokDescription: { en: '', ar: '', fr: '' },
+      tiktokImage: ''
     }
   });
 
@@ -119,9 +119,9 @@ const BlogForm: React.FC = () => {
           ogTitle: resolve(currentPost.seo?.ogTitle),
           ogDescription: resolve(currentPost.seo?.ogDescription),
           ogImage: currentPost.seo?.ogImage || '',
-          twitterTitle: resolve(currentPost.seo?.twitterTitle),
-          twitterDescription: resolve(currentPost.seo?.twitterDescription),
-          twitterImage: currentPost.seo?.twitterImage || ''
+          tiktokTitle: resolve(currentPost.seo?.tiktokTitle),
+          tiktokDescription: resolve(currentPost.seo?.tiktokDescription),
+          tiktokImage: currentPost.seo?.tiktokImage || ''
         }
       });
     }

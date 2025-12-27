@@ -15,9 +15,9 @@ interface SEOMetadata {
   ogTitle?: MultilingualText;
   ogDescription?: MultilingualText;
   ogImage?: string;
-  twitterTitle?: MultilingualText;
-  twitterDescription?: MultilingualText;
-  twitterImage?: string;
+  tiktokTitle?: MultilingualText;
+  tiktokDescription?: MultilingualText;
+  tiktokImage?: string;
   structuredData?: any;
 }
 

@@ -63,7 +63,7 @@ const ContactPageManager: React.FC = () => {
   const [socialMedia, setSocialMedia] = useState({
     facebook: '',
     instagram: '',
-    twitter: '',
+    tiktok: '',
     linkedin: '',
     youtube: '',
     whatsapp: '',
@@ -99,7 +99,7 @@ const ContactPageManager: React.FC = () => {
         setSocialMedia({
           facebook: contactItem.metadata?.social?.facebook || '',
           instagram: contactItem.metadata?.social?.instagram || '',
-          twitter: contactItem.metadata?.social?.twitter || '',
+          tiktok: contactItem.metadata?.social?.tiktok || '',
           linkedin: contactItem.metadata?.social?.linkedin || '',
           youtube: contactItem.metadata?.social?.youtube || '',
           whatsapp: contactItem.metadata?.social?.whatsapp || '',
@@ -226,7 +226,7 @@ const ContactPageManager: React.FC = () => {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}><TextField fullWidth label="Facebook URL" value={socialMedia.facebook} onChange={(e) => setSocialMedia({ ...socialMedia, facebook: e.target.value })} disabled={!socialEditing} /></Grid>
               <Grid item xs={12} sm={6}><TextField fullWidth label="Instagram URL" value={socialMedia.instagram} onChange={(e) => setSocialMedia({ ...socialMedia, instagram: e.target.value })} disabled={!socialEditing} /></Grid>
-              <Grid item xs={12} sm={6}><TextField fullWidth label="Twitter/X URL" value={socialMedia.twitter} onChange={(e) => setSocialMedia({ ...socialMedia, twitter: e.target.value })} disabled={!socialEditing} /></Grid>
+              <Grid item xs={12} sm={6}><TextField fullWidth label="Twitter/X URL" value={socialMedia.tiktok} onChange={(e) => setSocialMedia({ ...socialMedia, tiktok: e.target.value })} disabled={!socialEditing} /></Grid>
               <Grid item xs={12} sm={6}><TextField fullWidth label="LinkedIn URL" value={socialMedia.linkedin} onChange={(e) => setSocialMedia({ ...socialMedia, linkedin: e.target.value })} disabled={!socialEditing} /></Grid>
               <Grid item xs={12} sm={6}><TextField fullWidth label="YouTube URL" value={socialMedia.youtube} onChange={(e) => setSocialMedia({ ...socialMedia, youtube: e.target.value })} disabled={!socialEditing} /></Grid>
               <Grid item xs={12} sm={6}><TextField fullWidth label="WhatsApp Number" value={socialMedia.whatsapp} onChange={(e) => setSocialMedia({ ...socialMedia, whatsapp: e.target.value })} disabled={!socialEditing} placeholder="+1234567890" /></Grid>

@@ -35,6 +35,8 @@ const Contact: React.FC = () => {
     businessHours: { en: 'Sun - Thu: 8:00 AM - 6:00 PM', ar: 'الأحد - الخميس: 8:00 صباحاً - 6:00 مساءً' }
   });
   const [heroImage, setHeroImage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' });
 
   useEffect(() => {
     const fetchContactInfo = async () => {
@@ -75,11 +77,57 @@ const Contact: React.FC = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
-    alert('Thank you for your inquiry! We will contact you soon.');
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: '' });
+
+    try {
+      const response = await axios.post(`${API_URL}/contact-requests`, {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        subject: formData.subject,
+        message: formData.message,
+        propertyType: formData.propertyType,
+        budget: formData.budget
+      });
+
+      if (response.data.success) {
+        setSubmitStatus({
+          type: 'success',
+          message: 'Thank you for your inquiry! We will contact you soon. Check your email and WhatsApp for confirmation.'
+        });
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: '',
+          propertyType: '',
+          budget: ''
+        });
+        // Clear success message after 5 seconds
+        setTimeout(() => {
+          setSubmitStatus({ type: null, message: '' });
+        }, 5000);
+      } else {
+        setSubmitStatus({
+          type: 'error',
+          message: response.data.error || 'Failed to send message. Please try again.'
+        });
+      }
+    } catch (error: any) {
+      console.error('Error submitting form:', error);
+      const errorMessage = error.response?.data?.error || 'Failed to send message. Please try again.';
+      setSubmitStatus({
+        type: 'error',
+        message: errorMessage
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -216,6 +264,21 @@ const Contact: React.FC = () => {
                 <p className="section-subtitle">Fill out the form below and we'll get back to you within 24 hours</p>
               </div>
 
+              {submitStatus.type && (
+                <div className={`form-status-message ${submitStatus.type}`}>
+                  {submitStatus.type === 'success' ? (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                  ) : (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                    </svg>
+                  )}
+                  <span>{submitStatus.message}</span>
+                </div>
+              )}
+
               <form onSubmit={handleSubmit} className="contact-form-wrapper">
                 <div className="form-row">
                   <div className="form-group">
@@ -324,12 +387,21 @@ const Contact: React.FC = () => {
                   ></textarea>
                 </div>
 
-                <button type="submit" className="submit-button">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M22 2L11 13" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M22 2L15 22L11 13L2 9L22 2Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  Send Message
+                <button type="submit" className="submit-button" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <>
+                      <span className="spinner"></span>
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M22 2L11 13" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M22 2L15 22L11 13L2 9L22 2Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      Send Message
+                    </>
+                  )}
                 </button>
               </form>
             </div>
@@ -618,6 +690,44 @@ const contactStyles = `
     font-family: inherit;
   }
 
+  .form-status-message {
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    animation: slideDown 0.3s ease;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .form-status-message.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  .form-status-message.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+
+  .form-status-message svg {
+    flex-shrink: 0;
+  }
+
   .submit-button {
     display: flex;
     align-items: center;
@@ -635,18 +745,39 @@ const contactStyles = `
     margin-top: 1rem;
   }
 
-  .submit-button:hover {
+  .submit-button:hover:not(:disabled) {
     background: #A89070;
     transform: translateY(-2px);
     box-shadow: 0 10px 25px rgba(193, 168, 138, 0.3);
+  }
+
+  .submit-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
   }
 
   .submit-button svg {
     transition: transform 0.3s ease;
   }
 
-  .submit-button:hover svg {
+  .submit-button:hover:not(:disabled) svg {
     transform: translateX(5px);
+  }
+
+  .spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   /* Responsive Design */

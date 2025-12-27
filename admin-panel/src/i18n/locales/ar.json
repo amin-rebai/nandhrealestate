@@ -225,9 +225,9 @@
       "ogTitle": "عنوان Open Graph",
       "ogDescription": "وصف Open Graph",
       "ogImage": "صورة Open Graph",
-      "twitterTitle": "عنوان تويتر",
-      "twitterDescription": "وصف تويتر",
-      "twitterImage": "صورة تويتر"
+      "tiktokTitle": "عنوان تويتر",
+      "tiktokDescription": "وصف تويتر",
+      "tiktokImage": "صورة تويتر"
     },
     "stats": {
       "totalPosts": "إجمالي المقالات",

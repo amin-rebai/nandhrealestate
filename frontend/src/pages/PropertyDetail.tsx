@@ -128,16 +128,16 @@ const PropertyDetail: React.FC = () => {
         padding: '2rem'
       }}>
         <h2 style={{ color: 'var(--luxury-burgundy)', marginBottom: '1rem' }}>
-          Property Not Found
+          {t('property.notFound', 'Property Not Found')}
         </h2>
         <p style={{ color: 'var(--text-light)', marginBottom: '2rem' }}>
-          The property you're looking for doesn't exist or has been removed.
+          {t('property.notFoundDesc', "The property you're looking for doesn't exist or has been removed.")}
         </p>
         <button
           className="btn btn-primary"
           onClick={() => navigate('/properties')}
         >
-          {t('common.back')} to Properties
+          {t('common.back')} {t('common.toProperties', 'to Properties')}
         </button>
       </div>
     );
@@ -250,10 +250,10 @@ const PropertyDetail: React.FC = () => {
                     </div>
                   )}
                   {property.type === 'sale' && (
-                    <div className="badge badge-sale">For Sale</div>
+                    <div className="badge badge-sale">{t('property.forSale', 'For Sale')}</div>
                   )}
                   {property.type === 'rent' && (
-                    <div className="badge badge-rent">For Rent</div>
+                    <div className="badge badge-rent">{t('property.forRent', 'For Rent')}</div>
                   )}
                   {(property as any).verified && (
                     <div className="badge badge-verified">
@@ -327,13 +327,13 @@ const PropertyDetail: React.FC = () => {
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" strokeWidth="2"/>
                       </svg>
-                      <span className="detail-value">{property.bedrooms === 0 ? 'Studio' : `${property.bedrooms} Bedroom${property.bedrooms > 1 ? 's' : ''}`}</span>
+                      <span className="detail-value">{property.bedrooms === 0 ? t('property.studio', 'Studio') : `${property.bedrooms} ${t('property.bedroom', 'Bedroom')}${property.bedrooms > 1 ? 's' : ''}`}</span>
                     </div>
                     <div className="detail-item">
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M9 6L20 6C20.5523 6 21 6.44772 21 7V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V7C3 6.44772 3.44772 6 4 6L9 6Z" stroke="currentColor" strokeWidth="2"/>
                       </svg>
-                      <span className="detail-value">{property.bathrooms} Bathroom{property.bathrooms > 1 ? 's' : ''}</span>
+                      <span className="detail-value">{property.bathrooms} {t('property.bathroom', 'Bathroom')}${property.bathrooms > 1 ? 's' : ''}</span>
                     </div>
                     {(property as any).serviceCharge && (
                       <div className="detail-item">
@@ -391,7 +391,7 @@ const PropertyDetail: React.FC = () => {
                 {/* Off-Plan Details */}
                 {property.type === 'off-plan' && (
                   <div className="off-plan-details-section-fg">
-                    <h2 className="section-title-fg">Off-Plan Details</h2>
+                    <h2 className="section-title-fg">{t('property.offPlanDetails', 'Off-Plan Details')}</h2>
                     <div className="off-plan-grid-fg">
                       {(property as any).developer && (
                         <div className="off-plan-item-fg">
@@ -479,40 +479,40 @@ const PropertyDetail: React.FC = () => {
                       <h3 className="agent-name-fg">
                         {typeof property.agent === 'string' ? 'N&H Real Estate' : property.agent?.name || 'N&H Real Estate'}
                       </h3>
-                      <p className="agent-title-fg">Property Consultant</p>
+                      <p className="agent-title-fg">{t('property.propertyConsultant', 'Property Consultant')}</p>
                     </div>
                   </div>
 
                   <div className="contact-buttons-fg">
-                    <a href="tel:+97444444444" className="contact-btn-fg call">
+                    <a href="tel:+97470704504" className="contact-btn-fg call">
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                         <path d="M22 16.92V19.92C22.0011 20.1985 21.9441 20.4742 21.8325 20.7293C21.7209 20.9845 21.5573 21.2136 21.3521 21.4019C21.1468 21.5901 20.9046 21.7335 20.6407 21.8227C20.3769 21.9119 20.0974 21.9451 19.82 21.92C16.7428 21.5856 13.787 20.5341 11.19 18.85C8.77382 17.3147 6.72533 15.2662 5.18999 12.85C3.49997 10.2412 2.44824 7.27099 2.11999 4.18C2.095 3.90347 2.12787 3.62476 2.21649 3.36162C2.30512 3.09849 2.44756 2.85669 2.63476 2.65162C2.82196 2.44655 3.0498 2.28271 3.30379 2.17052C3.55777 2.05833 3.83233 2.00026 4.10999 2H7.10999C7.59531 1.99522 8.06579 2.16708 8.43376 2.48353C8.80173 2.79999 9.04207 3.23945 9.10999 3.72C9.23662 4.68007 9.47144 5.62273 9.80999 6.53C9.94454 6.88792 9.97366 7.27691 9.8939 7.65088C9.81415 8.02485 9.62886 8.36811 9.35999 8.64L8.08999 9.91C9.51355 12.4135 11.5865 14.4864 14.09 15.91L15.36 14.64C15.6319 14.3711 15.9751 14.1858 16.3491 14.1061C16.7231 14.0263 17.1121 14.0555 17.47 14.19C18.3773 14.5286 19.3199 14.7634 20.28 14.89C20.7658 14.9585 21.2094 15.2032 21.5265 15.5775C21.8437 15.9518 22.0122 16.4296 22 16.92Z" stroke="currentColor" strokeWidth="2"/>
                       </svg>
-                      Call
+                      {t('common.call', 'Call')}
                     </a>
-                    <a href="https://wa.me/97444444444" target="_blank" rel="noopener noreferrer" className="contact-btn-fg whatsapp">
+                    <a href="https://wa.me/97470704504" target="_blank" rel="noopener noreferrer" className="contact-btn-fg whatsapp">
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                         <path d="M21 11.5C21.0034 12.8199 20.6951 14.1219 20.1 15.3C19.3944 16.7118 18.3098 17.8992 16.9674 18.7293C15.6251 19.5594 14.0782 19.9994 12.5 20C11.1801 20.0035 9.87812 19.6951 8.7 19.1L3 21L4.9 15.3C4.30493 14.1219 3.99656 12.8199 4 11.5C4.00061 9.92179 4.44061 8.37488 5.27072 7.03258C6.10083 5.69028 7.28825 4.60568 8.7 3.90003C9.87812 3.30496 11.1801 2.99659 12.5 3.00003H13C15.0843 3.11502 17.053 3.99479 18.5291 5.47089C20.0052 6.94699 20.885 8.91568 21 11V11.5Z" stroke="currentColor" strokeWidth="2"/>
                       </svg>
-                      WhatsApp
+                      {t('common.whatsapp', 'WhatsApp')}
                     </a>
-                    <a href="mailto:info@nhrealestate.qa" className="contact-btn-fg email">
+                    <a href="mailto:info@nandhrealestate.qa" className="contact-btn-fg email">
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                         <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" strokeWidth="2"/>
                         <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2"/>
                       </svg>
-                      Email
+                      {t('common.email', 'Email')}
                     </a>
                   </div>
 
                   <div className="inquiry-form-fg">
-                    <h4>Send an Inquiry</h4>
+                    <h4>{t('property.sendInquiry', 'Send an Inquiry')}</h4>
                     <form>
-                      <input type="text" placeholder="Your Name" className="form-input-fg" />
-                      <input type="email" placeholder="Your Email" className="form-input-fg" />
-                      <input type="tel" placeholder="Your Phone" className="form-input-fg" />
-                      <textarea placeholder="I'm interested in this property..." className="form-textarea-fg" rows={3}></textarea>
-                      <button type="submit" className="submit-btn-fg">Send Message</button>
+                      <input type="text" placeholder={t('common.yourName', 'Your Name')} className="form-input-fg" />
+                      <input type="email" placeholder={t('common.yourEmail', 'Your Email')} className="form-input-fg" />
+                      <input type="tel" placeholder={t('common.yourPhone', 'Your Phone')} className="form-input-fg" />
+                      <textarea placeholder={t('property.interestedMessage', "I'm interested in this property...")} className="form-textarea-fg" rows={3}></textarea>
+                      <button type="submit" className="submit-btn-fg">{t('common.sendMessage', 'Send Message')}</button>
                     </form>
                   </div>
                 </div>
@@ -526,16 +526,16 @@ const PropertyDetail: React.FC = () => {
                       <span className="stat-value-fg">{referenceNumber}</span>
                     </div>
                     <div className="stat-row-fg">
-                      <span className="stat-label-fg">Property Type</span>
-                      <span className="stat-value-fg">{property.propertyType || 'Apartment'}</span>
+                      <span className="stat-label-fg">{t('property.propertyType', 'Property Type')}</span>
+                      <span className="stat-value-fg">{property.propertyType || t('property.apartment', 'Apartment')}</span>
                     </div>
                     <div className="stat-row-fg">
-                      <span className="stat-label-fg">Listing Type</span>
-                      <span className="stat-value-fg">{property.type === 'sale' ? 'For Sale' : property.type === 'rent' ? 'For Rent' : 'Off-Plan'}</span>
+                      <span className="stat-label-fg">{t('property.listingType', 'Listing Type')}</span>
+                      <span className="stat-value-fg">{property.type === 'sale' ? t('property.forSale', 'For Sale') : property.type === 'rent' ? t('property.forRent', 'For Rent') : t('property.offPlan', 'Off-Plan')}</span>
                     </div>
                     {property.area && (
                       <div className="stat-row-fg">
-                        <span className="stat-label-fg">Price per sqm</span>
+                        <span className="stat-label-fg">{t('property.pricePerSqm', 'Price per sqm')}</span>
                         <span className="stat-value-fg">QAR {Math.round(property.price / property.area).toLocaleString()}</span>
                       </div>
                     )}
@@ -1143,8 +1143,8 @@ const PropertyDetail: React.FC = () => {
         .submit-btn-fg {
           width: 100%;
           padding: 14px;
-          background: var(--luxury-burgundy);
-          color: white;
+          background: #f0f0f0;
+          color: #333;
           border: none;
           border-radius: 8px;
           font-weight: 600;

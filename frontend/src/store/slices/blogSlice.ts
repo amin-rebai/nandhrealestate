@@ -36,9 +36,9 @@ export interface BlogPost {
     ogTitle?: string | MultilingualText;
     ogDescription?: string | MultilingualText;
     ogImage?: string;
-    twitterTitle?: string | MultilingualText;
-    twitterDescription?: string | MultilingualText;
-    twitterImage?: string;
+    tiktokTitle?: string | MultilingualText;
+    tiktokDescription?: string | MultilingualText;
+    tiktokImage?: string;
   };
   isActive: boolean;
   isFeatured: boolean;

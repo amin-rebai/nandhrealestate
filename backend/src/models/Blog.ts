@@ -15,9 +15,9 @@ interface SEOMetadata {
   ogTitle?: MultilingualText;
   ogDescription?: MultilingualText;
   ogImage?: string;
-  twitterTitle?: MultilingualText;
-  twitterDescription?: MultilingualText;
-  twitterImage?: string;
+  tiktokTitle?: MultilingualText;
+  tiktokDescription?: MultilingualText;
+  tiktokImage?: string;
   structuredData?: any; // JSON-LD structured data
 }
 
@@ -63,9 +63,9 @@ const seoMetadataSchema = new Schema({
   ogTitle: { type: multilingualTextSchema },
   ogDescription: { type: multilingualTextSchema },
   ogImage: { type: String },
-  twitterTitle: { type: multilingualTextSchema },
-  twitterDescription: { type: multilingualTextSchema },
-  twitterImage: { type: String },
+  tiktokTitle: { type: multilingualTextSchema },
+  tiktokDescription: { type: multilingualTextSchema },
+  tiktokImage: { type: String },
   structuredData: { type: Schema.Types.Mixed }
 }, { _id: false });
 
@@ -79,8 +79,8 @@ const authorSchema = new Schema({
 // Main blog schema
 const blogSchema = new Schema({
   title: { type: multilingualTextSchema, required: true },
-  slug: { 
-    type: multilingualTextSchema, 
+  slug: {
+    type: multilingualTextSchema,
     required: true,
     unique: true,
     index: true
@@ -92,9 +92,9 @@ const blogSchema = new Schema({
   author: { type: authorSchema, required: true },
   category: { type: multilingualTextSchema, required: true },
   tags: [{ type: multilingualTextSchema }],
-  status: { 
-    type: String, 
-    enum: ['draft', 'published', 'archived'], 
+  status: {
+    type: String,
+    enum: ['draft', 'published', 'archived'],
     default: 'draft',
     index: true
   },
@@ -120,12 +120,12 @@ blogSchema.index({ views: -1 });
 blogSchema.index({ likes: -1 });
 
 // Virtual for URL generation
-blogSchema.virtual('url').get(function() {
+blogSchema.virtual('url').get(function () {
   return `/blog/${this.slug.en}`;
 });
 
 // Pre-save middleware to calculate reading time
-blogSchema.pre('save', function(next) {
+blogSchema.pre('save', function (next) {
   if (this.isModified('content')) {
     const wordsPerMinute = 200;
     const enWordCount = this.content.en.split(/\s+/).length;
@@ -133,27 +133,27 @@ blogSchema.pre('save', function(next) {
     const avgWordCount = (enWordCount + arWordCount) / 2;
     this.readingTime = Math.ceil(avgWordCount / wordsPerMinute);
   }
-  
+
   // Set publishedAt when status changes to published
   if (this.isModified('status') && this.status === 'published' && !this.publishedAt) {
     this.publishedAt = new Date();
   }
-  
+
   next();
 });
 
 // Static methods
-blogSchema.statics.findPublished = function() {
+blogSchema.statics.findPublished = function () {
   return this.find({ status: 'published', isActive: true });
 };
 
-blogSchema.statics.findFeatured = function() {
+blogSchema.statics.findFeatured = function () {
   return this.find({ status: 'published', isActive: true, isFeatured: true });
 };
 
-blogSchema.statics.findByCategory = function(category: string) {
-  return this.find({ 
-    status: 'published', 
+blogSchema.statics.findByCategory = function (category: string) {
+  return this.find({
+    status: 'published',
     isActive: true,
     $or: [
       { 'category.en': new RegExp(category, 'i') },
@@ -162,7 +162,7 @@ blogSchema.statics.findByCategory = function(category: string) {
   });
 };
 
-blogSchema.statics.searchPosts = function(query: string) {
+blogSchema.statics.searchPosts = function (query: string) {
   return this.find({
     status: 'published',
     isActive: true,
@@ -171,12 +171,12 @@ blogSchema.statics.searchPosts = function(query: string) {
 };
 
 // Instance methods
-blogSchema.methods.incrementViews = function() {
+blogSchema.methods.incrementViews = function () {
   this.views += 1;
   return this.save();
 };
 
-blogSchema.methods.incrementLikes = function() {
+blogSchema.methods.incrementLikes = function () {
   this.likes += 1;
   return this.save();
 };

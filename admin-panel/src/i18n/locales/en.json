@@ -225,9 +225,9 @@
       "ogTitle": "Open Graph Title",
       "ogDescription": "Open Graph Description",
       "ogImage": "Open Graph Image",
-      "twitterTitle": "Twitter Title",
-      "twitterDescription": "Twitter Description",
-      "twitterImage": "Twitter Image"
+      "tiktokTitle": "Twitter Title",
+      "tiktokDescription": "Twitter Description",
+      "tiktokImage": "Twitter Image"
     },
     "stats": {
       "totalPosts": "Total Posts",

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 import {
   Box,
   Container,
@@ -19,7 +20,8 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions
+  DialogActions,
+  CircularProgress
 } from '@mui/material';
 import {
   Search as SearchIcon,
@@ -33,8 +35,9 @@ import {
 } from '@mui/icons-material';
 import { RootState, AppDispatch } from '../store/store';
 import { fetchAgents } from '../store/slices/userSlice';
-import Header from '../components/Header';
 import Footer from '../components/Footer';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 const Agents: React.FC = () => {
   const { t } = useTranslation();
@@ -54,6 +57,7 @@ const Agents: React.FC = () => {
     phone: '',
     message: ''
   });
+  const [sendingMessage, setSendingMessage] = useState(false);
 
   useEffect(() => {
     dispatch(fetchAgents());
@@ -93,24 +97,37 @@ const Agents: React.FC = () => {
 
   const handleSendMessage = async () => {
     if (!contactForm.name || !contactForm.email || !contactForm.message) {
-      alert('Please fill in all fields');
+      alert('Please fill in all required fields');
       return;
     }
 
+    setSendingMessage(true);
     try {
-      // TODO: Send message via API
-      console.log('Sending message:', { ...contactForm, agentId: selectedAgent._id });
-      alert('Message sent successfully!');
-      handleContactClose();
-    } catch (error) {
+      const response = await axios.post(`${API_URL}/contact-requests`, {
+        name: contactForm.name,
+        email: contactForm.email,
+        phone: contactForm.phone,
+        message: contactForm.message,
+        agentId: selectedAgent._id
+      });
+
+      if (response.data.success) {
+        alert('Message sent successfully! We will get back to you soon.');
+        handleContactClose();
+      } else {
+        alert('Failed to send message. Please try again.');
+      }
+    } catch (error: any) {
       console.error('Error sending message:', error);
-      alert('Failed to send message');
+      const errorMessage = error.response?.data?.error || 'Failed to send message. Please try again.';
+      alert(errorMessage);
+    } finally {
+      setSendingMessage(false);
     }
   };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <Header />
       <Container maxWidth="lg" sx={{ py: 8, flexGrow: 1 }}>
         {/* Page Header */}
         <Box sx={{ mb: 6, textAlign: 'center' }}>
@@ -373,16 +390,25 @@ const Agents: React.FC = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleContactClose}>{t('common.cancel', 'Cancel')}</Button>
+          <Button onClick={handleContactClose} disabled={sendingMessage}>{t('common.cancel', 'Cancel')}</Button>
           <Button
             onClick={handleSendMessage}
             variant="contained"
+            disabled={sendingMessage}
             sx={{
               backgroundColor: '#4B0E14',
-              '&:hover': { backgroundColor: '#3a0b10' }
+              '&:hover': { backgroundColor: '#3a0b10' },
+              position: 'relative'
             }}
           >
-            {t('common.send', 'Send')}
+            {sendingMessage ? (
+              <>
+                <CircularProgress size={20} sx={{ mr: 1, color: 'white' }} />
+                {t('common.sending', 'Sending...')}
+              </>
+            ) : (
+              t('common.send', 'Send')
+            )}
           </Button>
         </DialogActions>
       </Dialog>
