@@ -124,7 +124,7 @@ const ProcessSection: React.FC = () => {
         }}>
           {displaySteps.map((step, index) => (
             <div key={step._id} className="process-step-card">
-              <div className="step-number">{String(index + 1).padStart(2, '0')}</div>
+              {/* <div className="step-number">{String(index + 1).padStart(2, '0')}</div> */}
               
               {step.image && (
                 <div>

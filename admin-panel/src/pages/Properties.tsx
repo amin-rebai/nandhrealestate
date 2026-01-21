@@ -98,6 +98,7 @@ const Properties: React.FC = () => {
     title: '',
     description: '',
     price: '',
+    currency: 'QAR' as 'QAR' | 'USD' | 'EUR' | 'AED' | 'SAR' | 'KWD' | 'BHD' | 'OMR',
     location: '',
     locationCity: '',
     locationDetails: '',
@@ -177,6 +178,7 @@ const Properties: React.FC = () => {
           ? property.description
           : (property.description as any)?.en || '',
         price: property.price.toString(),
+        currency: (property as any).currency || 'QAR',
         location: locationStr,
         locationCity: locationCity,
         locationDetails: locationDetails,
@@ -227,6 +229,7 @@ const Properties: React.FC = () => {
         title: '',
         description: '',
         price: '',
+        currency: 'QAR',
         location: '',
         locationCity: '',
         locationDetails: '',
@@ -304,6 +307,7 @@ const Properties: React.FC = () => {
       title: { en: formData.title, ar: formData.title },
       description: { en: formData.description, ar: formData.description },
       price: Number(formData.price),
+      currency: formData.currency,
       location: { en: fullLocation, ar: fullLocation },
       country: formData.country,
       bedrooms: Number(formData.bedrooms),
@@ -650,7 +654,7 @@ const Properties: React.FC = () => {
                 </TableCell>
                 <TableCell>
                   <Typography variant="subtitle2" sx={{ fontWeight: 600, color: '#C5A059' }}>
-                    ${property.price.toLocaleString()}
+                    {property.price.toLocaleString()}
                   </Typography>
                 </TableCell>
                 <TableCell>
@@ -831,7 +835,7 @@ const Properties: React.FC = () => {
                       required
                     />
                   </Grid>
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={12} md={4}>
                     <TextField
                       fullWidth
                       label="Price"
@@ -840,9 +844,28 @@ const Properties: React.FC = () => {
                       onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                       required
                       InputProps={{
-                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                        startAdornment: <InputAdornment position="start">{formData.currency}</InputAdornment>,
                       }}
                     />
+                  </Grid>
+                  <Grid item xs={12} md={2}>
+                    <TextField
+                      select
+                      fullWidth
+                      label="Currency"
+                      value={formData.currency}
+                      onChange={(e) => setFormData({ ...formData, currency: e.target.value as any })}
+                      required
+                    >
+                      <MenuItem value="QAR">QAR (Qatar Riyal)</MenuItem>
+                      <MenuItem value="USD">USD (US Dollar)</MenuItem>
+                      <MenuItem value="EUR">EUR (Euro)</MenuItem>
+                      <MenuItem value="AED">AED (UAE Dirham)</MenuItem>
+                      <MenuItem value="SAR">SAR (Saudi Riyal)</MenuItem>
+                      <MenuItem value="KWD">KWD (Kuwaiti Dinar)</MenuItem>
+                      <MenuItem value="BHD">BHD (Bahraini Dinar)</MenuItem>
+                      <MenuItem value="OMR">OMR (Omani Rial)</MenuItem>
+                    </TextField>
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <TextField

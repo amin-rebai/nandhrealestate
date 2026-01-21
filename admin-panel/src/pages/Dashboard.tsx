@@ -245,7 +245,7 @@ const Dashboard: React.FC = () => {
                             color: '#C5A059'
                           }}
                         >
-                          ${property.price.toLocaleString()}
+                          {property.price.toLocaleString()}
                         </Typography>
                         <Typography
                           variant="body2"

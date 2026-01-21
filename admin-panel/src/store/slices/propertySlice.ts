@@ -28,6 +28,7 @@ export interface Property {
     ar: string;
   } | string;
   price: number;
+  currency: 'QAR' | 'USD' | 'EUR' | 'AED' | 'SAR' | 'KWD' | 'BHD' | 'OMR';
   location: {
     en: string;
     ar: string;

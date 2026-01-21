@@ -26,6 +26,7 @@ export interface IProperty extends Document {
     ar: string;
   };
   price: number;
+  currency: 'QAR' | 'USD' | 'EUR' | 'AED' | 'SAR' | 'KWD' | 'BHD' | 'OMR';
   location: {
     en: string;
     ar: string;
@@ -105,6 +106,12 @@ const PropertySchema: Schema = new Schema({
     type: Number,
     required: [true, 'Property price is required'],
     min: [0, 'Price cannot be negative']
+  },
+  currency: {
+    type: String,
+    enum: ['QAR', 'USD', 'EUR', 'AED', 'SAR', 'KWD', 'BHD', 'OMR'],
+    default: 'QAR',
+    required: [true, 'Currency is required']
   },
   location: {
     en: {

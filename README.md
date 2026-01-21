@@ -15,6 +15,7 @@ HNrealstate/
 ## Tech Stack
 
 ### Frontend & Admin Panel
+
 - **React 18** with TypeScript
 - **Redux Toolkit** for state management
 - **React Router** for navigation
@@ -22,6 +23,7 @@ HNrealstate/
 - **Axios** for API calls
 
 ### Backend
+
 - **Node.js** with **Express**
 - **TypeScript**
 - **MongoDB** with **Mongoose**
@@ -32,6 +34,7 @@ HNrealstate/
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js (v16 or higher)
 - MongoDB (local or cloud instance)
 - npm or yarn
@@ -39,12 +42,14 @@ HNrealstate/
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd HNrealstate
    ```
 
 2. **Install dependencies for all applications**
+
    ```bash
    # Frontend
    cd frontend
@@ -60,6 +65,7 @@ HNrealstate/
    ```
 
 3. **Set up environment variables**
+
    ```bash
    cd backend
    cp .env.example .env
@@ -69,18 +75,21 @@ HNrealstate/
 4. **Start the applications**
 
    **Backend (Terminal 1):**
+
    ```bash
    cd backend
    npm run dev
    ```
 
    **Frontend (Terminal 2):**
+
    ```bash
    cd frontend
    npm start
    ```
 
    **Admin Panel (Terminal 3):**
+
    ```bash
    cd admin-panel
    npm start
@@ -89,12 +98,14 @@ HNrealstate/
 ## Available Scripts
 
 ### Backend
+
 - `npm run dev` - Start development server with nodemon
 - `npm run build` - Build TypeScript to JavaScript
 - `npm start` - Start production server
 - `npm test` - Run tests
 
 ### Frontend & Admin Panel
+
 - `npm start` - Start development server
 - `npm run build` - Build for production
 - `npm test` - Run tests
@@ -103,11 +114,13 @@ HNrealstate/
 ## API Endpoints
 
 ### Authentication
+
 - `POST /auth/register` - Register new user
 - `POST /auth/login` - Login user
 - `GET /auth/me` - Get current user
 
 ### Properties
+
 - `GET /properties` - Get all properties
 - `GET /properties/:id` - Get property by ID
 - `POST /properties` - Create new property (auth required)
@@ -115,6 +128,7 @@ HNrealstate/
 - `DELETE /properties/:id` - Delete property (auth required)
 
 ### Users (Admin only)
+
 - `GET /users` - Get all users
 - `GET /users/:id` - Get user by ID
 - `PUT /users/:id` - Update user
@@ -123,6 +137,7 @@ HNrealstate/
 ## Features
 
 ### Frontend (Public Website)
+
 - Property listings with search and filters
 - Property detail pages
 - User authentication
@@ -130,6 +145,7 @@ HNrealstate/
 - Responsive design
 
 ### Admin Panel
+
 - Dashboard with analytics
 - Property management (CRUD operations)
 - User management
@@ -137,6 +153,7 @@ HNrealstate/
 - Role-based access control
 
 ### Backend API
+
 - RESTful API design
 - JWT authentication
 - Input validation

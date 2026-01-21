@@ -30,6 +30,7 @@ export interface Property {
   title: string | { en: string; ar: string; fr?: string };
   description: string | { en: string; ar: string; fr?: string };
   price: number;
+  currency?: 'QAR' | 'USD' | 'EUR' | 'AED' | 'SAR' | 'KWD' | 'BHD' | 'OMR';
   location: string | { en: string; ar: string; fr?: string };
   bedrooms: number;
   bathrooms: number;
