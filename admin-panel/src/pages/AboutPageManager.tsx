@@ -32,7 +32,28 @@ const AboutPageManager: React.FC = () => {
   const [tabValue, setTabValue] = useState(0);
 
   // About Section State
-  const [aboutData, setAboutData] = useState({
+  const [aboutData, setAboutData] = useState<{
+    title: { en?: string; ar?: string; fr?: string };
+    content: { en?: string; ar?: string; fr?: string };
+    image: string;
+    stats: Array<{ label: { en?: string; ar?: string; fr?: string }; value: string }>;
+    metadata: {
+      ceo: {
+        message: { en?: string; ar?: string; fr?: string };
+        photo: string;
+        name: { en?: string; ar?: string; fr?: string };
+        title: { en?: string; ar?: string; fr?: string };
+        sectionTitle: { en?: string; ar?: string; fr?: string };
+      };
+      mission: { en?: string; ar?: string; fr?: string };
+      missionImage: string;
+      vision: { en?: string; ar?: string; fr?: string };
+      visionImage: string;
+      whyChoose: Array<{ title: { en?: string; ar?: string; fr?: string }; description: { en?: string; ar?: string; fr?: string } }>;
+      worldwideNetwork: Array<{ label: { en?: string; ar?: string; fr?: string }; value: string }>;
+    };
+    isActive: boolean;
+  }>({
     title: { en: '', ar: '', fr: '' },
     content: { en: '', ar: '', fr: '' },
     image: '',
@@ -54,8 +75,8 @@ const AboutPageManager: React.FC = () => {
       missionImage: '',
       vision: { en: '', ar: '', fr: '' },
       visionImage: '',
-      whyChoose: [] as Array<{ title: { en: string; ar: string; fr: string }; description: { en: string; ar: string; fr: string } }>,
-      worldwideNetwork: [] as Array<{ label: { en: string; ar: string; fr: string }; value: string }>
+      whyChoose: [],
+      worldwideNetwork: []
     },
     isActive: true
   });
@@ -109,11 +130,34 @@ const AboutPageManager: React.FC = () => {
     try {
       const aboutPayload = {
         section: 'about' as const,
-        title: aboutData.title,
-        content: aboutData.content,
+        title: ensureMultilingual(aboutData.title),
+        content: ensureMultilingual(aboutData.content),
         image: aboutData.image,
-        stats: aboutData.stats,
-        metadata: aboutData.metadata,
+        stats: aboutData.stats.map(stat => ({
+          label: ensureMultilingual(stat.label),
+          value: stat.value
+        })),
+        metadata: {
+          ceo: {
+            message: ensureMultilingual(aboutData.metadata.ceo.message),
+            photo: aboutData.metadata.ceo.photo,
+            name: ensureMultilingual(aboutData.metadata.ceo.name),
+            title: ensureMultilingual(aboutData.metadata.ceo.title),
+            sectionTitle: ensureMultilingual(aboutData.metadata.ceo.sectionTitle)
+          },
+          mission: ensureMultilingual(aboutData.metadata.mission),
+          missionImage: aboutData.metadata.missionImage,
+          vision: ensureMultilingual(aboutData.metadata.vision),
+          visionImage: aboutData.metadata.visionImage,
+          whyChoose: aboutData.metadata.whyChoose.map(item => ({
+            title: ensureMultilingual(item.title),
+            description: ensureMultilingual(item.description)
+          })),
+          worldwideNetwork: aboutData.metadata.worldwideNetwork.map(item => ({
+            label: ensureMultilingual(item.label),
+            value: item.value
+          }))
+        },
         isActive: aboutData.isActive
       };
       if (aboutSection) {

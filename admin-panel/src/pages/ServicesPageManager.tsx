@@ -32,8 +32,8 @@ type ContentSection = 'home' | 'hero' | 'about' | 'featured' | 'services' | 'goa
 
 interface ServiceItem {
   _id?: string;
-  title: { en: string; ar: string; fr: string };
-  description: { en: string; ar: string; fr: string };
+  title: { en?: string; ar?: string; fr?: string };
+  description: { en?: string; ar?: string; fr?: string };
   image: string;
   order: number;
   isActive: boolean;
@@ -50,7 +50,12 @@ const ServicesPageManager: React.FC = () => {
   const [processes, setProcesses] = useState<ServiceItem[]>([]);
 
   // Process section settings (background image, title, subtitle)
-  const [processSectionData, setProcessSectionData] = useState({
+  const [processSectionData, setProcessSectionData] = useState<{
+    title: { en?: string; ar?: string; fr?: string };
+    subtitle: { en?: string; ar?: string; fr?: string };
+    backgroundImage: string;
+    isActive: boolean;
+  }>({
     title: { en: 'Our Process', ar: 'عمليتنا', fr: 'Notre processus' },
     subtitle: { en: 'A systematic approach to delivering exceptional results', ar: 'نهج منهجي لتقديم نتائج استثنائية', fr: 'Une approche systématique pour des résultats exceptionnels' },
     backgroundImage: '',
@@ -141,7 +146,12 @@ const ServicesPageManager: React.FC = () => {
 
   const handleSave = async () => {
     try {
-      const payload = { ...formData, content: formData.description };
+      const payload: any = {
+        ...formData,
+        content: formData.description,
+        title: formData.title || { en: '', ar: '', fr: '' },
+        description: formData.description || { en: '', ar: '', fr: '' }
+      };
       if (editingItem && editingItem._id) {
         await dispatch(updateContent({ id: editingItem._id, data: payload })).unwrap();
       } else {
@@ -166,10 +176,10 @@ const ServicesPageManager: React.FC = () => {
   const handleSaveProcessSection = async () => {
     try {
       const processSectionItem = contentList?.find((it: any) => it.section === 'process-section');
-      const payload = {
+      const payload: any = {
         section: 'process-section' as const,
-        title: processSectionData.title,
-        description: processSectionData.subtitle,
+        title: processSectionData.title || { en: '', ar: '', fr: '' },
+        description: processSectionData.subtitle || { en: '', ar: '', fr: '' },
         image: processSectionData.backgroundImage,
         isActive: processSectionData.isActive
       };
@@ -185,8 +195,9 @@ const ServicesPageManager: React.FC = () => {
     }
   };
 
-  const getDisplayText = (value: { en: string; ar: string; fr: string } | string): string => {
+  const getDisplayText = (value: { en?: string; ar?: string; fr?: string } | string | undefined): string => {
     if (typeof value === 'string') return value;
+    if (!value) return '';
     return value.en || value.ar || value.fr || '';
   };
 

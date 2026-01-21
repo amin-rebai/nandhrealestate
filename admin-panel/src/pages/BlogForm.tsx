@@ -40,6 +40,7 @@ import MultilingualTextField from '../components/MultilingualTextField';
 import RichTextEditor from '../components/RichTextEditor';
 import ImageUpload from '../components/ImageUpload';
 import ImageGallery from '../components/ImageGallery';
+import { ensureMultilingual } from '../utils/multilingualUtils';
 
 const BlogForm: React.FC = () => {
   const { t } = useTranslation();
@@ -51,14 +52,42 @@ const BlogForm: React.FC = () => {
   const isEdit = Boolean(id);
 
   // Form state
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    title: { en?: string; ar?: string; fr?: string };
+    slug: { en?: string; ar?: string; fr?: string };
+    excerpt: { en?: string; ar?: string; fr?: string };
+    content: { en?: string; ar?: string; fr?: string };
+    featuredImage: string;
+    category: { en?: string; ar?: string; fr?: string };
+    tags: Array<{ en?: string; ar?: string; fr?: string }>;
+    author: {
+      name: string;
+      avatar: string;
+      bio: { en?: string; ar?: string; fr?: string };
+    };
+    status: 'draft' | 'published' | 'archived';
+    isFeatured: boolean;
+    isActive: boolean;
+    seo: {
+      metaTitle: { en?: string; ar?: string; fr?: string };
+      metaDescription: { en?: string; ar?: string; fr?: string };
+      keywords: { en?: string; ar?: string; fr?: string };
+      canonicalUrl: string;
+      ogTitle: { en?: string; ar?: string; fr?: string };
+      ogDescription: { en?: string; ar?: string; fr?: string };
+      ogImage: string;
+      tiktokTitle: { en?: string; ar?: string; fr?: string };
+      tiktokDescription: { en?: string; ar?: string; fr?: string };
+      tiktokImage: string;
+    };
+  }>({
     title: { en: '', ar: '', fr: '' },
     slug: { en: '', ar: '', fr: '' },
     excerpt: { en: '', ar: '', fr: '' },
     content: { en: '', ar: '', fr: '' },
     featuredImage: '',
     category: { en: '', ar: '', fr: '' },
-    tags: [] as Array<{ en: string; ar: string; fr: string }>,
+    tags: [] as Array<{ en?: string; ar?: string; fr?: string }>,
     author: {
       name: '',
       avatar: '',
@@ -129,16 +158,41 @@ const BlogForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
+      const submitData = {
+        ...formData,
+        title: ensureMultilingual(formData.title),
+        slug: ensureMultilingual(formData.slug),
+        excerpt: ensureMultilingual(formData.excerpt),
+        content: ensureMultilingual(formData.content),
+        category: ensureMultilingual(formData.category),
+        tags: formData.tags.map(t => ensureMultilingual(t)),
+        author: {
+          ...formData.author,
+          bio: ensureMultilingual(formData.author.bio)
+        },
+        seo: {
+          ...formData.seo,
+          metaTitle: ensureMultilingual(formData.seo.metaTitle),
+          metaDescription: ensureMultilingual(formData.seo.metaDescription),
+          keywords: ensureMultilingual(formData.seo.keywords),
+          ogTitle: ensureMultilingual(formData.seo.ogTitle),
+          ogDescription: ensureMultilingual(formData.seo.ogDescription),
+          tiktokTitle: ensureMultilingual(formData.seo.tiktokTitle),
+          tiktokDescription: ensureMultilingual(formData.seo.tiktokDescription)
+        }
+      };
+
       if (isEdit && id) {
-        await dispatch(updateBlog({ id, data: formData })).unwrap();
+        await dispatch(updateBlog({ id, data: submitData })).unwrap();
       } else {
-        await dispatch(createBlog(formData)).unwrap();
+        await dispatch(createBlog(submitData)).unwrap();
       }
       navigate('/blog');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving blog post:', error);
+      // Error will be displayed via the Redux error state
     }
   };
 
@@ -154,19 +208,24 @@ const BlogForm: React.FC = () => {
       .replace(/-+/g, '-')
       .replace(/^-|-$/g, '');
   };
-  const handleTitleChange = (value: { en: string; ar: string; fr: string }) => {
+  const handleTitleChange = (value: { en?: string; ar?: string; fr?: string }) => {
     setFormData(prev => ({
       ...prev,
-      title: value,
+      title: {
+        en: value.en || '',
+        ar: value.ar || '',
+        fr: value.fr || ''
+      },
       slug: {
-        en: generateSlug(value.en),
-        ar: generateSlug(value.ar),
-        fr: generateSlug(value.fr)
+        en: generateSlug(value.en || ''),
+        ar: generateSlug(value.ar || ''),
+        fr: generateSlug(value.fr || '')
       }
     }));
   };
   const addTag = () => {
-    if (tagInput.en.trim() && tagInput.ar.trim() && tagInput.fr.trim()) {
+    // Allow adding tag if at least one language has content
+    if (tagInput.en.trim() || tagInput.ar.trim() || tagInput.fr.trim()) {
       setFormData(prev => ({
         ...prev,
         tags: [...prev.tags, { en: tagInput.en.trim(), ar: tagInput.ar.trim(), fr: tagInput.fr.trim() }]
@@ -198,9 +257,10 @@ const BlogForm: React.FC = () => {
             {t('common.cancel')}
           </Button>
           <Button
+            type="submit"
+            form="blog-form"
             variant="contained"
             startIcon={<Save />}
-            onClick={handleSubmit}
             disabled={loading}
             sx={{
               backgroundColor: '#4B0E14',
@@ -218,7 +278,7 @@ const BlogForm: React.FC = () => {
         </Alert>
       )}
 
-      <form onSubmit={handleSubmit}>
+      <form id="blog-form" onSubmit={handleSubmit}>
         <Grid container spacing={3}>
           {/* Main Content */}
           <Grid item xs={12} md={8}>
@@ -238,7 +298,7 @@ const BlogForm: React.FC = () => {
               <MultilingualTextField
                 label="Slug"
                 value={formData.slug}
-                onChange={(value) => setFormData(prev => ({ ...prev, slug: value }))}
+                onChange={(value) => setFormData(prev => ({ ...prev, slug: ensureMultilingual(value) }))}
                 helperText="URL-friendly version of the title"
                 sx={{ mb: 3 }}
               />
@@ -246,7 +306,7 @@ const BlogForm: React.FC = () => {
               <MultilingualTextField
                 label={t('blog.excerpt')}
                 value={formData.excerpt}
-                onChange={(value) => setFormData(prev => ({ ...prev, excerpt: value }))}
+                onChange={(value) => setFormData(prev => ({ ...prev, excerpt: ensureMultilingual(value) }))}
                 multiline
                 rows={3}
                 sx={{ mb: 3 }}
@@ -255,7 +315,7 @@ const BlogForm: React.FC = () => {
               <RichTextEditor
                 label={t('blog.postContent')}
                 value={formData.content}
-                onChange={(value) => setFormData(prev => ({ ...prev, content: value }))}
+                onChange={(value) => setFormData(prev => ({ ...prev, content: ensureMultilingual(value) }))}
                 minRows={15}
               />
             </Paper>
@@ -276,7 +336,7 @@ const BlogForm: React.FC = () => {
                       value={formData.seo.metaTitle}
                       onChange={(value) => setFormData(prev => ({
                         ...prev,
-                        seo: { ...prev.seo, metaTitle: value }
+                        seo: { ...prev.seo, metaTitle: ensureMultilingual(value) }
                       }))}
                     />
                   </Grid>
@@ -286,7 +346,7 @@ const BlogForm: React.FC = () => {
                       value={formData.seo.metaDescription}
                       onChange={(value) => setFormData(prev => ({
                         ...prev,
-                        seo: { ...prev.seo, metaDescription: value }
+                        seo: { ...prev.seo, metaDescription: ensureMultilingual(value) }
                       }))}
                       multiline
                       rows={3}
@@ -298,7 +358,7 @@ const BlogForm: React.FC = () => {
                       value={formData.seo.keywords}
                       onChange={(value) => setFormData(prev => ({
                         ...prev,
-                        seo: { ...prev.seo, keywords: value }
+                        seo: { ...prev.seo, keywords: ensureMultilingual(value) }
                       }))}
                       helperText="Separate keywords with commas"
                     />
@@ -380,7 +440,7 @@ const BlogForm: React.FC = () => {
               <MultilingualTextField
                 label={t('blog.category')}
                 value={formData.category}
-                onChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
+                onChange={(value) => setFormData(prev => ({ ...prev, category: ensureMultilingual(value) }))}
                 sx={{ mb: 2 }}
               />
 
@@ -429,7 +489,7 @@ const BlogForm: React.FC = () => {
                     variant="outlined"
                     size="small"
                     onClick={addTag}
-                    disabled={!tagInput.en.trim() || !tagInput.ar.trim() || !tagInput.fr.trim()}
+                    disabled={!tagInput.en.trim() && !tagInput.ar.trim() && !tagInput.fr.trim()}
                   >
                     Add Tag
                   </Button>

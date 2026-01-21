@@ -10,15 +10,16 @@ import {
 } from '@mui/material';
 
 interface MultilingualValue {
-  en: string;
-  ar: string;
-  fr: string;
+  en?: string;
+  ar?: string;
+  fr?: string;
 }
 
 interface MultilingualTextFieldProps extends Omit<TextFieldProps, 'value' | 'onChange'> {
   value: MultilingualValue;
   onChange: (value: MultilingualValue) => void;
   label: string;
+  optionalLanguages?: boolean; // If true, languages are optional
 }
 
 const MultilingualTextField: React.FC<MultilingualTextFieldProps> = ({
@@ -28,10 +29,16 @@ const MultilingualTextField: React.FC<MultilingualTextFieldProps> = ({
   disabled,
   multiline,
   rows,
+  optionalLanguages = true,
   ...textFieldProps
 }) => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState(0);
+
+  // Helper to check if a language has content
+  const hasContent = (lang: 'en' | 'ar' | 'fr') => {
+    return (value[lang] || '').trim().length > 0;
+  };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
@@ -60,9 +67,30 @@ const MultilingualTextField: React.FC<MultilingualTextFieldProps> = ({
             }
           }}
         >
-          <Tab label={t('content.english')} />
-          <Tab label={t('content.arabic')} />
-          <Tab label={t('content.french') || 'Français'} />
+          <Tab
+            label={
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                {t('content.english')}
+                {hasContent('en') && <Box sx={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#4B0E14' }} />}
+              </Box>
+            }
+          />
+          <Tab
+            label={
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                {t('content.arabic')}
+                {hasContent('ar') && <Box sx={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#4B0E14' }} />}
+              </Box>
+            }
+          />
+          <Tab
+            label={
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                {t('content.french') || 'Français'}
+                {hasContent('fr') && <Box sx={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#4B0E14' }} />}
+              </Box>
+            }
+          />
         </Tabs>
         
         <Box sx={{ p: 2, pt: 1 }}>

@@ -37,7 +37,17 @@ const HomePageManager: React.FC = () => {
   const [tabValue, setTabValue] = useState(0);
 
   // Hero Section State
-  const [heroData, setHeroData] = useState({
+  const [heroData, setHeroData] = useState<{
+    title: { en?: string; ar?: string; fr?: string };
+    subtitle: { en?: string; ar?: string; fr?: string };
+    description: { en?: string; ar?: string; fr?: string };
+    backgroundImage: string;
+    videoUrl: string;
+    mediaType: 'image' | 'video';
+    ctaText: { en?: string; ar?: string; fr?: string };
+    ctaLink: string;
+    isActive: boolean;
+  }>({
     title: { en: '', ar: '', fr: '' },
     subtitle: { en: '', ar: '', fr: '' },
     description: { en: '', ar: '', fr: '' },
@@ -51,7 +61,10 @@ const HomePageManager: React.FC = () => {
   const [heroEditing, setHeroEditing] = useState(false);
 
   // Stats Section State
-  const [statsData, setStatsData] = useState({
+  const [statsData, setStatsData] = useState<{
+    stats: Array<{ label: { en?: string; ar?: string; fr?: string }; value: string }>;
+    isActive: boolean;
+  }>({
     stats: [
       { label: { en: 'Years Experience', ar: 'سنوات الخبرة', fr: "Années d'expérience" }, value: '15+' },
       { label: { en: 'Countries', ar: 'البلدان', fr: 'Pays' }, value: '8' },
@@ -63,7 +76,15 @@ const HomePageManager: React.FC = () => {
   const [statsEditing, setStatsEditing] = useState(false);
 
   // CTA Section State
-  const [ctaData, setCtaData] = useState({
+  const [ctaData, setCtaData] = useState<{
+    title: { en?: string; ar?: string; fr?: string };
+    description: { en?: string; ar?: string; fr?: string };
+    primaryButtonText: { en?: string; ar?: string; fr?: string };
+    primaryButtonLink: string;
+    secondaryButtonText: { en?: string; ar?: string; fr?: string };
+    secondaryButtonLink: string;
+    isActive: boolean;
+  }>({
     title: { en: 'Ready to Find Your Dream Property?', ar: 'هل أنت مستعد للعثور على عقار أحلامك؟', fr: 'Prêt à trouver la propriété de vos rêves?' },
     description: { en: 'Let our expert team guide you through your real estate journey', ar: 'دع فريقنا الخبير يرشدك خلال رحلتك العقارية', fr: 'Laissez notre équipe d\'experts vous guider dans votre parcours immobilier' },
     primaryButtonText: { en: 'Browse Properties', ar: 'تصفح العقارات', fr: 'Parcourir les propriétés' },
@@ -75,7 +96,17 @@ const HomePageManager: React.FC = () => {
   const [ctaEditing, setCtaEditing] = useState(false);
 
   // About Section State (for Home Page)
-  const [aboutHomeData, setAboutHomeData] = useState({
+  const [aboutHomeData, setAboutHomeData] = useState<{
+    badge: { en?: string; ar?: string; fr?: string };
+    title: { en?: string; ar?: string; fr?: string };
+    description: { en?: string; ar?: string; fr?: string };
+    description2: { en?: string; ar?: string; fr?: string };
+    backgroundImage: string;
+    features: Array<{ icon: string; title: { en?: string; ar?: string; fr?: string }; description: { en?: string; ar?: string; fr?: string } }>;
+    statNumber: string;
+    statLabel: { en?: string; ar?: string; fr?: string };
+    isActive: boolean;
+  }>({
     badge: { en: 'About N&H Homes Real Estate', ar: 'عن N&H العقارية', fr: 'À propos de N&H Immobilier' },
     title: { en: 'Your Trusted Real Estate Partner', ar: 'شريكك العقاري الموثوق', fr: 'Votre partenaire immobilier de confiance' },
     description: { en: 'We provide a comprehensive portfolio of services designed for individuals, families, developers, corporate tenants, and institutional investors.', ar: 'نقدم مجموعة شاملة من الخدمات المصممة للأفراد والعائلات والمطورين والمستأجرين من الشركات والمستثمرين المؤسسيين.', fr: 'Nous proposons un portefeuille complet de services conçus pour les particuliers, les familles, les promoteurs, les locataires corporatifs et les investisseurs institutionnels.' },
@@ -93,7 +124,14 @@ const HomePageManager: React.FC = () => {
   const [aboutHomeEditing, setAboutHomeEditing] = useState(false);
 
   // Featured Properties Section State
-  const [featuredPropertiesData, setFeaturedPropertiesData] = useState({
+  const [featuredPropertiesData, setFeaturedPropertiesData] = useState<{
+    badge: { en?: string; ar?: string; fr?: string };
+    title: { en?: string; ar?: string; fr?: string };
+    subtitle: { en?: string; ar?: string; fr?: string };
+    fetchFromDatabase: boolean;
+    propertyCount: number;
+    isActive: boolean;
+  }>({
     badge: { en: 'Featured Properties', ar: 'عقارات مميزة', fr: 'Propriétés en vedette' },
     title: { en: 'Exceptional Properties', ar: 'عقارات استثنائية', fr: 'Propriétés exceptionnelles' },
     subtitle: { en: 'Handpicked luxury properties that define excellence in real estate', ar: 'عقارات فاخرة مختارة بعناية تحدد التميز في العقارات', fr: 'Propriétés de luxe sélectionnées avec soin qui définissent l\'excellence en immobilier' },
@@ -194,13 +232,13 @@ const HomePageManager: React.FC = () => {
     try {
       const heroPayload = {
         section: 'hero' as const,
-        title: heroData.title,
-        subtitle: heroData.subtitle,
-        description: heroData.description,
+        title: ensureMultilingual(heroData.title),
+        subtitle: ensureMultilingual(heroData.subtitle),
+        description: ensureMultilingual(heroData.description),
         backgroundImage: heroData.backgroundImage,
         videoUrl: heroData.videoUrl,
         mediaType: heroData.mediaType,
-        ctaText: heroData.ctaText,
+        ctaText: ensureMultilingual(heroData.ctaText),
         ctaLink: heroData.ctaLink,
         isActive: heroData.isActive
       };
@@ -220,16 +258,20 @@ const HomePageManager: React.FC = () => {
       const aboutHomeItem = contentList?.find((it: any) => it.section === 'about-home');
       const payload = {
         section: 'about-home' as const,
-        title: aboutHomeData.title,
-        description: aboutHomeData.description,
+        title: ensureMultilingual(aboutHomeData.title),
+        description: ensureMultilingual(aboutHomeData.description),
         backgroundImage: aboutHomeData.backgroundImage,
         image: aboutHomeData.backgroundImage,
         metadata: {
-          badge: aboutHomeData.badge,
-          description2: aboutHomeData.description2,
-          features: aboutHomeData.features,
+          badge: ensureMultilingual(aboutHomeData.badge),
+          description2: ensureMultilingual(aboutHomeData.description2),
+          features: aboutHomeData.features.map(f => ({
+            icon: f.icon,
+            title: ensureMultilingual(f.title),
+            description: ensureMultilingual(f.description)
+          })),
           statNumber: aboutHomeData.statNumber,
-          statLabel: aboutHomeData.statLabel
+          statLabel: ensureMultilingual(aboutHomeData.statLabel)
         },
         isActive: aboutHomeData.isActive
       };
@@ -245,15 +287,68 @@ const HomePageManager: React.FC = () => {
     }
   };
 
+  const handleSaveStats = async () => {
+    try {
+      const statsItem = contentList?.find((it: any) => it.section === 'stats');
+      const payload = {
+        section: 'stats' as const,
+        title: { en: 'Statistics', ar: 'الإحصائيات', fr: 'Statistiques' },
+        metadata: {
+          stats: statsData.stats.map(s => ({
+            label: ensureMultilingual(s.label),
+            value: s.value
+          }))
+        },
+        isActive: statsData.isActive
+      };
+      if (statsItem) {
+        await dispatch(updateContent({ id: statsItem._id, data: payload })).unwrap();
+      } else {
+        await dispatch(createContent(payload)).unwrap();
+      }
+      setStatsEditing(false);
+      dispatch(fetchContent({}));
+    } catch (error) {
+      console.error('Error saving stats:', error);
+    }
+  };
+
+  const handleSaveCta = async () => {
+    try {
+      const ctaItem = contentList?.find((it: any) => it.section === 'cta');
+      const payload = {
+        section: 'cta' as const,
+        title: ensureMultilingual(ctaData.title),
+        description: ensureMultilingual(ctaData.description),
+        metadata: {
+          primaryButtonText: ensureMultilingual(ctaData.primaryButtonText),
+          primaryButtonLink: ctaData.primaryButtonLink,
+          secondaryButtonText: ensureMultilingual(ctaData.secondaryButtonText),
+          secondaryButtonLink: ctaData.secondaryButtonLink
+        },
+        isActive: ctaData.isActive
+      };
+      if (ctaItem) {
+        await dispatch(updateContent({ id: ctaItem._id, data: payload })).unwrap();
+      } else {
+        await dispatch(createContent(payload)).unwrap();
+      }
+      setCtaEditing(false);
+      dispatch(fetchContent({}));
+    } catch (error) {
+      console.error('Error saving CTA:', error);
+    }
+  };
+
   const handleSaveFeaturedProperties = async () => {
     try {
       const featuredPropertiesItem = contentList?.find((it: any) => it.section === 'featured-properties');
       const payload = {
         section: 'featured-properties' as const,
-        title: featuredPropertiesData.title,
-        description: featuredPropertiesData.subtitle,
+        title: ensureMultilingual(featuredPropertiesData.title),
+        description: ensureMultilingual(featuredPropertiesData.subtitle),
         metadata: {
-          badge: featuredPropertiesData.badge,
+          badge: ensureMultilingual(featuredPropertiesData.badge),
           fetchFromDatabase: featuredPropertiesData.fetchFromDatabase,
           propertyCount: featuredPropertiesData.propertyCount
         },
@@ -510,7 +605,7 @@ const HomePageManager: React.FC = () => {
               <Typography variant="h6" sx={{ fontWeight: 600, color: '#4B0E14' }}>Statistics Section</Typography>
               <Box>
                 <FormControlLabel control={<Switch checked={statsData.isActive} onChange={(e) => setStatsData({ ...statsData, isActive: e.target.checked })} disabled={!statsEditing} />} label="Active" />
-                <Button variant="contained" startIcon={statsEditing ? <Save /> : <Edit />} onClick={() => setStatsEditing(!statsEditing)} sx={{ ml: 2, backgroundColor: '#4B0E14', '&:hover': { backgroundColor: '#3a0b10' } }}>
+                <Button variant="contained" startIcon={statsEditing ? <Save /> : <Edit />} onClick={() => statsEditing ? handleSaveStats() : setStatsEditing(true)} sx={{ ml: 2, backgroundColor: '#4B0E14', '&:hover': { backgroundColor: '#3a0b10' } }}>
                   {statsEditing ? 'Save Changes' : 'Edit'}
                 </Button>
               </Box>
@@ -537,7 +632,7 @@ const HomePageManager: React.FC = () => {
               <Typography variant="h6" sx={{ fontWeight: 600, color: '#4B0E14' }}>Call to Action Section</Typography>
               <Box>
                 <FormControlLabel control={<Switch checked={ctaData.isActive} onChange={(e) => setCtaData({ ...ctaData, isActive: e.target.checked })} disabled={!ctaEditing} />} label="Active" />
-                <Button variant="contained" startIcon={ctaEditing ? <Save /> : <Edit />} onClick={() => setCtaEditing(!ctaEditing)} sx={{ ml: 2, backgroundColor: '#4B0E14', '&:hover': { backgroundColor: '#3a0b10' } }}>
+                <Button variant="contained" startIcon={ctaEditing ? <Save /> : <Edit />} onClick={() => ctaEditing ? handleSaveCta() : setCtaEditing(true)} sx={{ ml: 2, backgroundColor: '#4B0E14', '&:hover': { backgroundColor: '#3a0b10' } }}>
                   {ctaEditing ? 'Save Changes' : 'Edit'}
                 </Button>
               </Box>

@@ -9,6 +9,7 @@ export const getBlogs = async (req: Request, res: Response) => {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
     const skip = (page - 1) * limit;
+    const isAdmin = req.query.admin === 'true';
 
     const {
       status,
@@ -22,12 +23,21 @@ export const getBlogs = async (req: Request, res: Response) => {
     } = req.query;
 
     // Build filter query
-    let filter: any = { isActive: true };
+    let filter: any = {};
 
-    if (status) {
-      filter.status = status;
+    // For admin, don't filter by isActive or status unless specified
+    if (!isAdmin) {
+      filter.isActive = true;
+      if (status) {
+        filter.status = status;
+      } else {
+        filter.status = 'published'; // Default to published posts for public API
+      }
     } else {
-      filter.status = 'published'; // Default to published posts for public API
+      // For admin, only filter by status if specified
+      if (status) {
+        filter.status = status;
+      }
     }
 
     if (category) {
@@ -193,29 +203,36 @@ export const createBlog = async (req: Request, res: Response) => {
   try {
     const blogData = req.body;
 
-    // Validate required fields
-    if (!blogData.title?.en || !blogData.title?.ar) {
+    // Validate that at least one language has title and content
+    const hasTitle = (blogData.title?.en && blogData.title.en.trim()) || (blogData.title?.ar && blogData.title.ar.trim());
+    const hasContent = (blogData.content?.en && blogData.content.en.trim()) || (blogData.content?.ar && blogData.content.ar.trim());
+
+    if (!hasTitle) {
       return res.status(400).json({
         success: false,
-        message: 'Title is required in both English and Arabic'
+        message: 'Title is required in at least one language'
       });
     }
 
-    if (!blogData.content?.en || !blogData.content?.ar) {
+    if (!hasContent) {
       return res.status(400).json({
         success: false,
-        message: 'Content is required in both English and Arabic'
+        message: 'Content is required in at least one language'
       });
     }
 
     // Generate slug if not provided
-    if (!blogData.slug) {
+    if (!blogData.slug || (!blogData.slug.en && !blogData.slug.ar)) {
+      const titleEn = blogData.title?.en || '';
+      const titleAr = blogData.title?.ar || '';
       blogData.slug = {
-        en: blogData.title.en.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
-        ar: blogData.title.ar.toLowerCase().replace(/[^ا-ي0-9]+/g, '-').replace(/(^-|-$)/g, '')
+        en: titleEn ? titleEn.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : '',
+        ar: titleAr ? titleAr.toLowerCase().replace(/[^ا-ي0-9]+/g, '-').replace(/(^-|-$)/g, '') : ''
       };
     }
 
+
+    // console.log("===================== success", blogData)
     const blog = new Blog(blogData);
     await blog.save();
 

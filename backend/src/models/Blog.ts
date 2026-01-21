@@ -56,15 +56,50 @@ const multilingualTextSchema = new Schema({
 
 // SEO metadata schema
 const seoMetadataSchema = new Schema({
-  metaTitle: { type: multilingualTextSchema, required: true },
-  metaDescription: { type: multilingualTextSchema, required: true },
-  keywords: { type: multilingualTextSchema, required: true },
+  metaTitle: {
+    type: new Schema({
+      en: { type: String },
+      ar: { type: String }
+    }, { _id: false })
+  },
+  metaDescription: {
+    type: new Schema({
+      en: { type: String },
+      ar: { type: String }
+    }, { _id: false })
+  },
+  keywords: {
+    type: new Schema({
+      en: { type: String },
+      ar: { type: String }
+    }, { _id: false })
+  },
   canonicalUrl: { type: String },
-  ogTitle: { type: multilingualTextSchema },
-  ogDescription: { type: multilingualTextSchema },
+  ogTitle: {
+    type: new Schema({
+      en: { type: String },
+      ar: { type: String }
+    }, { _id: false })
+  },
+  ogDescription: {
+    type: new Schema({
+      en: { type: String },
+      ar: { type: String }
+    }, { _id: false })
+  },
   ogImage: { type: String },
-  tiktokTitle: { type: multilingualTextSchema },
-  tiktokDescription: { type: multilingualTextSchema },
+  tiktokTitle: {
+    type: new Schema({
+      en: { type: String },
+      ar: { type: String }
+    }, { _id: false })
+  },
+  tiktokDescription: {
+    type: new Schema({
+      en: { type: String },
+      ar: { type: String }
+    }, { _id: false })
+  },
   tiktokImage: { type: String },
   structuredData: { type: Schema.Types.Mixed }
 }, { _id: false });
@@ -73,7 +108,12 @@ const seoMetadataSchema = new Schema({
 const authorSchema = new Schema({
   name: { type: String, required: true },
   avatar: { type: String },
-  bio: { type: multilingualTextSchema }
+  bio: {
+    type: new Schema({
+      en: { type: String },
+      ar: { type: String }
+    }, { _id: false })
+  }
 }, { _id: false });
 
 // Main blog schema
@@ -90,7 +130,12 @@ const blogSchema = new Schema({
   featuredImage: { type: String, required: true },
   gallery: [{ type: String }],
   author: { type: authorSchema, required: true },
-  category: { type: multilingualTextSchema, required: true },
+  category: {
+    type: new Schema({
+      en: { type: String },
+      ar: { type: String }
+    }, { _id: false })
+  },
   tags: [{ type: multilingualTextSchema }],
   status: {
     type: String,

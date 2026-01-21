@@ -24,9 +24,9 @@ import {
 import { useTranslation } from 'react-i18next';
 
 interface MultilingualValue {
-  en: string;
-  ar: string;
-  fr: string;
+  en?: string;
+  ar?: string;
+  fr?: string;
 }
 
 interface RichTextEditorProps {
@@ -39,6 +39,7 @@ interface RichTextEditorProps {
   error?: boolean;
   helperText?: string;
   disabled?: boolean;
+  optionalLanguages?: boolean; // If true, languages are optional
 }
 
 const RichTextEditor: React.FC<RichTextEditorProps> = ({
@@ -50,10 +51,16 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   maxRows = 20,
   error = false,
   helperText,
-  disabled = false
+  disabled = false,
+  optionalLanguages = true
 }) => {
   const { t, i18n } = useTranslation();
   const [activeTab, setActiveTab] = useState<'en' | 'ar' | 'fr'>('en');
+
+  // Helper to check if a language has content
+  const hasContent = (lang: 'en' | 'ar' | 'fr') => {
+    return (value[lang] || '').trim().length > 0;
+  };
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: 'en' | 'ar' | 'fr') => {
     setActiveTab(newValue);
@@ -73,9 +80,10 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
 
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
-    const selectedText = value[activeTab].substring(start, end);
-    const beforeText = value[activeTab].substring(0, start);
-    const afterText = value[activeTab].substring(end);
+    const currentText = value[activeTab] || '';
+    const selectedText = currentText.substring(start, end);
+    const beforeText = currentText.substring(0, start);
+    const afterText = currentText.substring(end);
 
     const newText = beforeText + before + selectedText + after + afterText;
     
@@ -122,6 +130,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           label={
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               🇺🇸 English
+              {hasContent('en') && <Box sx={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#4B0E14' }} />}
             </Box>
           }
           value="en"
@@ -130,6 +139,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           label={
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               🇸🇦 العربية
+              {hasContent('ar') && <Box sx={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#4B0E14' }} />}
             </Box>
           }
           value="ar"
@@ -138,6 +148,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           label={
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               🇫🇷 Français
+              {hasContent('fr') && <Box sx={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#4B0E14' }} />}
             </Box>
           }
           value="fr"

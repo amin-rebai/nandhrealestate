@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchBlogs } from '../store/slices/blogSlice';
+import { AppDispatch, RootState } from '../store/store';
 
 interface BlogPostData {
   _id: string;
@@ -148,27 +151,61 @@ const mockBlogPosts: BlogPostData[] = [
   }
 ];
 
+// Helper function to extract text from multilingual object
+const getMultilingualText = (value: any, language: string): string => {
+  if (!value) return '';
+  if (typeof value === 'string') return value;
+  if (typeof value === 'object' && value[language]) return value[language];
+  if (typeof value === 'object') {
+    return value.en || value.ar || value.fr || '';
+  }
+  return '';
+};
+
 const Blog: React.FC = () => {
-  const { t } = useTranslation();
+  const { i18n } = useTranslation();
+  const dispatch = useDispatch<AppDispatch>();
+  const { posts: reduxPosts, loading } = useSelector((state: RootState) => state.blog);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [posts, setPosts] = useState<BlogPostData[]>(mockBlogPosts);
-  const [loading, setLoading] = useState(false);
+  const [posts, setPosts] = useState<BlogPostData[]>([]);
   const postsPerPage = 6;
+
+  // Fetch blogs on component mount
+  useEffect(() => {
+    const language = i18n.language as 'en' | 'ar' | 'fr';
+    dispatch(fetchBlogs({ status: 'published', language }));
+  }, [dispatch, i18n.language]);
+
+  // Update local posts when Redux posts change
+  useEffect(() => {
+    if (reduxPosts && reduxPosts.length > 0) {
+      setPosts(reduxPosts as BlogPostData[]);
+    } else if (!loading && reduxPosts.length === 0) {
+      // If no posts and not loading, use mock data as fallback
+      setPosts(mockBlogPosts);
+    }
+  }, [reduxPosts, loading]);
+
+  const language = i18n.language as 'en' | 'ar' | 'fr';
 
   // Filter posts based on search and category
   const filteredPosts = posts.filter(post => {
+    const title = getMultilingualText(post.title, language);
+    const excerpt = getMultilingualText(post.excerpt, language);
+    const category = getMultilingualText(post.category, language);
+
     const matchesSearch = searchTerm === '' ||
-      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === '' || post.category === selectedCategory;
+      title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === '' || category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
   // Get unique categories
-  const categories = Array.from(new Set(posts.map(post => post.category)));
+  const categories = Array.from(new Set(posts.map(post => getMultilingualText(post.category, language))));
 
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
@@ -273,13 +310,18 @@ const Blog: React.FC = () => {
                 <p className="section-subtitle">Discover our most popular and insightful content</p>
               </div>
               <div className="featured-grid">
-                {featuredPosts.map((post) => (
-                  <article key={post._id} className="featured-post-card visual-enhanced">
-                    <Link to={`/blog/${post.slug}`} className="post-link">
+                {featuredPosts.map((post) => {
+                  const postTitle = getMultilingualText(post.title, language);
+                  const postExcerpt = getMultilingualText(post.excerpt, language);
+                  const postCategory = getMultilingualText(post.category, language);
+                  const postSlug = getMultilingualText(post.slug, language);
+                  return (
+                    <article key={post._id} className="featured-post-card visual-enhanced">
+                    <Link to={`/blog/${postSlug}`} className="post-link">
                       <div className="post-image">
-                        <img src={post.featuredImage} alt={post.title} />
+                        <img src={post.featuredImage} alt={postTitle} />
                         <div className="post-category">
-                          {post.category}
+                          {postCategory}
                         </div>
                         <div className="post-overlay">
                           <div className="read-more">
@@ -290,8 +332,8 @@ const Blog: React.FC = () => {
                         </div>
                       </div>
                       <div className="post-content">
-                        <h3>{post.title}</h3>
-                        <p>{post.excerpt}</p>
+                        <h3>{postTitle}</h3>
+                        <p>{postExcerpt}</p>
                         <div className="post-meta">
                           <div className="author">
                             {post.author.avatar && (
@@ -310,7 +352,8 @@ const Blog: React.FC = () => {
                       </div>
                     </Link>
                   </article>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </section>
@@ -325,11 +368,16 @@ const Blog: React.FC = () => {
             </div>
 
             <div className="posts-grid">
-              {paginatedPosts.map((post) => (
+              {paginatedPosts.map((post) => {
+                const postTitle = getMultilingualText(post.title, language);
+                const postExcerpt = getMultilingualText(post.excerpt, language);
+                const postCategory = getMultilingualText(post.category, language);
+                const postSlug = getMultilingualText(post.slug, language);
+                return (
                 <article key={post._id} className="post-card visual-enhanced">
-                  <Link to={`/blog/${post.slug}`} className="post-link">
+                  <Link to={`/blog/${postSlug}`} className="post-link">
                     <div className="post-image">
-                      <img src={post.featuredImage} alt={post.title} />
+                      <img src={post.featuredImage} alt={postTitle} />
                       <div className="post-overlay">
                         <div className="read-more">
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -340,10 +388,10 @@ const Blog: React.FC = () => {
                     </div>
                     <div className="post-content">
                       <div className="post-category">
-                        {post.category}
+                        {postCategory}
                       </div>
-                      <h3>{post.title}</h3>
-                      <p>{post.excerpt}</p>
+                      <h3>{postTitle}</h3>
+                      <p>{postExcerpt}</p>
                       <div className="post-meta">
                         <div className="author">
                           {post.author.avatar && (
@@ -362,7 +410,8 @@ const Blog: React.FC = () => {
                     </div>
                   </Link>
                 </article>
-              ))}
+                );
+              })}
             </div>
 
             {/* Pagination */}

@@ -48,7 +48,15 @@ const ContactPageManager: React.FC = () => {
   const [tabValue, setTabValue] = useState(0);
 
   // Contact Info State
-  const [contactInfo, setContactInfo] = useState({
+  const [contactInfo, setContactInfo] = useState<{
+    phone: string;
+    email: string;
+    address: { en?: string; ar?: string; fr?: string };
+    businessHours: { en?: string; ar?: string; fr?: string };
+    mapUrl: string;
+    backgroundImage: string;
+    isActive: boolean;
+  }>({
     phone: '',
     email: '',
     address: { en: '', ar: '', fr: '' },

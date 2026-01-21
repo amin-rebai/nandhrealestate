@@ -75,12 +75,12 @@ function TabPanel(props: TabPanelProps) {
 }
 
 const displayMultilingual = (
-  value: string | { en: string; ar: string; fr?: string } | undefined,
+  value: string | { en?: string; ar?: string; fr?: string } | undefined,
   language: 'en' | 'ar' | 'fr' = 'en'
 ): string => {
   if (!value) return '';
   if (typeof value === 'string') return value;
-  return value[language] || value.en || value.fr || '';
+  return (value as any)[language] || (value as any).en || (value as any).fr || '';
 };
 
 const Content: React.FC = () => {
@@ -114,7 +114,17 @@ const Content: React.FC = () => {
   const [tabValue, setTabValue] = useState(0);
 
   // Hero Section State
-  const [heroData, setHeroData] = useState({
+  const [heroData, setHeroData] = useState<{
+    title: { en?: string; ar?: string; fr?: string };
+    subtitle: { en?: string; ar?: string; fr?: string };
+    description: { en?: string; ar?: string; fr?: string };
+    backgroundImage: string;
+    videoUrl: string;
+    mediaType: 'image' | 'video';
+    ctaText: { en?: string; ar?: string; fr?: string };
+    ctaLink: string;
+    isActive: boolean;
+  }>({
     title: { en: '', ar: '', fr: '' },
     subtitle: { en: '', ar: '', fr: '' },
     description: { en: '', ar: '', fr: '' },
@@ -129,7 +139,20 @@ const Content: React.FC = () => {
   const [heroEditing, setHeroEditing] = useState(false);
 
   // About Section State
-  const [aboutData, setAboutData] = useState({
+  const [aboutData, setAboutData] = useState<{
+    title: { en?: string; ar?: string; fr?: string };
+    content: { en?: string; ar?: string; fr?: string };
+    image: string;
+    stats: Array<{ label: { en?: string; ar?: string; fr?: string }; value: string }>;
+    metadata: {
+      ceo: { message: { en?: string; ar?: string; fr?: string }; photo: string };
+      mission: { en?: string; ar?: string; fr?: string };
+      vision: { en?: string; ar?: string; fr?: string };
+      whyChoose: Array<{ title: { en?: string; ar?: string; fr?: string }; description: { en?: string; ar?: string; fr?: string } }>;
+      worldwideNetwork: Array<{ label: { en?: string; ar?: string; fr?: string }; value: string }>;
+    };
+    isActive: boolean;
+  }>({
     title: { en: '', ar: '', fr: '' },
     content: { en: '', ar: '', fr: '' },
     image: '',
@@ -239,13 +262,13 @@ const Content: React.FC = () => {
     try {
       const heroPayload = {
         section: 'hero' as const,
-        title: heroData.title,
-        subtitle: heroData.subtitle,
-        description: heroData.description,
+        title: ensureMultilingual(heroData.title),
+        subtitle: ensureMultilingual(heroData.subtitle),
+        description: ensureMultilingual(heroData.description),
         backgroundImage: heroData.backgroundImage,
         videoUrl: heroData.videoUrl,
         mediaType: heroData.mediaType,
-        ctaText: heroData.ctaText,
+        ctaText: ensureMultilingual(heroData.ctaText),
         ctaLink: heroData.ctaLink,
         isActive: heroData.isActive
       };
@@ -266,12 +289,31 @@ const Content: React.FC = () => {
     try {
       const aboutPayload = {
         section: 'about' as const,
-        title: aboutData.title,
-        content: aboutData.content,
+        title: ensureMultilingual(aboutData.title),
+        content: ensureMultilingual(aboutData.content),
         image: aboutData.image,
-        stats: aboutData.stats,
+        stats: aboutData.stats.map(s => ({
+          label: ensureMultilingual(s.label),
+          value: s.value
+        })),
         isActive: aboutData.isActive,
-        metadata: aboutData.metadata
+        metadata: {
+          ...aboutData.metadata,
+          ceo: {
+            ...aboutData.metadata.ceo,
+            message: ensureMultilingual(aboutData.metadata.ceo.message)
+          },
+          mission: ensureMultilingual(aboutData.metadata.mission),
+          vision: ensureMultilingual(aboutData.metadata.vision),
+          whyChoose: aboutData.metadata.whyChoose.map(item => ({
+            title: ensureMultilingual(item.title),
+            description: ensureMultilingual(item.description)
+          })),
+          worldwideNetwork: aboutData.metadata.worldwideNetwork.map(item => ({
+            label: ensureMultilingual(item.label),
+            value: item.value
+          }))
+        }
       };
 
       if (aboutSection) {
