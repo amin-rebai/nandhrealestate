@@ -2441,31 +2441,127 @@ main {
   }
 }
 
-/* RTL Support */
+/* RTL Support - Complete Implementation */
 [dir="rtl"] {
   text-align: right;
+  direction: rtl;
+}
+
+/* ===== HEADER & NAVIGATION ===== */
+[dir="rtl"] .header {
+  direction: rtl;
 }
 
 [dir="rtl"] .navbar {
-  flex-direction: row-reverse;
+  /* flex-direction: row-reverse !important; */
+  direction: rtl;
 }
 
 [dir="rtl"] .nav-links {
-  flex-direction: row-reverse;
+  /* flex-direction: row-reverse !important; */
+  direction: rtl;
+}
+
+[dir="rtl"] .nav-links li {
+  text-align: right;
+}
+
+[dir="rtl"] .nav-links a {
+  text-align: right;
+  direction: rtl;
 }
 
 [dir="rtl"] .header-actions {
-  flex-direction: row-reverse;
+  flex-direction: row-reverse !important;
+  direction: rtl;
 }
 
+[dir="rtl"] .logo {
+  /* order: 2; */
+}
+
+[dir="rtl"] .mobile-menu-toggle {
+  order: 1;
+}
+
+/* ===== FOOTER ===== */
+[dir="rtl"] .footer {
+  direction: rtl;
+}
+
+[dir="rtl"] .footer-content {
+  direction: rtl;
+}
+
+[dir="rtl"] .footer-grid {
+  direction: rtl;
+  grid-auto-flow: dense;
+}
+
+[dir="rtl"] .footer-section {
+  text-align: right;
+  direction: rtl;
+}
+
+[dir="rtl"] .footer-section h3 {
+  text-align: right;
+}
+
+[dir="rtl"] .footer-section p,
+[dir="rtl"] .footer-section a {
+  text-align: right;
+}
+
+[dir="rtl"] .footer-section ul {
+  text-align: right;
+}
+
+[dir="rtl"] .footer-section ul li {
+  text-align: right;
+}
+
+[dir="rtl"] .footer-bottom {
+  flex-direction: row-reverse !important;
+  direction: rtl;
+  text-align: center;
+}
+
+[dir="rtl"] .social-links {
+  flex-direction: row-reverse !important;
+  direction: rtl;
+  justify-content: center;
+}
+
+/* ===== HERO & CONTENT ===== */
 [dir="rtl"] .hero-content {
+  text-align: right;
+  direction: rtl;
+}
+
+[dir="rtl"] .hero-text {
+  text-align: right;
+}
+
+[dir="rtl"] .hero-title {
+  text-align: right;
+}
+
+[dir="rtl"] .hero-subtitle {
   text-align: right;
 }
 
 [dir="rtl"] .cta-buttons {
-  flex-direction: row-reverse;
+  flex-direction: row-reverse !important;
+  direction: rtl;
+  justify-content: center;
 }
 
+[dir="rtl"] .hero-cta {
+  flex-direction: row-reverse !important;
+  direction: rtl;
+}
+
+/* ===== GRIDS & LAYOUTS ===== */
 [dir="rtl"] .stats-grid {
   direction: rtl;
 }
@@ -2474,32 +2570,67 @@ main {
   direction: rtl;
 }
 
+[dir="rtl"] .services-grid-modern {
+  direction: rtl;
+}
+
 [dir="rtl"] .properties-grid {
   direction: rtl;
 }
 
-[dir="rtl"] .footer-content {
+[dir="rtl"] .featured-properties-grid {
   direction: rtl;
 }
 
-[dir="rtl"] .footer-section {
+[dir="rtl"] .partners-categories-grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .process-timeline {
+  direction: rtl;
+}
+
+[dir="rtl"] .values-grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .testimonials-grid {
+  direction: rtl;
+}
+
+/* ===== CARDS & COMPONENTS ===== */
+[dir="rtl"] .service-card {
   text-align: right;
 }
 
-[dir="rtl"] .social-links {
-  flex-direction: row-reverse;
+[dir="rtl"] .service-card-modern {
+  text-align: right;
 }
 
-[dir="rtl"] .contact-quick-info {
-  flex-direction: row-reverse;
+[dir="rtl"] .property-card {
+  text-align: right;
 }
 
-[dir="rtl"] .quick-contact-item {
-  flex-direction: row-reverse;
+[dir="rtl"] .partner-category {
+  text-align: right;
 }
 
+[dir="rtl"] .process-step {
+  text-align: right;
+}
+
+[dir="rtl"] .value-card {
+  text-align: right;
+}
+
+[dir="rtl"] .testimonial-card {
+  text-align: right;
+}
+
+/* ===== FORMS & INPUTS ===== */
 [dir="rtl"] .contact-item {
   text-align: right;
+  flex-direction: row-reverse !important;
 }
 
 [dir="rtl"] .contact-details {
@@ -2511,44 +2642,39 @@ main {
   margin-right: 0;
 }
 
-[dir="rtl"] .hero-cta {
-  flex-direction: row-reverse;
+[dir="rtl"] .contact-quick-info {
+  flex-direction: row-reverse !important;
 }
 
-[dir="rtl"] .footer-bottom {
-  flex-direction: row-reverse;
+[dir="rtl"] .quick-contact-item {
+  flex-direction: row-reverse !important;
 }
 
-[dir="rtl"] .partners-categories-grid {
+[dir="rtl"] .contact-grid {
   direction: rtl;
 }
 
-[dir="rtl"] .process-timeline {
+[dir="rtl"] .form-group label {
+  text-align: right;
+}
+
+[dir="rtl"] .form-group input,
+[dir="rtl"] .form-group textarea {
+  text-align: right;
   direction: rtl;
 }
 
-[dir="rtl"] .partner-category {
-  text-align: right;
-}
-
-[dir="rtl"] .process-step {
-  text-align: right;
-}
-
-/* Arabic font support */
-[dir="rtl"] {
-  font-family: 'Tajawal', 'Cairo', 'Amiri', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-
-/* RTL Support for Dropdown Menu */
+/* ===== DROPDOWN MENU ===== */
 [dir="rtl"] .dropdown-menu {
-  right: auto;
-  left: 0;
+  right: auto !important;
+  left: 0 !important;
   text-align: right;
+  direction: rtl;
 }
 
 [dir="rtl"] .dropdown-item {
-  flex-direction: row-reverse;
+  flex-direction: row-reverse !important;
+  text-align: right;
 }
 
 [dir="rtl"] .dropdown-icon {
@@ -2559,18 +2685,62 @@ main {
 [dir="rtl"] .dropdown-arrow {
   margin-left: 0.5rem;
   margin-right: 0;
+  transform: scaleX(-1);
 }
 
-/* RTL Support for Featured Properties */
-[dir="rtl"] .featured-properties-grid {
-  direction: rtl;
+[dir="rtl"] .nav-link-dropdown {
+  flex-direction: row-reverse !important;
 }
 
-[dir="rtl"] .property-features {
-  flex-direction: row-reverse;
+/* ===== SECTION HEADERS ===== */
+[dir="rtl"] .section-header {
+  text-align: right;
+}
+
+[dir="rtl"] .section-header h2 {
+  text-align: center;
+}
+
+[dir="rtl"] .section-header p {
+  text-align: right;
+}
+
+[dir="rtl"] .section-header-modern {
+  text-align: center;
+}
+
+[dir="rtl"] .section-badge {
+  text-align: center;
+}
+
+[dir="rtl"] .section-title-modern {
+  text-align: center;
+}
+
+[dir="rtl"] .section-subtitle-modern {
+  text-align: right;
 }
 
 [dir="rtl"] .section-cta {
+  direction: rtl;
+  text-align: center;
+}
+
+/* ===== BUTTONS ===== */
+[dir="rtl"] .btn {
+  flex-direction: row-reverse !important;
+}
+
+[dir="rtl"] .btn-primary {
+  direction: rtl;
+}
+
+[dir="rtl"] .btn-secondary {
+  direction: rtl;
+}
+
+[dir="rtl"] .btn-modern-primary {
+  flex-direction: row-reverse !important;
   direction: rtl;
 }
 
@@ -2580,75 +2750,168 @@ main {
   transform: scaleX(-1);
 }
 
-/* RTL Support for Services Section */
-[dir="rtl"] .services-grid-modern {
+[dir="rtl"] .btn-modern-secondary {
+  flex-direction: row-reverse !important;
   direction: rtl;
 }
 
-[dir="rtl"] .service-card-modern {
+[dir="rtl"] .btn-primary-enhanced {
+  flex-direction: row-reverse !important;
+  direction: rtl;
+}
+
+[dir="rtl"] .btn-secondary-enhanced {
+  flex-direction: row-reverse !important;
+  direction: rtl;
+}
+
+/* ===== PROPERTY CARDS ===== */
+[dir="rtl"] .property-features {
+  flex-direction: row-reverse !important;
+  direction: rtl;
+}
+
+[dir="rtl"] .property-location {
   text-align: right;
 }
 
-[dir="rtl"] .service-link {
+[dir="rtl"] .property-location::before {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+[dir="rtl"] .property-details {
+  flex-direction: row-reverse !important;
+  direction: rtl;
   text-align: right;
 }
 
-/* RTL Support for Section Headers */
-[dir="rtl"] .section-header-modern {
+[dir="rtl"] .property-actions {
+  flex-direction: row-reverse !important;
+  direction: rtl;
+}
+
+/* ===== ABOUT SECTION ===== */
+[dir="rtl"] .about-content-grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .about-text {
   text-align: right;
 }
 
-[dir="rtl"] .section-badge {
+[dir="rtl"] .about-description {
   text-align: right;
 }
 
-/* RTL Support for Mobile Menu */
+[dir="rtl"] .about-features {
+  text-align: right;
+}
+
+[dir="rtl"] .about-feature {
+  flex-direction: row-reverse !important;
+  text-align: right;
+}
+
+[dir="rtl"] .feature-icon {
+  margin-left: 1rem;
+  margin-right: 0;
+}
+
+[dir="rtl"] .about-feature h4 {
+  text-align: right;
+}
+
+[dir="rtl"] .about-feature p {
+  text-align: right;
+}
+
+/* ===== CONTACT SECTION ===== */
+[dir="rtl"] .contact-info h3 {
+  text-align: right;
+}
+
+[dir="rtl"] .contact-form {
+  direction: rtl;
+}
+
+/* ===== SEARCH WIDGET ===== */
+[dir="rtl"] .search-widget-container {
+  direction: rtl;
+}
+
+[dir="rtl"] .search-tabs {
+  direction: rtl;
+}
+
+[dir="rtl"] .search-input-container {
+  flex-direction: row-reverse !important;
+  direction: rtl;
+}
+
+[dir="rtl"] .search-input-wrapper {
+  direction: rtl;
+}
+
+[dir="rtl"] .search-icon {
+  right: 1.5rem;
+  left: auto;
+}
+
+[dir="rtl"] .search-input {
+  padding: 1.2rem 3.5rem 1.2rem 1.5rem;
+  text-align: right;
+  direction: rtl;
+}
+
+[dir="rtl"] .quick-filters {
+  flex-direction: row-reverse !important;
+  direction: rtl;
+  justify-content: center;
+}
+
+/* ===== MOBILE MENU ===== */
 [dir="rtl"] .nav-links {
-  right: auto;
-  left: -100%;
+  right: auto !important;
+  left: -100% !important;
 }
 
 [dir="rtl"] .nav-links.mobile-active {
-  left: 0;
-  right: auto;
+  left: 0 !important;
+  right: auto !important;
 }
 
-[dir="rtl"] .mobile-menu-toggle {
-  order: -1;
+/* ===== ARABIC FONT SUPPORT ===== */
+[dir="rtl"] {
+  font-family: 'Tajawal', 'Cairo', 'Amiri', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-[dir="rtl"] .logo {
-  order: 0;
-}
-
-[dir="rtl"] .nav-link-dropdown {
-  flex-direction: row-reverse;
-}
-
-[dir="rtl"] .dropdown-arrow {
-  margin-right: 0.5rem;
-  margin-left: 0;
-}
-
-/* RTL Mobile Menu Alignment */
+/* ===== RTL MOBILE MENU ALIGNMENT ===== */
 @media (max-width: 768px) {
   [dir="rtl"] .nav-links {
-    left: -100%;
-    right: auto;
+    left: -100% !important;
+    right: auto !important;
     align-items: flex-end;
+    direction: rtl;
   }
 
   [dir="rtl"] .nav-links.mobile-active {
-    left: 0;
-    right: auto;
+    left: 0 !important;
+    right: auto !important;
+  }
+
+  [dir="rtl"] .nav-links li {
+    text-align: right;
+    width: 100%;
   }
 
   [dir="rtl"] .nav-links a {
     text-align: right;
+    direction: rtl;
   }
 
   [dir="rtl"] .dropdown-item {
-    flex-direction: row-reverse;
+    flex-direction: row-reverse !important;
     text-align: right;
   }
 
@@ -2657,8 +2920,123 @@ main {
     margin-right: 0;
   }
 
+  [dir="rtl"] .nav-link-dropdown {
+    flex-direction: row-reverse !important;
+  }
+
   [dir="rtl"] .nav-link-dropdown a {
     text-align: right;
+  }
+
+  [dir="rtl"] .dropdown-menu {
+    text-align: right;
+    direction: rtl;
+  }
+
+  [dir="rtl"] .mobile-language-switcher {
+    text-align: right;
+  }
+
+  [dir="rtl"] .filters-bar {
+    flex-direction: column;
+    direction: rtl;
+  }
+
+  [dir="rtl"] .filter-group {
+    text-align: right;
+  }
+
+  [dir="rtl"] .filter-group label {
+    text-align: right;
+  }
+
+  [dir="rtl"] .view-toggle {
+    margin-left: 0;
+    flex-direction: row-reverse !important;
+  }
+
+  [dir="rtl"] .results-summary {
+    flex-direction: column;
+    text-align: right;
+  }
+
+  [dir="rtl"] .property-list-item {
+    flex-direction: column;
+    text-align: right;
+  }
+
+  [dir="rtl"] .list-property-image {
+    width: 100% !important;
+  }
+
+  [dir="rtl"] .list-property-content {
+    text-align: right;
+  }
+
+  [dir="rtl"] .property-details {
+    flex-direction: column;
+    text-align: right;
+  }
+
+  [dir="rtl"] .contact-grid {
+    grid-template-columns: 1fr;
+    direction: rtl;
+  }
+
+  [dir="rtl"] .about-content-grid {
+    grid-template-columns: 1fr;
+    direction: rtl;
+  }
+
+  [dir="rtl"] .about-image {
+    order: -1;
+  }
+
+  [dir="rtl"] .featured-properties-grid {
+    grid-template-columns: 1fr;
+    direction: rtl;
+  }
+
+  [dir="rtl"] .services-grid-modern {
+    grid-template-columns: 1fr;
+    direction: rtl;
+  }
+
+  [dir="rtl"] .stats-grid-modern {
+    grid-template-columns: repeat(2, 1fr);
+    direction: rtl;
+  }
+
+  [dir="rtl"] .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+    direction: rtl;
+  }
+
+  [dir="rtl"] .btn-modern-primary,
+  [dir="rtl"] .btn-modern-secondary {
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+  }
+
+  [dir="rtl"] .footer-grid {
+    grid-template-columns: 1fr;
+    direction: rtl;
+  }
+
+  [dir="rtl"] .search-widget-container {
+    padding: 1.5rem;
+    direction: rtl;
+  }
+
+  [dir="rtl"] .search-input-container {
+    flex-direction: column;
+    direction: rtl;
+  }
+
+  [dir="rtl"] .search-button {
+    width: 100%;
   }
 }
 

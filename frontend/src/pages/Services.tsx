@@ -76,8 +76,16 @@ const Services: React.FC = () => {
       <section className="section section-light">
         <div className="container">
           <div className="section-header">
-            <h2>Explore Our Expertise</h2>
-            <p>Navigate through our comprehensive service offerings</p>
+            <h2>{getText({
+              en: 'Explore Our Expertise',
+              ar: 'استكشف خبرتنا',
+              fr: 'Explorez notre expertise'
+            })}</h2>
+            <p>{getText({
+              en: 'Navigate through our comprehensive service offerings',
+              ar: 'تصفح عروضنا الخدمية الشاملة',
+              fr: 'Parcourez nos offres de services complètes'
+            })}</p>
           </div>
 
           <div className="service-navigation-grid">
@@ -91,16 +99,31 @@ const Services: React.FC = () => {
                 <div className="service-icon">🏢</div>
               </div>
               <div className="service-content">
-                <h3>Our Services</h3>
+                <h3>{getText({
+                  en: 'Our Services',
+                  ar: 'خدماتنا',
+                  fr: 'Nos services'
+                })}</h3>
                 <p className="service-description">
-                  <strong>Complete Real Estate Solutions</strong>
+                  <strong>{getText({
+                    en: 'Complete Real Estate Solutions',
+                    ar: 'حلول عقارية شاملة',
+                    fr: 'Solutions immobilières complètes'
+                  })}</strong>
                 </p>
                 <p className="service-summary">
-                  Discover our comprehensive range of services including sales & leasing,
-                  property management, marketing, and investment advisory.
+                  {getText({
+                    en: 'Discover our comprehensive range of services including sales & leasing, property management, marketing, and investment advisory.',
+                    ar: 'اكتشف مجموعتنا الشاملة من الخدمات بما في ذلك البيع والإيجار وإدارة الممتلكات والتسويق والاستشارات الاستثمارية.',
+                    fr: 'Découvrez notre gamme complète de services incluant la vente et la location, la gestion immobilière, le marketing et les conseils en investissement.'
+                  })}
                 </p>
                 <div className="service-cta">
-                  <span>Explore Services →</span>
+                  <span>{getText({
+                    en: 'Explore Services →',
+                    ar: 'استكشف الخدمات →',
+                    fr: 'Explorer les services →'
+                  })}</span>
                 </div>
               </div>
             </Link>
@@ -115,16 +138,31 @@ const Services: React.FC = () => {
                 <div className="service-icon">⚡</div>
               </div>
               <div className="service-content">
-                <h3>Our Process</h3>
+                <h3>{getText({
+                  en: 'Our Process',
+                  ar: 'عمليتنا',
+                  fr: 'Notre processus'
+                })}</h3>
                 <p className="service-description">
-                  <strong>Streamlined Excellence in Every Step</strong>
+                  <strong>{getText({
+                    en: 'Streamlined Excellence in Every Step',
+                    ar: 'التميز المبسط في كل خطوة',
+                    fr: 'Excellence rationalisée à chaque étape'
+                  })}</strong>
                 </p>
                 <p className="service-summary">
-                  Learn about our proven methodology that ensures seamless transactions
-                  and exceptional results through every phase of your real estate journey.
+                  {getText({
+                    en: 'Learn about our proven methodology that ensures seamless transactions and exceptional results through every phase of your real estate journey.',
+                    ar: 'تعرف على منهجيتنا المثبتة التي تضمن معاملات سلسة ونتائج استثنائية في كل مرحلة من رحلتك العقارية.',
+                    fr: 'Découvrez notre méthodologie éprouvée qui garantit des transactions fluides et des résultats exceptionnels à chaque étape de votre parcours immobilier.'
+                  })}
                 </p>
                 <div className="service-cta">
-                  <span>Discover Process →</span>
+                  <span>{getText({
+                    en: 'Discover Process →',
+                    ar: 'اكتشف العملية →',
+                    fr: 'Découvrir le processus →'
+                  })}</span>
                 </div>
               </div>
             </Link>
@@ -139,16 +177,31 @@ const Services: React.FC = () => {
                 <div className="service-icon">🤝</div>
               </div>
               <div className="service-content">
-                <h3>Our Partners</h3>
+                <h3>{getText({
+                  en: 'Our Partners',
+                  ar: 'شركاؤنا',
+                  fr: 'Nos partenaires'
+                })}</h3>
                 <p className="service-description">
-                  <strong>Strategic Alliances for Success</strong>
+                  <strong>{getText({
+                    en: 'Strategic Alliances for Success',
+                    ar: 'تحالفات استراتيجية للنجاح',
+                    fr: 'Alliances stratégiques pour le succès'
+                  })}</strong>
                 </p>
                 <p className="service-summary">
-                  Explore our network of strategic partners including financial institutions,
-                  technology providers, and industry leaders across global markets.
+                  {getText({
+                    en: 'Explore our network of strategic partners including financial institutions, technology providers, and industry leaders across global markets.',
+                    ar: 'استكشف شبكتنا من الشركاء الاستراتيجيين بما في ذلك المؤسسات المالية وموفري التكنولوجيا وقادة الصناعة في الأسواق العالمية.',
+                    fr: 'Explorez notre réseau de partenaires stratégiques incluant les institutions financières, les fournisseurs de technologie et les leaders de l\'industrie sur les marchés mondiaux.'
+                  })}
                 </p>
                 <div className="service-cta">
-                  <span>Meet Partners →</span>
+                  <span>{getText({
+                    en: 'Meet Partners →',
+                    ar: 'التقابل مع الشركاء →',
+                    fr: 'Rencontrer les partenaires →'
+                  })}</span>
                 </div>
               </div>
             </Link>
@@ -160,31 +213,71 @@ const Services: React.FC = () => {
       <section className="section section-dark">
         <div className="container">
           <div className="section-header">
-            <h2 style={{ color: 'white' }}>Why Choose Our Approach</h2>
+            <h2 style={{ color: 'white' }}>{getText({
+              en: 'Why Choose Our Approach',
+              ar: 'لماذا تختار نهجنا',
+              fr: 'Pourquoi choisir notre approche'
+            })}</h2>
             <p style={{ color: 'rgba(255,255,255,0.9)' }}>
-              Our integrated approach delivers exceptional results through expertise, innovation, and partnerships
+              {getText({
+                en: 'Our integrated approach delivers exceptional results through expertise, innovation, and partnerships',
+                ar: 'يوفر نهجنا المتكامل نتائج استثنائية من خلال الخبرة والابتكار والشراكات',
+                fr: 'Notre approche intégrée offre des résultats exceptionnels grâce à l\'expertise, l\'innovation et les partenariats'
+              })}
             </p>
           </div>
           <div className="approach-benefits-grid">
             <div className="benefit-card">
               <div className="benefit-icon">🎯</div>
-              <h3>Comprehensive Solutions</h3>
-              <p>End-to-end services covering every aspect of real estate</p>
+              <h3>{getText({
+                en: 'Comprehensive Solutions',
+                ar: 'حلول شاملة',
+                fr: 'Solutions complètes'
+              })}</h3>
+              <p>{getText({
+                en: 'End-to-end services covering every aspect of real estate',
+                ar: 'خدمات شاملة تغطي كل جوانب العقارات',
+                fr: 'Services complets couvrant tous les aspects de l\'immobilier'
+              })}</p>
             </div>
             <div className="benefit-card">
               <div className="benefit-icon">⚡</div>
-              <h3>Proven Process</h3>
-              <p>Streamlined methodology ensuring consistent excellence</p>
+              <h3>{getText({
+                en: 'Proven Process',
+                ar: 'عملية مثبتة',
+                fr: 'Processus éprouvé'
+              })}</h3>
+              <p>{getText({
+                en: 'Streamlined methodology ensuring consistent excellence',
+                ar: 'منهجية مبسطة تضمن التميز المستمر',
+                fr: 'Méthodologie rationalisée garantissant l\'excellence constante'
+              })}</p>
             </div>
             <div className="benefit-card">
               <div className="benefit-icon">🤝</div>
-              <h3>Strategic Partnerships</h3>
-              <p>Global network of trusted industry leaders</p>
+              <h3>{getText({
+                en: 'Strategic Partnerships',
+                ar: 'شراكات استراتيجية',
+                fr: 'Partenariats stratégiques'
+              })}</h3>
+              <p>{getText({
+                en: 'Global network of trusted industry leaders',
+                ar: 'شبكة عالمية من قادة الصناعة الموثوقين',
+                fr: 'Réseau mondial de leaders de l\'industrie de confiance'
+              })}</p>
             </div>
             <div className="benefit-card">
               <div className="benefit-icon">🌍</div>
-              <h3>International Reach</h3>
-              <p>Expertise across multiple markets and regions</p>
+              <h3>{getText({
+                en: 'International Reach',
+                ar: 'نطاق دولي',
+                fr: 'Portée internationale'
+              })}</h3>
+              <p>{getText({
+                en: 'Expertise across multiple markets and regions',
+                ar: 'خبرة في أسواق ومناطق متعددة',
+                fr: 'Expertise sur plusieurs marchés et régions'
+              })}</p>
             </div>
           </div>
         </div>
@@ -194,17 +287,32 @@ const Services: React.FC = () => {
       <section className="section section-light">
         <div className="container">
           <div className="cta-content" style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
-            <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Ready to Get Started?</h2>
+            <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>{getText({
+              en: 'Ready to Get Started?',
+              ar: 'هل أنت مستعد للبدء؟',
+              fr: 'Prêt à commencer?'
+            })}</h2>
             <p style={{ fontSize: '1.2rem', marginBottom: '2rem', color: 'var(--gray)' }}>
-              Explore our detailed service offerings, learn about our proven process,
-              or discover our strategic partnerships.
+              {getText({
+                en: 'Explore our detailed service offerings, learn about our proven process, or discover our strategic partnerships.',
+                ar: 'استكشف عروضنا الخدمية المفصلة، تعرف على عمليتنا المثبتة، أو اكتشف شراكاتنا الاستراتيجية.',
+                fr: 'Explorez nos offres de services détaillées, découvrez notre processus éprouvé ou explorez nos partenariats stratégiques.'
+              })}
             </p>
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
               <Link to="/our-services" className="btn-primary-enhanced">
-                Explore All Services
+                {getText({
+                  en: 'Explore All Services',
+                  ar: 'استكشف جميع الخدمات',
+                  fr: 'Explorer tous les services'
+                })}
               </Link>
               <Link to="/contact" className="btn-secondary-enhanced">
-                Contact Our Team
+                {getText({
+                  en: 'Contact Our Team',
+                  ar: 'اتصل بفريقنا',
+                  fr: 'Contactez notre équipe'
+                })}
               </Link>
             </div>
           </div>
@@ -273,36 +381,72 @@ const Services: React.FC = () => {
       <section className="section section-light">
         <div className="container">
           <div className="section-header">
-            <h2>Our Partnerships</h2>
-            <p>Strategic alliances that enhance our service delivery</p>
+            <h2>{getText({
+              en: 'Our Partnerships',
+              ar: 'شراكاتنا',
+              fr: 'Nos partenariats'
+            })}</h2>
+            <p>{getText({
+              en: 'Strategic alliances that enhance our service delivery',
+              ar: 'تحالفات استراتيجية تعزز تقديم خدماتنا',
+              fr: 'Alliances stratégiques qui améliorent notre prestation de services'
+            })}</p>
           </div>
           <div className="partnerships-grid services-grid">
             <div className="service-card">
-              <h3>🏗️ Leading Developers</h3>
+              <h3>{getText({
+                en: '🏗️ Leading Developers',
+                ar: '🏗️ المطورون الرائدون',
+                fr: '🏗️ Développeurs leaders'
+              })}</h3>
               <p>
-                Strong alliances with leading developers in the GCC, MENA, and Europe, 
-                providing access to premium projects and exclusive opportunities.
+                {getText({
+                  en: 'Strong alliances with leading developers in the GCC, MENA, and Europe, providing access to premium projects and exclusive opportunities.',
+                  ar: 'تحالفات قوية مع المطورين الرائدين في دول مجلس التعاون الخليجي والشرق الأوسط وشمال أفريقيا وأوروبا، مما يوفر الوصول إلى مشاريع فاخرة وفرص حصرية.',
+                  fr: 'Alliances solides avec les développeurs leaders du CCG, du MENA et de l\'Europe, offrant un accès à des projets premium et à des opportunités exclusives.'
+                })}
               </p>
             </div>
             <div className="service-card">
-              <h3>🏦 Financial Institutions</h3>
+              <h3>{getText({
+                en: '🏦 Financial Institutions',
+                ar: '🏦 المؤسسات المالية',
+                fr: '🏦 Institutions financières'
+              })}</h3>
               <p>
-                Partnerships with banks and financial institutions to provide comprehensive 
-                mortgage and investment solutions for our clients.
+                {getText({
+                  en: 'Partnerships with banks and financial institutions to provide comprehensive mortgage and investment solutions for our clients.',
+                  ar: 'شراكات مع البنوك والمؤسسات المالية لتقديم حلول الرهن العقاري والاستثمار الشاملة لعملائنا.',
+                  fr: 'Partenariats avec les banques et les institutions financières pour fournir des solutions hypothécaires et d\'investissement complètes à nos clients.'
+                })}
               </p>
             </div>
             <div className="service-card">
-              <h3>🎨 Design & Management</h3>
+              <h3>{getText({
+                en: '🎨 Design & Management',
+                ar: '🎨 التصميم والإدارة',
+                fr: '🎨 Design et gestion'
+              })}</h3>
               <p>
-                Collaboration with interior design and facility management providers to 
-                enhance property value and client satisfaction.
+                {getText({
+                  en: 'Collaboration with interior design and facility management providers to enhance property value and client satisfaction.',
+                  ar: 'التعاون مع موفري التصميم الداخلي وإدارة المرافق لتعزيز قيمة الممتلكات ورضا العملاء.',
+                  fr: 'Collaboration avec les fournisseurs de design d\'intérieur et de gestion des installations pour améliorer la valeur des propriétés et la satisfaction des clients.'
+                })}
               </p>
             </div>
             <div className="service-card">
-              <h3>⚖️ Legal Consultants</h3>
+              <h3>{getText({
+                en: '⚖️ Legal Consultants',
+                ar: '⚖️ الاستشاريون القانونيون',
+                fr: '⚖️ Consultants juridiques'
+              })}</h3>
               <p>
-                Working with experienced legal consultants to ensure compliance and 
-                smooth transactions in every market we operate.
+                {getText({
+                  en: 'Working with experienced legal consultants to ensure compliance and smooth transactions in every market we operate.',
+                  ar: 'العمل مع استشاريين قانونيين ذوي خبرة لضمان الامتثال والمعاملات السلسة في كل سوق نعمل فيه.',
+                  fr: 'Travailler avec des consultants juridiques expérimentés pour assurer la conformité et des transactions fluides sur tous les marchés où nous opérons.'
+                })}
               </p>
             </div>
           </div>
@@ -313,16 +457,32 @@ const Services: React.FC = () => {
       <section className="section section-dark">
         <div className="container">
           <div className="section-header">
-            <h2>Ready to Get Started?</h2>
-            <p>Let us help you achieve your real estate goals with our comprehensive services</p>
+            <h2>{getText({
+              en: 'Ready to Get Started?',
+              ar: 'هل أنت مستعد للبدء؟',
+              fr: 'Prêt à commencer?'
+            })}</h2>
+            <p>{getText({
+              en: 'Let us help you achieve your real estate goals with our comprehensive services',
+              ar: 'دعنا نساعدك في تحقيق أهدافك العقارية من خلال خدماتنا الشاملة',
+              fr: 'Laissez-nous vous aider à atteindre vos objectifs immobiliers avec nos services complets'
+            })}</p>
           </div>
           <div style={{ textAlign: 'center', marginTop: '2rem' }}>
             <div className="cta-buttons">
               <a href="/contact" className="btn btn-primary">
-                Schedule Consultation
+                {getText({
+                  en: 'Schedule Consultation',
+                  ar: 'جدول استشارة',
+                  fr: 'Planifier une consultation'
+                })}
               </a>
               <a href="/properties" className="btn btn-secondary">
-                View Properties
+                {getText({
+                  en: 'View Properties',
+                  ar: 'عرض الممتلكات',
+                  fr: 'Afficher les propriétés'
+                })}
               </a>
             </div>
           </div>

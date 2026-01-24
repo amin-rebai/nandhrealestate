@@ -121,12 +121,24 @@ const OurProcess: React.FC = () => {
         <div className="container">
           <div className="heading-row">
             <div style={{ flex: '0 1 560px' }}>
-              <h1>OUR PROCESS</h1>
-              <p className="gold-subtitle">HOW WE GUIDE YOU SMARTLY THROUGH EVERY STEP</p>
+              <h1>{getText({
+                en: 'OUR PROCESS',
+                ar: 'عمليتنا',
+                fr: 'NOTRE PROCESSUS'
+              })}</h1>
+              <p className="gold-subtitle">{getText({
+                en: 'HOW WE GUIDE YOU SMARTLY THROUGH EVERY STEP',
+                ar: 'كيف نرشدك بذكاء من خلال كل خطوة',
+                fr: 'COMMENT NOUS VOUS GUIDONS INTELLIGEMMENT À CHAQUE ÉTAPE'
+              })}</p>
             </div>
             <div style={{ flex: '0 1 300px', textAlign: 'right' }}>
               <p className="lead">
-                We use a hands-on, professional approach to deliver exceptional results — every step is designed to protect your investment and support your goals.
+                {getText({
+                  en: 'We use a hands-on, professional approach to deliver exceptional results — every step is designed to protect your investment and support your goals.',
+                  ar: 'نستخدم نهجاً عملياً واحترافياً لتحقيق نتائج استثنائية — كل خطوة مصممة لحماية استثمارك ودعم أهدافك.',
+                  fr: 'Nous utilisons une approche pratique et professionnelle pour obtenir des résultats exceptionnels — chaque étape est conçue pour protéger votre investissement et soutenir vos objectifs.'
+                })}
               </p>
             </div>
           </div>
@@ -137,8 +149,16 @@ const OurProcess: React.FC = () => {
       <section className="section section-light">
         <div className="container">
           <div className="section-header">
-            <h2>How We Work</h2>
-            <p>Our systematic approach ensures transparency, efficiency, and success in every project</p>
+            <h2>{getText({
+              en: 'How We Work',
+              ar: 'كيف نعمل',
+              fr: 'Comment nous travaillons'
+            })}</h2>
+            <p>{getText({
+              en: 'Our systematic approach ensures transparency, efficiency, and success in every project',
+              ar: 'يضمن نهجنا المنهجي الشفافية والكفاءة والنجاح في كل مشروع',
+              fr: 'Notre approche systématique garantit la transparence, l\'efficacité et le succès dans chaque projet'
+            })}</p>
           </div>
 
           {loading ? (
@@ -167,32 +187,72 @@ const OurProcess: React.FC = () => {
       <section className="section section-dark">
         <div className="container">
           <div className="section-header">
-            <h2 style={{ color: 'white' }}>Why Our Process Works</h2>
+            <h2 style={{ color: 'white' }}>{getText({
+              en: 'Why Our Process Works',
+              ar: 'لماذا تعمل عمليتنا',
+              fr: 'Pourquoi notre processus fonctionne'
+            })}</h2>
             <p style={{ color: 'rgba(255,255,255,0.9)' }}>
-              Our methodology is built on years of experience and proven results
+              {getText({
+                en: 'Our methodology is built on years of experience and proven results',
+                ar: 'تم بناء منهجيتنا على سنوات من الخبرة والنتائج المثبتة',
+                fr: 'Notre méthodologie est basée sur des années d\'expérience et des résultats éprouvés'
+              })}
             </p>
           </div>
 
           <div className="process-benefits-grid">
             <div className="benefit-card">
               <div className="benefit-icon">🎯</div>
-              <h3>Precision & Accuracy</h3>
-              <p>Every step is carefully planned and executed with attention to detail</p>
+              <h3>{getText({
+                en: 'Precision & Accuracy',
+                ar: 'الدقة والصحة',
+                fr: 'Précision & Exactitude'
+              })}</h3>
+              <p>{getText({
+                en: 'Every step is carefully planned and executed with attention to detail',
+                ar: 'يتم التخطيط لكل خطوة بعناية وتنفيذها مع الاهتمام بالتفاصيل',
+                fr: 'Chaque étape est soigneusement planifiée et exécutée avec attention aux détails'
+              })}</p>
             </div>
             <div className="benefit-card">
               <div className="benefit-icon">⏱️</div>
-              <h3>Time Efficiency</h3>
-              <p>Streamlined processes that save time while maintaining quality</p>
+              <h3>{getText({
+                en: 'Time Efficiency',
+                ar: 'كفاءة الوقت',
+                fr: 'Efficacité temporelle'
+              })}</h3>
+              <p>{getText({
+                en: 'Streamlined processes that save time while maintaining quality',
+                ar: 'عمليات مبسطة توفر الوقت مع الحفاظ على الجودة',
+                fr: 'Des processus rationalisés qui économisent du temps tout en maintenant la qualité'
+              })}</p>
             </div>
             <div className="benefit-card">
               <div className="benefit-icon">🔒</div>
-              <h3>Risk Mitigation</h3>
-              <p>Comprehensive risk assessment and management at every stage</p>
+              <h3>{getText({
+                en: 'Risk Mitigation',
+                ar: 'تخفيف المخاطر',
+                fr: 'Atténuation des risques'
+              })}</h3>
+              <p>{getText({
+                en: 'Comprehensive risk assessment and management at every stage',
+                ar: 'تقييم شامل للمخاطر وإدارتها في كل مرحلة',
+                fr: 'Évaluation et gestion complètes des risques à chaque étape'
+              })}</p>
             </div>
             <div className="benefit-card">
               <div className="benefit-icon">📈</div>
-              <h3>Proven Results</h3>
-              <p>Track record of successful transactions and satisfied clients</p>
+              <h3>{getText({
+                en: 'Proven Results',
+                ar: 'نتائج مثبتة',
+                fr: 'Résultats éprouvés'
+              })}</h3>
+              <p>{getText({
+                en: 'Track record of successful transactions and satisfied clients',
+                ar: 'سجل حافل بالمعاملات الناجحة والعملاء الراضين',
+                fr: 'Antécédents de transactions réussies et de clients satisfaits'
+              })}</p>
             </div>
           </div>
         </div>
@@ -202,16 +262,32 @@ const OurProcess: React.FC = () => {
       <section className="section section-light">
         <div className="container">
           <div className="cta-content" style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
-            <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Experience Our Process</h2>
+            <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>{getText({
+              en: 'Experience Our Process',
+              ar: 'اختبر عمليتنا',
+              fr: 'Découvrez notre processus'
+            })}</h2>
             <p style={{ fontSize: '1.2rem', marginBottom: '2rem', color: 'var(--gray)' }}>
-              Ready to see how our proven process can work for you? Let's start your real estate journey today.
+              {getText({
+                en: 'Ready to see how our proven process can work for you? Let\'s start your real estate journey today.',
+                ar: 'هل أنت مستعد لرؤية كيف يمكن لعمليتنا المثبتة أن تعمل من أجلك؟ دعنا نبدأ رحلتك العقارية اليوم.',
+                fr: 'Prêt à voir comment notre processus éprouvé peut fonctionner pour vous? Commençons votre parcours immobilier aujourd\'hui.'
+              })}
             </p>
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
               <Link to="/contact" className="btn-primary-enhanced">
-                Start Your Journey
+                {getText({
+                  en: 'Start Your Journey',
+                  ar: 'ابدأ رحلتك',
+                  fr: 'Commencez votre parcours'
+                })}
               </Link>
               <Link to="/our-partners" className="btn-secondary-enhanced">
-                Meet Our Partners
+                {getText({
+                  en: 'Meet Our Partners',
+                  ar: 'تعرف على شركائنا',
+                  fr: 'Rencontrez nos partenaires'
+                })}
               </Link>
             </div>
           </div>

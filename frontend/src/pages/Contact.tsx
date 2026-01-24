@@ -185,8 +185,16 @@ const Contact: React.FC = () => {
             {/* Contact Information */}
             <div className="contact-info visual-enhanced">
               <div className="section-header">
-                <h3 className="section-title">Get in Touch</h3>
-                <p className="section-subtitle">We're here to help you with all your real estate needs</p>
+                <h3 className="section-title">{getText({
+                  en: 'Get in Touch',
+                  ar: 'تواصل معنا',
+                  fr: 'Contactez-nous'
+                })}</h3>
+                <p className="section-subtitle">{getText({
+                  en: "We're here to help you with all your real estate needs",
+                  ar: 'نحن هنا لمساعدتك في جميع احتياجاتك العقارية',
+                  fr: 'Nous sommes là pour vous aider dans tous vos besoins immobiliers'
+                })}</p>
               </div>
 
               <div className="contact-items">
@@ -197,9 +205,17 @@ const Contact: React.FC = () => {
                     </svg>
                   </div>
                   <div className="contact-details">
-                    <h4>Head Office</h4>
+                    <h4>{getText({
+                      en: 'Head Office',
+                      ar: 'المقر الرئيسي',
+                      fr: 'Siège social'
+                    })}</h4>
                     <p>{getText(contactInfo.address)}</p>
-                    <span className="contact-description">Visit our main office for in-person consultations</span>
+                    <span className="contact-description">{getText({
+                      en: 'Visit our main office for in-person consultations',
+                      ar: 'قم بزيارة مكتبنا الرئيسي للاستشارات الشخصية',
+                      fr: 'Visitez notre bureau principal pour des consultations en personne'
+                    })}</span>
                   </div>
                 </div>
 
@@ -210,9 +226,17 @@ const Contact: React.FC = () => {
                     </svg>
                   </div>
                   <div className="contact-details">
-                    <h4>Phone</h4>
+                    <h4>{getText({
+                      en: 'Phone',
+                      ar: 'الهاتف',
+                      fr: 'Téléphone'
+                    })}</h4>
                     <p>{contactInfo.phone}</p>
-                    <span className="contact-description">Call us for immediate assistance</span>
+                    <span className="contact-description">{getText({
+                      en: 'Call us for immediate assistance',
+                      ar: 'اتصل بنا للحصول على مساعدة فورية',
+                      fr: 'Appelez-nous pour une assistance immédiate'
+                    })}</span>
                   </div>
                 </div>
 
@@ -223,9 +247,17 @@ const Contact: React.FC = () => {
                     </svg>
                   </div>
                   <div className="contact-details">
-                    <h4>Email</h4>
+                    <h4>{getText({
+                      en: 'Email',
+                      ar: 'البريد الإلكتروني',
+                      fr: 'E-mail'
+                    })}</h4>
                     <p>{contactInfo.email}</p>
-                    <span className="contact-description">Send us your inquiries anytime</span>
+                    <span className="contact-description">{getText({
+                      en: 'Send us your inquiries anytime',
+                      ar: 'أرسل لنا استفساراتك في أي وقت',
+                      fr: 'Envoyez-nous vos demandes à tout moment'
+                    })}</span>
                   </div>
                 </div>
 
@@ -236,23 +268,63 @@ const Contact: React.FC = () => {
                     </svg>
                   </div>
                   <div className="contact-details">
-                    <h4>Business Hours</h4>
+                    <h4>{getText({
+                      en: 'Business Hours',
+                      ar: 'ساعات العمل',
+                      fr: 'Heures d\'ouverture'
+                    })}</h4>
                     <p>{getText(contactInfo.businessHours)}</p>
-                    <span className="contact-description">We're available during business hours</span>
+                    <span className="contact-description">{getText({
+                      en: "We're available during business hours",
+                      ar: 'نحن متاحون خلال ساعات العمل',
+                      fr: 'Nous sommes disponibles pendant les heures de bureau'
+                    })}</span>
                   </div>
                 </div>
               </div>
 
               <div className="regional-offices">
-                <h4>Regional Network</h4>
+                <h4>{getText({
+                  en: 'Regional Network',
+                  ar: 'الشبكة الإقليمية',
+                  fr: 'Réseau régional'
+                })}</h4>
                 <div className="offices-grid">
-                  <div className="office-item">🇸🇦 Saudi Arabia</div>
-                  <div className="office-item">🇦🇪 UAE</div>
-                  <div className="office-item">🇪🇬 Egypt</div>
-                  <div className="office-item">🇫🇷 France</div>
-                  <div className="office-item">🇲🇦 Morocco</div>
-                  <div className="office-item">🇴🇲 Oman</div>
-                  <div className="office-item">🇹🇷 Turkey</div>
+                  <div className="office-item">🇸🇦 {getText({
+                    en: 'Saudi Arabia',
+                    ar: 'المملكة العربية السعودية',
+                    fr: 'Arabie Saoudite'
+                  })}</div>
+                  <div className="office-item">🇦🇪 {getText({
+                    en: 'UAE',
+                    ar: 'الإمارات العربية المتحدة',
+                    fr: 'Émirats Arabes Unis'
+                  })}</div>
+                  <div className="office-item">🇪🇬 {getText({
+                    en: 'Egypt',
+                    ar: 'مصر',
+                    fr: 'Égypte'
+                  })}</div>
+                  <div className="office-item">🇫🇷 {getText({
+                    en: 'France',
+                    ar: 'فرنسا',
+                    fr: 'France'
+                  })}</div>
+                  <div className="office-item">🇲🇦 {getText({
+                    en: 'Morocco',
+                    ar: 'المغرب',
+                    fr: 'Maroc'
+                  })}</div>
+                  <div className="office-item">🇴🇲 {getText({
+                    en: 'Oman',
+                    ar: 'عمان',
+                    fr: 'Oman'
+                  })}</div>
+                  <div className="office-item">🇹🇷 {getText({
+                    en: 'Turkey',
+                    ar: 'تركيا',
+                    fr: 'Turquie'
+                  })}</div>
                 </div>
               </div>
             </div>
@@ -260,8 +332,16 @@ const Contact: React.FC = () => {
             {/* Contact Form */}
             <div className="contact-form visual-enhanced">
               <div className="section-header">
-                <h3 className="section-title">Send us a Message</h3>
-                <p className="section-subtitle">Fill out the form below and we'll get back to you within 24 hours</p>
+                <h3 className="section-title">{getText({
+                  en: 'Send us a Message',
+                  ar: 'أرسل لنا رسالة',
+                  fr: 'Envoyez-nous un message'
+                })}</h3>
+                <p className="section-subtitle">{getText({
+                  en: "Fill out the form below and we'll get back to you within 24 hours",
+                  ar: 'املأ النموذج أدناه وسنرد عليك في غضون 24 ساعة',
+                  fr: 'Remplissez le formulaire ci-dessous et nous vous répondrons dans les 24 heures'
+                })}</p>
               </div>
 
               {submitStatus.type && (
@@ -282,7 +362,11 @@ const Contact: React.FC = () => {
               <form onSubmit={handleSubmit} className="contact-form-wrapper">
                 <div className="form-row">
                   <div className="form-group">
-                    <label htmlFor="name">Full Name *</label>
+                    <label htmlFor="name">{getText({
+                      en: 'Full Name *',
+                      ar: 'الاسم الكامل *',
+                      fr: 'Nom complet *'
+                    })}</label>
                     <input
                       type="text"
                       id="name"
@@ -290,12 +374,20 @@ const Contact: React.FC = () => {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      placeholder="Enter your full name"
+                      placeholder={getText({
+                        en: 'Enter your full name',
+                        ar: 'أدخل اسمك الكامل',
+                        fr: 'Entrez votre nom complet'
+                      })}
                     />
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="email">Email Address *</label>
+                    <label htmlFor="email">{getText({
+                      en: 'Email Address *',
+                      ar: 'عنوان البريد الإلكتروني *',
+                      fr: 'Adresse e-mail *'
+                    })}</label>
                     <input
                       type="email"
                       id="email"
@@ -303,41 +395,93 @@ const Contact: React.FC = () => {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      placeholder="Enter your email address"
+                      placeholder={getText({
+                        en: 'Enter your email address',
+                        ar: 'أدخل عنوان بريدك الإلكتروني',
+                        fr: 'Entrez votre adresse e-mail'
+                      })}
                     />
                   </div>
                 </div>
 
                 <div className="form-row">
                   <div className="form-group">
-                    <label htmlFor="phone">Phone Number</label>
+                    <label htmlFor="phone">{getText({
+                      en: 'Phone Number',
+                      ar: 'رقم الهاتف',
+                      fr: 'Numéro de téléphone'
+                    })}</label>
                     <input
                       type="tel"
                       id="phone"
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      placeholder="Enter your phone number"
+                      placeholder={getText({
+                        en: 'Enter your phone number',
+                        ar: 'أدخل رقم هاتفك',
+                        fr: 'Entrez votre numéro de téléphone'
+                      })}
                     />
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="propertyType">Property Interest</label>
+                    <label htmlFor="propertyType">{getText({
+                      en: 'Property Interest',
+                      ar: 'اهتمام العقار',
+                      fr: 'Intérêt immobilier'
+                    })}</label>
                     <select
                       id="propertyType"
                       name="propertyType"
                       value={formData.propertyType}
                       onChange={handleChange}
                     >
-                      <option value="">Select Property Type</option>
-                      <option value="residential-sale">Residential - Sale</option>
-                      <option value="residential-rent">Residential - Rent</option>
-                      <option value="commercial-sale">Commercial - Sale</option>
-                      <option value="commercial-rent">Commercial - Rent</option>
-                      <option value="investment">Investment Opportunities</option>
-                      <option value="development">Development Projects</option>
-                      <option value="property-management">Property Management</option>
-                      <option value="other">Other Services</option>
+                      <option value="">{getText({
+                        en: 'Select Property Type',
+                        ar: 'اختر نوع العقار',
+                        fr: 'Sélectionnez le type de propriété'
+                      })}</option>
+                      <option value="residential-sale">{getText({
+                        en: 'Residential - Sale',
+                        ar: 'سكني - بيع',
+                        fr: 'Résidentiel - Vente'
+                      })}</option>
+                      <option value="residential-rent">{getText({
+                        en: 'Residential - Rent',
+                        ar: 'سكني - إيجار',
+                        fr: 'Résidentiel - Location'
+                      })}</option>
+                      <option value="commercial-sale">{getText({
+                        en: 'Commercial - Sale',
+                        ar: 'تجاري - بيع',
+                        fr: 'Commercial - Vente'
+                      })}</option>
+                      <option value="commercial-rent">{getText({
+                        en: 'Commercial - Rent',
+                        ar: 'تجاري - إيجار',
+                        fr: 'Commercial - Location'
+                      })}</option>
+                      <option value="investment">{getText({
+                        en: 'Investment Opportunities',
+                        ar: 'فرص الاستثمار',
+                        fr: 'Opportunités d\'investissement'
+                      })}</option>
+                      <option value="development">{getText({
+                        en: 'Development Projects',
+                        ar: 'مشاريع التطوير',
+                        fr: 'Projets de développement'
+                      })}</option>
+                      <option value="property-management">{getText({
+                        en: 'Property Management',
+                        ar: 'إدارة الممتلكات',
+                        fr: 'Gestion immobilière'
+                      })}</option>
+                      <option value="other">{getText({
+                        en: 'Other Services',
+                        ar: 'خدمات أخرى',
+                        fr: 'Autres services'
+                      })}</option>
                     </select>
                   </div>
                 </div>

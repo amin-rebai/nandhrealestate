@@ -79,11 +79,22 @@ const OurServices: React.FC = () => {
         </div>
         <div className="hero-content">
           <div className="container">
-            <h1 className="hero-title">Our Services</h1>
-            <p className="hero-subtitle">Comprehensive Real Estate Solutions</p>
+            <h1 className="hero-title">{getText({
+              en: 'Our Services',
+              ar: 'خدماتنا',
+              fr: 'Nos services'
+            })}</h1>
+            <p className="hero-subtitle">{getText({
+              en: 'Comprehensive Real Estate Solutions',
+              ar: 'حلول عقارية شاملة',
+              fr: 'Solutions immobilières complètes'
+            })}</p>
             <p className="hero-description">
-              From sales and leasing to property management and development, we provide
-              end-to-end real estate services tailored to your needs.
+              {getText({
+                en: 'From sales and leasing to property management and development, we provide end-to-end real estate services tailored to your needs.',
+                ar: 'من البيع والإيجار إلى إدارة الممتلكات والتطوير، نقدم خدمات عقارية شاملة مصممة خصيصاً لاحتياجاتك.',
+                fr: 'De la vente et la location à la gestion immobilière et au développement, nous fournissons des services immobiliers complets adaptés à vos besoins.'
+              })}
             </p>
           </div>
         </div>
@@ -93,8 +104,16 @@ const OurServices: React.FC = () => {
       <section className="section section-light">
         <div className="container">
           <div className="section-header">
-            <h2>Complete Real Estate Solutions</h2>
-            <p>We offer a comprehensive range of services designed to meet all your real estate needs</p>
+            <h2>{getText({
+              en: 'Complete Real Estate Solutions',
+              ar: 'حلول عقارية كاملة',
+              fr: 'Solutions immobilières complètes'
+            })}</h2>
+            <p>{getText({
+              en: 'We offer a comprehensive range of services designed to meet all your real estate needs',
+              ar: 'نقدم مجموعة شاملة من الخدمات المصممة لتلبية جميع احتياجاتك العقارية',
+              fr: 'Nous offrons une gamme complète de services conçus pour répondre à tous vos besoins immobiliers'
+            })}</p>
           </div>
 
           {loading ? (
@@ -130,16 +149,32 @@ const OurServices: React.FC = () => {
       <section className="section section-dark">
         <div className="container">
           <div className="cta-content" style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
-            <h2 style={{ color: 'white', fontSize: '2.5rem', marginBottom: '1rem' }}>Ready to Get Started?</h2>
+            <h2 style={{ color: 'white', fontSize: '2.5rem', marginBottom: '1rem' }}>{getText({
+              en: 'Ready to Get Started?',
+              ar: 'هل أنت مستعد للبدء؟',
+              fr: 'Prêt à commencer?'
+            })}</h2>
             <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '1.2rem', marginBottom: '2rem' }}>
-              Contact our expert team to discuss your real estate needs and discover how we can help you achieve your goals.
+              {getText({
+                en: 'Contact our expert team to discuss your real estate needs and discover how we can help you achieve your goals.',
+                ar: 'اتصل بفريقنا الخبير لمناقشة احتياجاتك العقارية واكتشف كيف يمكننا مساعدتك في تحقيق أهدافك.',
+                fr: 'Contactez notre équipe d\'experts pour discuter de vos besoins immobiliers et découvrez comment nous pouvons vous aider à atteindre vos objectifs.'
+              })}
             </p>
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
               <Link to="/contact" className="btn-primary-enhanced">
-                Contact Us Today
+                {getText({
+                  en: 'Contact Us Today',
+                  ar: 'اتصل بنا اليوم',
+                  fr: 'Contactez-nous aujourd\'hui'
+                })}
               </Link>
               <Link to="/our-process" className="btn-secondary-enhanced">
-                Learn Our Process
+                {getText({
+                  en: 'Learn Our Process',
+                  ar: 'تعرف على عمليتنا',
+                  fr: 'Découvrez notre processus'
+                })}
               </Link>
             </div>
           </div>

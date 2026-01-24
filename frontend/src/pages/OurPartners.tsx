@@ -107,11 +107,22 @@ const OurPartners: React.FC = () => {
         </div>
         <div className="hero-content">
           <div className="container">
-            <h1 className="hero-title">Our Partners</h1>
-            <p className="hero-subtitle">Building Success Through Strategic Alliances</p>
+            <h1 className="hero-title">{getText({
+              en: 'Our Partners',
+              ar: 'شركاؤنا',
+              fr: 'Nos partenaires'
+            })}</h1>
+            <p className="hero-subtitle">{getText({
+              en: 'Building Success Through Strategic Alliances',
+              ar: 'بناء النجاح من خلال التحالفات الاستراتيجية',
+              fr: 'Construire le succès par des alliances stratégiques'
+            })}</p>
             <p className="hero-description">
-              We collaborate with industry leaders, financial institutions, and technology
-              partners to deliver exceptional value and comprehensive solutions.
+              {getText({
+                en: 'We collaborate with industry leaders, financial institutions, and technology partners to deliver exceptional value and comprehensive solutions.',
+                ar: 'نتعاون مع قادة الصناعة والمؤسسات المالية وشركاء التكنولوجيا لتقديم قيمة استثنائية وحلول شاملة.',
+                fr: 'Nous collaborons avec les leaders de l\'industrie, les institutions financières et les partenaires technologiques pour offrir une valeur exceptionnelle et des solutions complètes.'
+              })}
             </p>
           </div>
         </div>
@@ -121,8 +132,16 @@ const OurPartners: React.FC = () => {
       <section className="section section-light">
         <div className="container">
           <div className="section-header">
-            <h2>Strategic Partnership Network</h2>
-            <p>Our carefully selected partners enable us to provide comprehensive real estate solutions</p>
+            <h2>{getText({
+              en: 'Strategic Partnership Network',
+              ar: 'شبكة الشراكة الاستراتيجية',
+              fr: 'Réseau de partenariat stratégique'
+            })}</h2>
+            <p>{getText({
+              en: 'Our carefully selected partners enable us to provide comprehensive real estate solutions',
+              ar: 'يمكّننا شركاؤنا المختارون بعناية من تقديم حلول عقارية شاملة',
+              fr: 'Nos partenaires soigneusement sélectionnés nous permettent de fournir des solutions immobilières complètes'
+            })}</p>
           </div>
 
           {loading ? (
@@ -158,42 +177,98 @@ const OurPartners: React.FC = () => {
       <section className="section section-dark">
         <div className="container">
           <div className="section-header">
-            <h2 style={{ color: 'white' }}>Global Network</h2>
+            <h2 style={{ color: 'white' }}>{getText({
+              en: 'Global Network',
+              ar: 'الشبكة العالمية',
+              fr: 'Réseau mondial'
+            })}</h2>
             <p style={{ color: 'rgba(255,255,255,0.9)' }}>
-              Our international partnerships span across key markets worldwide
+              {getText({
+                en: 'Our international partnerships span across key markets worldwide',
+                ar: 'تمتد شراكاتنا الدولية عبر الأسواق الرئيسية في جميع أنحاء العالم',
+                fr: 'Nos partenariats internationaux s\'étendent sur les marchés clés du monde entier'
+              })}
             </p>
           </div>
 
           <div className="global-network-grid">
             <div className="network-region">
               <div className="region-flag">🇶🇦</div>
-              <h3>Qatar</h3>
-              <p>Leading developers, banks, and government entities</p>
+              <h3>{getText({
+                en: 'Qatar',
+                ar: 'قطر',
+                fr: 'Qatar'
+              })}</h3>
+              <p>{getText({
+                en: 'Leading developers, banks, and government entities',
+                ar: 'المطورون والبنوك والجهات الحكومية الرائدة',
+                fr: 'Promoteurs, banques et entités gouvernementales de premier plan'
+              })}</p>
             </div>
             <div className="network-region">
               <div className="region-flag">🇦🇪</div>
-              <h3>UAE</h3>
-              <p>Dubai and Abu Dhabi's premier real estate networks</p>
+              <h3>{getText({
+                en: 'UAE',
+                ar: 'الإمارات العربية المتحدة',
+                fr: 'EAU'
+              })}</h3>
+              <p>{getText({
+                en: 'Dubai and Abu Dhabi\'s premier real estate networks',
+                ar: 'شبكات العقارات الرائدة في دبي وأبو ظبي',
+                fr: 'Réseaux immobiliers de premier plan de Dubaï et Abu Dhabi'
+              })}</p>
             </div>
             <div className="network-region">
               <div className="region-flag">🇸🇦</div>
-              <h3>Saudi Arabia</h3>
-              <p>Vision 2030 development partners and investors</p>
+              <h3>{getText({
+                en: 'Saudi Arabia',
+                ar: 'المملكة العربية السعودية',
+                fr: 'Arabie Saoudite'
+              })}</h3>
+              <p>{getText({
+                en: 'Vision 2030 development partners and investors',
+                ar: 'شركاء التطوير والمستثمرون في رؤية 2030',
+                fr: 'Partenaires de développement et investisseurs Vision 2030'
+              })}</p>
             </div>
             <div className="network-region">
               <div className="region-flag">🇪🇬</div>
-              <h3>Egypt</h3>
-              <p>New Capital and coastal development specialists</p>
+              <h3>{getText({
+                en: 'Egypt',
+                ar: 'مصر',
+                fr: 'Égypte'
+              })}</h3>
+              <p>{getText({
+                en: 'New Capital and coastal development specialists',
+                ar: 'متخصصو العاصمة الجديدة والتطوير الساحلي',
+                fr: 'Spécialistes de la nouvelle capitale et du développement côtier'
+              })}</p>
             </div>
             <div className="network-region">
               <div className="region-flag">🇫🇷</div>
-              <h3>France</h3>
-              <p>Luxury property and investment advisors</p>
+              <h3>{getText({
+                en: 'France',
+                ar: 'فرنسا',
+                fr: 'France'
+              })}</h3>
+              <p>{getText({
+                en: 'Luxury property and investment advisors',
+                ar: 'مستشارو الممتلكات الفاخرة والاستثمار',
+                fr: 'Conseillers en propriété de luxe et investissement'
+              })}</p>
             </div>
             <div className="network-region">
               <div className="region-flag">🇲🇦</div>
-              <h3>Morocco</h3>
-              <p>Emerging market development partners</p>
+              <h3>{getText({
+                en: 'Morocco',
+                ar: 'المغرب',
+                fr: 'Maroc'
+              })}</h3>
+              <p>{getText({
+                en: 'Emerging market development partners',
+                ar: 'شركاء تطوير الأسواق الناشئة',
+                fr: 'Partenaires de développement des marchés émergents'
+              })}</p>
             </div>
           </div>
         </div>
@@ -203,14 +278,22 @@ const OurPartners: React.FC = () => {
       <section className="section section-light">
         <div className="container">
           <div className="section-header">
-            <h2>Partnership Benefits</h2>
-            <p>How our strategic alliances benefit our clients</p>
+            <h2>{getText({
+              en: 'Partnership Benefits',
+              ar: 'فوائد الشراكة',
+              fr: 'Avantages du partenariat'
+            })}</h2>
+            <p>{getText({
+              en: 'How our strategic alliances benefit our clients',
+              ar: 'كيف تفيد تحالفاتنا الاستراتيجية عملاءنا',
+              fr: 'Comment nos alliances stratégiques bénéficient à nos clients'
+            })}</p>
           </div>
 
           <div className="benefits-showcase-grid">
             <div className="benefit-showcase visual-enhanced">
               <div className="benefit-image">
-                <img 
+                <img
                   src="https://images.unsplash.com/photo-1556761175-4b46a572b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                   alt="Comprehensive Solutions"
                   className="benefit-img"
@@ -218,17 +301,24 @@ const OurPartners: React.FC = () => {
                 <div className="benefit-icon">🎯</div>
               </div>
               <div className="benefit-content">
-                <h3>Comprehensive Solutions</h3>
+                <h3>{getText({
+                  en: 'Comprehensive Solutions',
+                  ar: 'حلول شاملة',
+                  fr: 'Solutions complètes'
+                })}</h3>
                 <p>
-                  Access to a complete ecosystem of real estate services through 
-                  our partner network, ensuring all your needs are met under one roof.
+                  {getText({
+                    en: 'Access to a complete ecosystem of real estate services through our partner network, ensuring all your needs are met under one roof.',
+                    ar: 'الوصول إلى نظام بيئي كامل لخدمات العقارات من خلال شبكة شركائنا، مما يضمن تلبية جميع احتياجاتك تحت سقف واحد.',
+                    fr: 'Accès à un écosystème complet de services immobiliers via notre réseau de partenaires, garantissant que tous vos besoins sont satisfaits sous un même toit.'
+                  })}
                 </p>
               </div>
             </div>
 
             <div className="benefit-showcase visual-enhanced">
               <div className="benefit-image">
-                <img 
+                <img
                   src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                   alt="Competitive Advantages"
                   className="benefit-img"
@@ -236,17 +326,24 @@ const OurPartners: React.FC = () => {
                 <div className="benefit-icon">⚡</div>
               </div>
               <div className="benefit-content">
-                <h3>Competitive Advantages</h3>
+                <h3>{getText({
+                  en: 'Competitive Advantages',
+                  ar: 'مزايا تنافسية',
+                  fr: 'Avantages concurrentiels'
+                })}</h3>
                 <p>
-                  Leverage our partners' expertise and resources to secure better 
-                  deals, faster approvals, and exclusive opportunities.
+                  {getText({
+                    en: 'Leverage our partners\' expertise and resources to secure better deals, faster approvals, and exclusive opportunities.',
+                    ar: 'استفد من خبرة شركائنا ومواردهم للحصول على صفقات أفضل وموافقات أسرع وفرص حصرية.',
+                    fr: 'Tirez parti de l\'expertise et des ressources de nos partenaires pour obtenir de meilleures offres, des approbations plus rapides et des opportunités exclusives.'
+                  })}
                 </p>
               </div>
             </div>
 
             <div className="benefit-showcase visual-enhanced">
               <div className="benefit-image">
-                <img 
+                <img
                   src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                   alt="Quality Assurance"
                   className="benefit-img"
@@ -254,10 +351,17 @@ const OurPartners: React.FC = () => {
                 <div className="benefit-icon">✅</div>
               </div>
               <div className="benefit-content">
-                <h3>Quality Assurance</h3>
+                <h3>{getText({
+                  en: 'Quality Assurance',
+                  ar: 'ضمان الجودة',
+                  fr: 'Assurance qualité'
+                })}</h3>
                 <p>
-                  All our partners are carefully vetted and selected based on their 
-                  track record, expertise, and commitment to excellence.
+                  {getText({
+                    en: 'All our partners are carefully vetted and selected based on their track record, expertise, and commitment to excellence.',
+                    ar: 'يتم فحص جميع شركائنا بعناية واختيارهم بناءً على سجلهم وخبرتهم والتزامهم بالتميز.',
+                    fr: 'Tous nos partenaires sont soigneusement vérifiés et sélectionnés en fonction de leurs antécédents, de leur expertise et de leur engagement envers l\'excellence.'
+                  })}
                 </p>
               </div>
             </div>
@@ -269,17 +373,32 @@ const OurPartners: React.FC = () => {
       <section className="section section-dark">
         <div className="container">
           <div className="cta-content" style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
-            <h2 style={{ color: 'white', fontSize: '2.5rem', marginBottom: '1rem' }}>Join Our Network</h2>
+            <h2 style={{ color: 'white', fontSize: '2.5rem', marginBottom: '1rem' }}>{getText({
+              en: 'Join Our Network',
+              ar: 'انضم إلى شبكتنا',
+              fr: 'Rejoignez notre réseau'
+            })}</h2>
             <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '1.2rem', marginBottom: '2rem' }}>
-              Interested in partnering with us? We're always looking for strategic alliances 
-              that can enhance our service offerings and client value.
+              {getText({
+                en: 'Interested in partnering with us? We\'re always looking for strategic alliances that can enhance our service offerings and client value.',
+                ar: 'هل أنت مهتم بالشراكة معنا؟ نحن نبحث دائماً عن تحالفات استراتيجية يمكنها تحسين عروض خدماتنا وقيمة العميل.',
+                fr: 'Intéressé par un partenariat avec nous? Nous recherchons toujours des alliances stratégiques qui peuvent améliorer nos offres de services et la valeur client.'
+              })}
             </p>
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
               <Link to="/contact" className="btn-primary-enhanced">
-                Partner With Us
+                {getText({
+                  en: 'Partner With Us',
+                  ar: 'شارك معنا',
+                  fr: 'Partenaire avec nous'
+                })}
               </Link>
               <Link to="/our-services" className="btn-secondary-enhanced">
-                Explore Our Services
+                {getText({
+                  en: 'Explore Our Services',
+                  ar: 'استكشف خدماتنا',
+                  fr: 'Explorez nos services'
+                })}
               </Link>
             </div>
           </div>
