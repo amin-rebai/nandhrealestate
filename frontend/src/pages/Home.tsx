@@ -142,6 +142,11 @@ const Home: React.FC = () => {
       }
     };
     fetchProperties();
+
+    // Set up polling to refresh featured properties every 30 seconds
+    const pollInterval = setInterval(fetchProperties, 30000);
+
+    return () => clearInterval(pollInterval);
   }, [featuredPropertiesConfig]);
 
   const getText = (text: MultilingualText | string | undefined): string => {

@@ -87,8 +87,14 @@ const About: React.FC = () => {
         <div className="vision-fullwidth-overlay"></div>
         <div className="vision-fullwidth-content">
           <div className="vision-icon">🎯</div>
-          <h2>Our Vision</h2>
-          <p>{displayML(getMeta('vision', 'To be the region\'s most trusted and innovative real estate partner, delivering excellence and sustainable growth through professionalism, technology, and client-focused solutions.'))}</p>
+          <h2>{displayML({
+            en: 'Our Vision',
+            ar: 'رؤيتنا'
+          })}</h2>
+          <p>{displayML(getMeta('vision', {
+            en: 'To be the region\'s most trusted and innovative real estate partner, delivering excellence and sustainable growth through professionalism, technology, and client-focused solutions.',
+            ar: 'أن نكون الشريك العقاري الأكثر موثوقية وابتكاراً في المنطقة، ونقدم التميز والنمو المستدام من خلال الاحترافية والتكنولوجيا والحلول الموجهة للعملاء.'
+          }))}</p>
         </div>
       </section>
 
@@ -102,8 +108,14 @@ const About: React.FC = () => {
         <div className="mission-fullwidth-overlay"></div>
         <div className="mission-fullwidth-content">
           <div className="mission-icon">🚀</div>
-          <h2>Our Mission</h2>
-          <p>{displayML(getMeta('mission', 'Our mission is to simplify the real estate journey through end-to-end services, delivering measurable value powered by market insights and modern tools.'))}</p>
+          <h2>{displayML({
+            en: 'Our Mission',
+            ar: 'مهمتنا'
+          })}</h2>
+          <p>{displayML(getMeta('mission', {
+            en: 'Our mission is to simplify the real estate journey through end-to-end services, delivering measurable value powered by market insights and modern tools.',
+            ar: 'مهمتنا هي تبسيط رحلة العقارات من خلال الخدمات الشاملة، وتقديم قيمة قابلة للقياس مدعومة برؤى السوق والأدوات الحديثة.'
+          }))}</p>
         </div>
       </section>
 
@@ -166,11 +178,14 @@ const About: React.FC = () => {
       <section className="section section-light">
         <div className="container">
           <div className="section-header">
-            <h2>Our Worldwide Network</h2>
-            <p>
-              N&H Homes Real Estate operates across a global network of premium real estate markets, 
-              connecting clients to opportunities in the Gulf, MENA, and Europe.
-            </p>
+            <h2>{displayML({
+              en: 'Our Worldwide Network',
+              ar: 'شبكتنا العالمية'
+            })}</h2>
+            <p>{displayML({
+              en: 'N&H Homes Real Estate operates across a global network of premium real estate markets, connecting clients to opportunities in the Gulf, MENA, and Europe.',
+              ar: 'تعمل N&H Homes Real Estate عبر شبكة عالمية من أسواق العقارات الفاخرة، وتربط العملاء بالفرص في الخليج والشرق الأوسط وشمال أفريقيا وأوروبا.'
+            })}</p>
           </div>
           <div className="network-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', marginTop: '3rem' }}>
             {Array.isArray(aboutSection?.metadata?.worldwideNetwork) && aboutSection?.metadata?.worldwideNetwork.map((item: any, idx: number) => (
@@ -183,9 +198,10 @@ const About: React.FC = () => {
           </div>
           <div style={{ textAlign: 'center', marginTop: '3rem' }}>
             <p style={{ fontSize: '1.1rem', color: 'var(--text-light)' }}>
-              Through this worldwide reach, our clients gain access to exclusive off-market listings, 
-              cross-border investment opportunities, and seamless transactions supported by local 
-              expertise and global standards.
+              {displayML({
+                en: 'Through this worldwide reach, our clients gain access to exclusive off-market listings, cross-border investment opportunities, and seamless transactions supported by local expertise and global standards.',
+                ar: 'من خلال هذا الوصول العالمي، يحصل عملاؤنا على إمكانية الوصول إلى قوائم حصرية خارج السوق وفرص استثمار عابرة للحدود وعمليات سلسة مدعومة بالخبرة المحلية والمعايير العالمية.'
+              })}
             </p>
           </div>
         </div>
@@ -195,8 +211,14 @@ const About: React.FC = () => {
       <section className="section section-dark">
         <div className="container">
           <div className="section-header">
-            <h2>Why Choose N&H Homes Real Estate</h2>
-            <p>What sets us apart in the competitive real estate market</p>
+            <h2>{displayML({
+              en: 'Why Choose N&H Homes Real Estate',
+              ar: 'لماذا تختار N&H Homes Real Estate'
+            })}</h2>
+            <p>{displayML({
+              en: 'What sets us apart in the competitive real estate market',
+              ar: 'ما يميزنا في سوق العقارات التنافسي'
+            })}</p>
           </div>
           <div className="why-choose-grid values-grid">
             {Array.isArray(aboutSection?.metadata?.whyChoose) && aboutSection?.metadata?.whyChoose.map((item: any, idx: number) => (
@@ -208,28 +230,58 @@ const About: React.FC = () => {
             ))}
             <div className="value-card">
               <div className="value-icon">🔑</div>
-              <h3>Exclusive Listings</h3>
-              <p>Premium projects not available on the open market with early access opportunities</p>
+              <h3>{displayML({
+                en: 'Exclusive Listings',
+                ar: 'قوائم حصرية'
+              })}</h3>
+              <p>{displayML({
+                en: 'Premium projects not available on the open market with early access opportunities',
+                ar: 'مشاريع فاخرة غير متاحة في السوق المفتوحة مع فرص الوصول المبكر'
+              })}</p>
             </div>
             <div className="value-card">
               <div className="value-icon">🔄</div>
-              <h3>Comprehensive Support</h3>
-              <p>From purchase to furnishing, management, and exit strategies</p>
+              <h3>{displayML({
+                en: 'Comprehensive Support',
+                ar: 'دعم شامل'
+              })}</h3>
+              <p>{displayML({
+                en: 'From purchase to furnishing, management, and exit strategies',
+                ar: 'من الشراء إلى التأثيث والإدارة واستراتيجيات الخروج'
+              })}</p>
             </div>
             <div className="value-card">
               <div className="value-icon">🤝</div>
-              <h3>Trusted Partnerships</h3>
-              <p>Strong relationships with developers, landlords, and institutions</p>
+              <h3>{displayML({
+                en: 'Trusted Partnerships',
+                ar: 'شراكات موثوقة'
+              })}</h3>
+              <p>{displayML({
+                en: 'Strong relationships with developers, landlords, and institutions',
+                ar: 'علاقات قوية مع المطورين والملاك والمؤسسات'
+              })}</p>
             </div>
             <div className="value-card">
               <div className="value-icon">⚡</div>
-              <h3>Seamless Processes</h3>
-              <p>Transparent, efficient, and client-focused service delivery</p>
+              <h3>{displayML({
+                en: 'Seamless Processes',
+                ar: 'عمليات سلسة'
+              })}</h3>
+              <p>{displayML({
+                en: 'Transparent, efficient, and client-focused service delivery',
+                ar: 'تقديم خدمات شفافة وفعالة وموجهة للعملاء'
+              })}</p>
             </div>
             <div className="value-card">
               <div className="value-icon">📈</div>
-              <h3>Proven Track Record</h3>
-              <p>Trusted by families, corporates, and global investors</p>
+              <h3>{displayML({
+                en: 'Proven Track Record',
+                ar: 'سجل حافل بالإنجازات'
+              })}</h3>
+              <p>{displayML({
+                en: 'Trusted by families, corporates, and global investors',
+                ar: 'موثوق به من قبل العائلات والشركات والمستثمرين العالميين'
+              })}</p>
             </div>
           </div>
         </div>
@@ -239,40 +291,66 @@ const About: React.FC = () => {
       <section className="section section-light">
         <div className="container">
           <div className="section-header">
-            <h2>What Our Clients Say</h2>
-            <p>Real experiences from satisfied clients across our global network</p>
+            <h2>{displayML({
+              en: 'What Our Clients Say',
+              ar: 'ماذا يقول عملاؤنا'
+            })}</h2>
+            <p>{displayML({
+              en: 'Real experiences from satisfied clients across our global network',
+              ar: 'تجارب حقيقية من عملاء راضين عبر شبكتنا العالمية'
+            })}</p>
           </div>
           <div className="testimonials-grid">
             <div className="testimonial-card">
               <p className="testimonial-text">
-                N&H Homes Real Estate guided us through our first investment in Qatar with professionalism 
-                and transparency. Every step was clear and well-managed.
+                {displayML({
+                  en: 'N&H Homes Real Estate guided us through our first investment in Qatar with professionalism and transparency. Every step was clear and well-managed.',
+                  ar: 'وجهتنا N&H Homes Real Estate خلال استثمارنا الأول في قطر باحترافية وشفافية. كانت كل خطوة واضحة وموضوعة بشكل جيد.'
+                })}
               </p>
-              <div className="testimonial-author">Private Investor</div>
+              <div className="testimonial-author">{displayML({
+                en: 'Private Investor',
+                ar: 'مستثمر خاص'
+              })}</div>
               <div className="testimonial-role">KSA</div>
             </div>
             <div className="testimonial-card">
               <p className="testimonial-text">
-                Thanks to their international network, we were able to expand our portfolio from 
-                Doha to Paris seamlessly. Their team handled everything with precision.
+                {displayML({
+                  en: 'Thanks to their international network, we were able to expand our portfolio from Doha to Paris seamlessly. Their team handled everything with precision.',
+                  ar: 'بفضل شبكتهم الدولية، تمكنا من توسيع محفظتنا من الدوحة إلى باريس بسلاسة. تعامل فريقهم مع كل شيء بدقة.'
+                })}
               </p>
-              <div className="testimonial-author">Institutional Investor</div>
+              <div className="testimonial-author">{displayML({
+                en: 'Institutional Investor',
+                ar: 'مستثمر مؤسسي'
+              })}</div>
               <div className="testimonial-role">France</div>
             </div>
             <div className="testimonial-card">
               <p className="testimonial-text">
-                N&H Homes Real Estate manages our properties in Lusail with complete efficiency. We have 
-                higher occupancy and better tenant satisfaction than ever before.
+                {displayML({
+                  en: 'N&H Homes Real Estate manages our properties in Lusail with complete efficiency. We have higher occupancy and better tenant satisfaction than ever before.',
+                  ar: 'تدير N&H Homes Real Estate ممتلكاتنا في لوسيل بكفاءة كاملة. لدينا معدل إشغال أعلى ورضا أفضل للمستأجرين من أي وقت مضى.'
+                })}
               </p>
-              <div className="testimonial-author">Property Owner</div>
+              <div className="testimonial-author">{displayML({
+                en: 'Property Owner',
+                ar: 'مالك عقار'
+              })}</div>
               <div className="testimonial-role">Qatar</div>
             </div>
             <div className="testimonial-card">
               <p className="testimonial-text">
-                From market insights to after-sales support, N&H Homes Real Estate exceeded our expectations. 
-                They truly care about long-term client success.
+                {displayML({
+                  en: 'From market insights to after-sales support, N&H Homes Real Estate exceeded our expectations. They truly care about long-term client success.',
+                  ar: 'من رؤى السوق إلى الدعم بعد البيع، تجاوزت N&H Homes Real Estate توقعاتنا. إنهم يهتمون حقاً بنجاح العملاء على المدى الطويل.'
+                })}
               </p>
-              <div className="testimonial-author">Developer Partner</div>
+              <div className="testimonial-author">{displayML({
+                en: 'Developer Partner',
+                ar: 'شريك مطور'
+              })}</div>
               <div className="testimonial-role">UAE</div>
             </div>
           </div>
