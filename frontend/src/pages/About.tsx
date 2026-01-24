@@ -137,7 +137,7 @@ const About: React.FC = () => {
                   alt={displayML(getMeta('ceo.name', 'CEO'))}
                   className="ceo-photo"
                 />
-                  <span>CEO Photo</span>
+                 
                 </div>
               )}
             </div>
