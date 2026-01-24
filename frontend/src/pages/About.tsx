@@ -131,6 +131,12 @@ const About: React.FC = () => {
                 />
               ) : (
                 <div className="ceo-photo-placeholder">
+
+                   <img
+                  src={ `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/uploads/image-1769193735256-995029133.jpeg`}
+                  alt={displayML(getMeta('ceo.name', 'CEO'))}
+                  className="ceo-photo"
+                />
                   <span>CEO Photo</span>
                 </div>
               )}
