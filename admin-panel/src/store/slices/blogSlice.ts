@@ -1,16 +1,17 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 
-// Multilingual text interface
+// Multilingual text interface - allows single language
 interface MultilingualText {
-  en: string;
-  ar: string;
+  en?: string;
+  ar?: string;
+  fr?: string;
 }
 
 // SEO metadata interface
 interface SEOMetadata {
-  metaTitle: MultilingualText;
-  metaDescription: MultilingualText;
-  keywords: MultilingualText;
+  metaTitle?: MultilingualText;
+  metaDescription?: MultilingualText;
+  keywords?: MultilingualText;
   canonicalUrl?: string;
   ogTitle?: MultilingualText;
   ogDescription?: MultilingualText;
@@ -35,8 +36,8 @@ export interface BlogPost {
     avatar?: string;
     bio?: MultilingualText;
   };
-  category: MultilingualText;
-  tags: MultilingualText[];
+  category?: MultilingualText;
+  tags?: MultilingualText[];
   status: 'draft' | 'published' | 'archived';
   publishedAt?: string;
   readingTime?: number;

@@ -1,9 +1,9 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-// Multilingual text interface
+// Multilingual text interface - allows single language
 interface MultilingualText {
-  en: string;
-  ar: string;
+  en?: string;
+  ar?: string;
 }
 
 // SEO metadata interface
@@ -48,10 +48,10 @@ export interface IBlog extends Document {
   updatedAt: Date;
 }
 
-// Multilingual text schema
+// Multilingual text schema - allows single language
 const multilingualTextSchema = new Schema({
-  en: { type: String, required: true },
-  ar: { type: String, required: true }
+  en: { type: String },
+  ar: { type: String }
 }, { _id: false });
 
 // SEO metadata schema
@@ -173,10 +173,10 @@ blogSchema.virtual('url').get(function () {
 blogSchema.pre('save', function (next) {
   if (this.isModified('content')) {
     const wordsPerMinute = 200;
-    const enWordCount = this.content.en.split(/\s+/).length;
-    const arWordCount = this.content.ar.split(/\s+/).length;
-    const avgWordCount = (enWordCount + arWordCount) / 2;
-    this.readingTime = Math.ceil(avgWordCount / wordsPerMinute);
+    const enWordCount = this.content?.en ? this.content.en.split(/\s+/).length : 0;
+    const arWordCount = this.content?.ar ? this.content.ar.split(/\s+/).length : 0;
+    const totalWordCount = enWordCount + arWordCount;
+    this.readingTime = totalWordCount > 0 ? Math.ceil(totalWordCount / wordsPerMinute) : 0;
   }
 
   // Set publishedAt when status changes to published

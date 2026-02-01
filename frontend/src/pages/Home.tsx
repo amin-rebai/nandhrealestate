@@ -101,9 +101,27 @@ const Home: React.FC = () => {
             fetchFromDatabase: item.metadata?.fetchFromDatabase ?? true,
             propertyCount: item.metadata?.propertyCount || 3
           });
+        } else {
+          // If no config found, use defaults with fetchFromDatabase enabled
+          console.log('No featured-properties config found, using defaults');
+          setFeaturedPropertiesConfig({
+            badge: { en: 'Featured Properties', ar: 'عقارات مميزة', fr: 'Propriétés en vedette' },
+            title: { en: 'Exceptional Properties', ar: 'عقارات استثنائية', fr: 'Propriétés exceptionnelles' },
+            subtitle: { en: 'Handpicked luxury properties that define excellence in real estate', ar: 'عقارات فاخرة مختارة بعناية', fr: 'Propriétés de luxe sélectionnées' },
+            fetchFromDatabase: true,
+            propertyCount: 3
+          });
         }
       } catch (error) {
         console.error('Error fetching featured-properties config:', error);
+        // Use defaults on error
+        setFeaturedPropertiesConfig({
+          badge: { en: 'Featured Properties', ar: 'عقارات مميزة', fr: 'Propriétés en vedette' },
+          title: { en: 'Exceptional Properties', ar: 'عقارات استثنائية', fr: 'Propriétés exceptionnelles' },
+          subtitle: { en: 'Handpicked luxury properties that define excellence in real estate', ar: 'عقارات فاخرة مختارة بعناية', fr: 'Propriétés de luxe sélectionnées' },
+          fetchFromDatabase: true,
+          propertyCount: 3
+        });
       }
     };
     fetchFeaturedPropertiesConfig();
@@ -112,18 +130,28 @@ const Home: React.FC = () => {
   // Fetch featured properties from database
   useEffect(() => {
     const fetchProperties = async () => {
-      if (!featuredPropertiesConfig?.fetchFromDatabase) return;
+      if (!featuredPropertiesConfig?.fetchFromDatabase) {
+        console.log('fetchFromDatabase is disabled, skipping featured properties fetch');
+        return;
+      }
       try {
+        console.log('Fetching featured properties with limit:', featuredPropertiesConfig.propertyCount);
         // First try to fetch properties marked as featured
         const response = await axios.get(`${API_URL}/properties/featured?limit=${featuredPropertiesConfig.propertyCount}`);
         const data = response.data?.data || response.data;
+        console.log('Featured properties response:', data);
+
         if (data && Array.isArray(data) && data.length > 0) {
+          console.log('Found featured properties:', data.length);
           setFeaturedProperties(data);
         } else {
+          console.log('No featured properties found, falling back to newest properties');
           // Fallback to newest properties if no featured properties found
           const fallbackResponse = await axios.get(`${API_URL}/properties?limit=${featuredPropertiesConfig.propertyCount}&sortBy=createdAt&order=desc`);
           const fallbackData = fallbackResponse.data?.data || fallbackResponse.data;
+          console.log('Fallback properties response:', fallbackData);
           if (fallbackData && Array.isArray(fallbackData)) {
+            console.log('Using fallback properties:', fallbackData.length);
             setFeaturedProperties(fallbackData);
           }
         }
@@ -131,9 +159,12 @@ const Home: React.FC = () => {
         console.error('Error fetching featured properties:', error);
         // Fallback to newest properties on error
         try {
+          console.log('Attempting fallback fetch due to error');
           const fallbackResponse = await axios.get(`${API_URL}/properties?limit=${featuredPropertiesConfig?.propertyCount || 3}&sortBy=createdAt&order=desc`);
           const fallbackData = fallbackResponse.data?.data || fallbackResponse.data;
+          console.log('Fallback properties response:', fallbackData);
           if (fallbackData && Array.isArray(fallbackData)) {
+            console.log('Using fallback properties:', fallbackData.length);
             setFeaturedProperties(fallbackData);
           }
         } catch (fallbackError) {
@@ -183,7 +214,7 @@ const Home: React.FC = () => {
           </div>
 
           <div className="featured-properties-grid">
-            {featuredPropertiesConfig?.fetchFromDatabase && featuredProperties.length > 0 ? (
+            {featuredProperties && featuredProperties.length > 0 ? (
               featuredProperties.map((property) => (
                 <Link to={`/properties/${property._id}`} key={property._id} className="featured-property-card">
                   <div className="property-image">

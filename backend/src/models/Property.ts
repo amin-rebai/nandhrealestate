@@ -35,7 +35,7 @@ export interface IProperty extends Document {
   bedrooms: number;
   bathrooms: number;
   area: number;
-  yearBuilt: number;
+  // yearBuilt: number;
   images: string[];
   video?: string;
   type: 'sale' | 'rent' | 'off-plan';
@@ -145,12 +145,12 @@ const PropertySchema: Schema = new Schema({
     required: [true, 'Property area is required'],
     min: [0, 'Area cannot be negative']
   },
-  yearBuilt: {
-    type: Number,
-    required: [true, 'Year built is required'],
-    min: [1900, 'Year built cannot be before 1900'],
-    max: [new Date().getFullYear() + 5, 'Year built cannot be more than 5 years in the future']
-  },
+  // yearBuilt: {
+  //   type: Number,
+  //   required: [true, 'Year built is required'],
+  //   min: [1900, 'Year built cannot be before 1900'],
+  //   max: [new Date().getFullYear() + 5, 'Year built cannot be more than 5 years in the future']
+  // },
   images: [{
     type: String,
     required: true

@@ -1,19 +1,26 @@
 export interface MultilingualValue {
   en: string;
   ar: string;
-  fr: string;
+  fr?: string;
 }
 
 export const ensureMultilingual = (value: any): MultilingualValue => {
   if (!value) {
-    return { en: '', ar: '', fr: '' };
+    return { en: '', ar: '' };
   }
 
   if (typeof value === 'string') {
-    return { en: value, ar: value, fr: value };
+    return { en: value, ar: '' };
   }
 
-  return { en: value.en || '', ar: value.ar || '', fr: value.fr || '' };
+  // Return only the languages that have content, with defaults for required fields
+  const result: MultilingualValue = {
+    en: value.en || '',
+    ar: value.ar || ''
+  };
+  if (value.fr) result.fr = value.fr;
+
+  return result;
 };
 
 export const getMultilingualValue = (value: string | MultilingualValue | undefined | null, language: 'en' | 'ar' | 'fr' = 'en'): string => {

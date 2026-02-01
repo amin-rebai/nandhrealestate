@@ -46,7 +46,7 @@ export interface Property {
   // Additional fields
   country?: string;
   priceText?: string;
-  yearBuilt?: number;
+  // yearBuilt?: number;
   features?: string[] | { en: string[]; ar: string[]; fr?: string[] };
   agent?: string | Agent;
   agentPhone?: string;

@@ -106,7 +106,7 @@ const Properties: React.FC = () => {
     bedrooms: '',
     bathrooms: '',
     area: '',
-    yearBuilt: '',
+    // yearBuilt: '',
     images: [] as string[],
     video: '',
     type: 'sale' as 'sale' | 'rent' | 'off-plan',
@@ -186,7 +186,7 @@ const Properties: React.FC = () => {
         bedrooms: property.bedrooms.toString(),
         bathrooms: property.bathrooms.toString(),
         area: property.area.toString(),
-        yearBuilt: (property as any).yearBuilt?.toString() || '',
+        // yearBuilt: (property as any).yearBuilt?.toString() || '',
         images: property.images || [],
         video: (property as any).video || '',
         type: property.type,
@@ -237,7 +237,7 @@ const Properties: React.FC = () => {
         bedrooms: '',
         bathrooms: '',
         area: '',
-        yearBuilt: '',
+        // yearBuilt: '',
         images: [],
         video: '',
         type: 'sale',
@@ -313,7 +313,7 @@ const Properties: React.FC = () => {
       bedrooms: Number(formData.bedrooms),
       bathrooms: Number(formData.bathrooms),
       area: Number(formData.area),
-      yearBuilt: Number(formData.yearBuilt),
+      // yearBuilt: Number(formData.yearBuilt),
       images: formData.images,
       video: formData.video,
       type: formData.type,
@@ -634,9 +634,9 @@ const Properties: React.FC = () => {
                     <Typography variant="body2" sx={{ color: '#666' }}>
                       {property.bedrooms} bed • {property.bathrooms} bath • {property.area} sqm
                     </Typography>
-                    <Typography variant="caption" sx={{ color: '#999' }}>
+                    {/* <Typography variant="caption" sx={{ color: '#999' }}>
                       {(property as any).propertyType} • {(property as any).yearBuilt}
-                    </Typography>
+                    </Typography> */}
                   </Box>
                 </TableCell>
                 <TableCell>
@@ -979,7 +979,7 @@ const Properties: React.FC = () => {
                       required
                     />
                   </Grid>
-                  <Grid item xs={6} md={3}>
+                  {/* <Grid item xs={6} md={3}>
                     <TextField
                       fullWidth
                       label="Year Built"
@@ -988,14 +988,29 @@ const Properties: React.FC = () => {
                       onChange={(e) => setFormData({ ...formData, yearBuilt: e.target.value })}
                       required
                     />
-                  </Grid>
+                  </Grid> */}
                   <Grid item xs={6} md={4}>
                     <TextField
                       select
                       fullWidth
                       label="Category"
                       value={formData.category}
-                      onChange={(e) => setFormData({ ...formData, category: e.target.value as any })}
+                      onChange={(e) => {
+                        const newCategory = e.target.value as any;
+                        let newPropertyType = 'Apartment'; // default
+
+                        if (newCategory === 'residential') {
+                          newPropertyType = 'Apartment';
+                        } else if (newCategory === 'commercial') {
+                          newPropertyType = 'Office';
+                        } else if (newCategory === 'industrial') {
+                          newPropertyType = 'Warehouse';
+                        } else if (newCategory === 'land') {
+                          newPropertyType = 'Land';
+                        }
+
+                        setFormData({ ...formData, category: newCategory, propertyType: newPropertyType });
+                      }}
                       required
                     >
                       <MenuItem value="residential">Residential</MenuItem>
@@ -1013,48 +1028,39 @@ const Properties: React.FC = () => {
                       onChange={(e) => setFormData({ ...formData, propertyType: e.target.value })}
                       required
                     >
-                      {formData.category === 'residential' && (
-                        <>
-                          <MenuItem value="Apartment">Apartment</MenuItem>
-                          <MenuItem value="Villa">Villa</MenuItem>
-                          <MenuItem value="Penthouse">Penthouse</MenuItem>
-                          <MenuItem value="Studio">Studio</MenuItem>
-                          <MenuItem value="Townhouse">Townhouse</MenuItem>
-                          <MenuItem value="Duplex">Duplex</MenuItem>
-                          <MenuItem value="Hotel Apartment">Hotel Apartment</MenuItem>
-                          <MenuItem value="Chalet">Chalet</MenuItem>
-                          <MenuItem value="Compound Villa">Compound Villa</MenuItem>
-                          <MenuItem value="Standalone Villa">Standalone Villa</MenuItem>
-                        </>
-                      )}
-                      {formData.category === 'commercial' && (
-                        <>
-                          <MenuItem value="Office">Office</MenuItem>
-                          <MenuItem value="Shop">Shop</MenuItem>
-                          <MenuItem value="Showroom">Showroom</MenuItem>
-                          <MenuItem value="Retail Shop">Retail Shop</MenuItem>
-                          <MenuItem value="Commercial Villa">Commercial Villa</MenuItem>
-                          <MenuItem value="Restaurant">Restaurant</MenuItem>
-                          <MenuItem value="Whole Building">Whole Building</MenuItem>
-                          <MenuItem value="Hotel">Hotel</MenuItem>
-                        </>
-                      )}
-                      {formData.category === 'industrial' && (
-                        <>
-                          <MenuItem value="Warehouse">Warehouse</MenuItem>
-                          <MenuItem value="Factory">Factory</MenuItem>
-                          <MenuItem value="Labor Camp">Labor Camp</MenuItem>
-                          <MenuItem value="Industrial Land">Industrial Land</MenuItem>
-                        </>
-                      )}
-                      {formData.category === 'land' && (
-                        <>
-                          <MenuItem value="Land">Land</MenuItem>
-                          <MenuItem value="Land Plot">Land Plot</MenuItem>
-                          <MenuItem value="Residential Land">Residential Land</MenuItem>
-                          <MenuItem value="Commercial Land">Commercial Land</MenuItem>
-                        </>
-                      )}
+                      {/* Residential Options */}
+                      <MenuItem value="Apartment" style={{ display: formData.category === 'residential' ? 'block' : 'none' }}>Apartment</MenuItem>
+                      <MenuItem value="Villa" style={{ display: formData.category === 'residential' ? 'block' : 'none' }}>Villa</MenuItem>
+                      <MenuItem value="Penthouse" style={{ display: formData.category === 'residential' ? 'block' : 'none' }}>Penthouse</MenuItem>
+                      <MenuItem value="Studio" style={{ display: formData.category === 'residential' ? 'block' : 'none' }}>Studio</MenuItem>
+                      <MenuItem value="Townhouse" style={{ display: formData.category === 'residential' ? 'block' : 'none' }}>Townhouse</MenuItem>
+                      <MenuItem value="Duplex" style={{ display: formData.category === 'residential' ? 'block' : 'none' }}>Duplex</MenuItem>
+                      <MenuItem value="Hotel Apartment" style={{ display: formData.category === 'residential' ? 'block' : 'none' }}>Hotel Apartment</MenuItem>
+                      <MenuItem value="Chalet" style={{ display: formData.category === 'residential' ? 'block' : 'none' }}>Chalet</MenuItem>
+                      <MenuItem value="Compound Villa" style={{ display: formData.category === 'residential' ? 'block' : 'none' }}>Compound Villa</MenuItem>
+                      <MenuItem value="Standalone Villa" style={{ display: formData.category === 'residential' ? 'block' : 'none' }}>Standalone Villa</MenuItem>
+
+                      {/* Commercial Options */}
+                      <MenuItem value="Office" style={{ display: formData.category === 'commercial' ? 'block' : 'none' }}>Office</MenuItem>
+                      <MenuItem value="Shop" style={{ display: formData.category === 'commercial' ? 'block' : 'none' }}>Shop</MenuItem>
+                      <MenuItem value="Showroom" style={{ display: formData.category === 'commercial' ? 'block' : 'none' }}>Showroom</MenuItem>
+                      <MenuItem value="Retail Shop" style={{ display: formData.category === 'commercial' ? 'block' : 'none' }}>Retail Shop</MenuItem>
+                      <MenuItem value="Commercial Villa" style={{ display: formData.category === 'commercial' ? 'block' : 'none' }}>Commercial Villa</MenuItem>
+                      <MenuItem value="Restaurant" style={{ display: formData.category === 'commercial' ? 'block' : 'none' }}>Restaurant</MenuItem>
+                      <MenuItem value="Whole Building" style={{ display: formData.category === 'commercial' ? 'block' : 'none' }}>Whole Building</MenuItem>
+                      <MenuItem value="Hotel" style={{ display: formData.category === 'commercial' ? 'block' : 'none' }}>Hotel</MenuItem>
+
+                      {/* Industrial Options */}
+                      <MenuItem value="Warehouse" style={{ display: formData.category === 'industrial' ? 'block' : 'none' }}>Warehouse</MenuItem>
+                      <MenuItem value="Factory" style={{ display: formData.category === 'industrial' ? 'block' : 'none' }}>Factory</MenuItem>
+                      <MenuItem value="Labor Camp" style={{ display: formData.category === 'industrial' ? 'block' : 'none' }}>Labor Camp</MenuItem>
+                      <MenuItem value="Industrial Land" style={{ display: formData.category === 'industrial' ? 'block' : 'none' }}>Industrial Land</MenuItem>
+
+                      {/* Land Options */}
+                      <MenuItem value="Land" style={{ display: formData.category === 'land' ? 'block' : 'none' }}>Land</MenuItem>
+                      <MenuItem value="Land Plot" style={{ display: formData.category === 'land' ? 'block' : 'none' }}>Land Plot</MenuItem>
+                      <MenuItem value="Residential Land" style={{ display: formData.category === 'land' ? 'block' : 'none' }}>Residential Land</MenuItem>
+                      <MenuItem value="Commercial Land" style={{ display: formData.category === 'land' ? 'block' : 'none' }}>Commercial Land</MenuItem>
                     </TextField>
                   </Grid>
                   {/* <Grid item xs={6} md={4}>

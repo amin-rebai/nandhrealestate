@@ -160,27 +160,37 @@ const BlogForm: React.FC = () => {
     e.preventDefault();
 
     try {
+      // Helper function to remove empty language fields
+      const cleanMultilingual = (value: any) => {
+        if (!value) return {};
+        const result: any = {};
+        if (value.en?.trim()) result.en = value.en.trim();
+        if (value.ar?.trim()) result.ar = value.ar.trim();
+        if (value.fr?.trim()) result.fr = value.fr.trim();
+        return result;
+      };
+
       const submitData = {
         ...formData,
-        title: ensureMultilingual(formData.title),
-        slug: ensureMultilingual(formData.slug),
-        excerpt: ensureMultilingual(formData.excerpt),
-        content: ensureMultilingual(formData.content),
-        category: ensureMultilingual(formData.category),
-        tags: formData.tags.map(t => ensureMultilingual(t)),
+        title: cleanMultilingual(formData.title),
+        slug: cleanMultilingual(formData.slug),
+        excerpt: cleanMultilingual(formData.excerpt),
+        content: cleanMultilingual(formData.content),
+        category: cleanMultilingual(formData.category),
+        tags: formData.tags.map(t => cleanMultilingual(t)).filter(t => Object.keys(t).length > 0),
         author: {
           ...formData.author,
-          bio: ensureMultilingual(formData.author.bio)
+          bio: cleanMultilingual(formData.author.bio)
         },
         seo: {
           ...formData.seo,
-          metaTitle: ensureMultilingual(formData.seo.metaTitle),
-          metaDescription: ensureMultilingual(formData.seo.metaDescription),
-          keywords: ensureMultilingual(formData.seo.keywords),
-          ogTitle: ensureMultilingual(formData.seo.ogTitle),
-          ogDescription: ensureMultilingual(formData.seo.ogDescription),
-          tiktokTitle: ensureMultilingual(formData.seo.tiktokTitle),
-          tiktokDescription: ensureMultilingual(formData.seo.tiktokDescription)
+          metaTitle: cleanMultilingual(formData.seo.metaTitle),
+          metaDescription: cleanMultilingual(formData.seo.metaDescription),
+          keywords: cleanMultilingual(formData.seo.keywords),
+          ogTitle: cleanMultilingual(formData.seo.ogTitle),
+          ogDescription: cleanMultilingual(formData.seo.ogDescription),
+          tiktokTitle: cleanMultilingual(formData.seo.tiktokTitle),
+          tiktokDescription: cleanMultilingual(formData.seo.tiktokDescription)
         }
       };
 

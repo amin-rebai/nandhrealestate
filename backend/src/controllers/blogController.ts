@@ -225,10 +225,15 @@ export const createBlog = async (req: Request, res: Response) => {
     if (!blogData.slug || (!blogData.slug.en && !blogData.slug.ar)) {
       const titleEn = blogData.title?.en || '';
       const titleAr = blogData.title?.ar || '';
-      blogData.slug = {
-        en: titleEn ? titleEn.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : '',
-        ar: titleAr ? titleAr.toLowerCase().replace(/[^ا-ي0-9]+/g, '-').replace(/(^-|-$)/g, '') : ''
-      };
+      blogData.slug = {};
+
+      // Only generate slug for languages that have title
+      if (titleEn) {
+        blogData.slug.en = titleEn.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      }
+      if (titleAr) {
+        blogData.slug.ar = titleAr.toLowerCase().replace(/[^ا-ي0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      }
     }
 
 

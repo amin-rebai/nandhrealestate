@@ -37,7 +37,7 @@ export interface Property {
   bedrooms: number;
   bathrooms: number;
   area: number;
-  yearBuilt: number;
+  // yearBuilt: number;
   images: string[];
   video?: string;
   type: 'sale' | 'rent' | 'off-plan';

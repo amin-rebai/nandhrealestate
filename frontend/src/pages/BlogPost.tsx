@@ -2,40 +2,50 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 interface BlogPostData {
   _id: string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string;
+  title: string | { en?: string; ar?: string; fr?: string };
+  slug: string | { en?: string; ar?: string; fr?: string };
+  excerpt: string | { en?: string; ar?: string; fr?: string };
+  content: string | { en?: string; ar?: string; fr?: string };
   featuredImage: string;
   gallery?: string[];
   author: {
     name: string;
     avatar?: string;
-    bio?: string;
+    bio?: string | { en?: string; ar?: string; fr?: string };
   };
-  category: string;
-  tags: string[];
+  category: string | { en?: string; ar?: string; fr?: string };
+  tags: (string | { en?: string; ar?: string; fr?: string })[];
   status: 'draft' | 'published' | 'archived';
   publishedAt: string;
   readingTime: number;
   views: number;
   likes: number;
-  seo: {
-    metaTitle: string;
-    metaDescription: string;
-    keywords: string;
+  seo?: {
+    metaTitle?: string | { en?: string; ar?: string; fr?: string };
+    metaDescription?: string | { en?: string; ar?: string; fr?: string };
+    keywords?: string | { en?: string; ar?: string; fr?: string };
     canonicalUrl?: string;
-    ogTitle?: string;
-    ogDescription?: string;
+    ogTitle?: string | { en?: string; ar?: string; fr?: string };
+    ogDescription?: string | { en?: string; ar?: string; fr?: string };
     ogImage?: string;
-    tiktokTitle?: string;
-    tiktokDescription?: string;
+    tiktokTitle?: string | { en?: string; ar?: string; fr?: string };
+    tiktokDescription?: string | { en?: string; ar?: string; fr?: string };
     tiktokImage?: string;
   };
 }
+
+// Helper function to get multilingual text
+const getMultilingualText = (value: string | { en?: string; ar?: string; fr?: string } | undefined, language: 'en' | 'ar' | 'fr' = 'en'): string => {
+  if (!value) return '';
+  if (typeof value === 'string') return value;
+  return (value as any)[language] || (value as any).en || (value as any).ar || (value as any).fr || '';
+};
 
 // Mock blog post data
 const mockBlogPosts: { [key: string]: BlogPostData } = {
@@ -393,7 +403,7 @@ const mockBlogPosts: { [key: string]: BlogPostData } = {
 
 const BlogPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   const [post, setPost] = useState<BlogPostData | null>(null);
@@ -402,24 +412,28 @@ const BlogPost: React.FC = () => {
   const [liked, setLiked] = useState(false);
 
   useEffect(() => {
-    // Simulate API loading delay
-    setLoading(true);
-    setError(null);
+    const fetchBlogPost = async () => {
+      if (!slug) return;
 
-    setTimeout(() => {
-      if (slug && mockBlogPosts[slug]) {
-        setPost(mockBlogPosts[slug]);
-        setLoading(false);
-      } else {
-        setPost(null);
+      setLoading(true);
+      setError(null);
+
+      try {
+        const response = await axios.get(`${API_URL}/blog/slug/${slug}`);
+        if (response.data.success) {
+          setPost(response.data.data);
+        } else {
+          setError("Blog post not found");
+        }
+      } catch (err) {
+        console.error('Error fetching blog post:', err);
         setError("Blog post not found");
+      } finally {
         setLoading(false);
       }
-    }, 500); // Simulate 500ms loading time
-
-    return () => {
-      setPost(null);
     };
+
+    fetchBlogPost();
   }, [slug]);
 
   const formatDate = (dateString: string): string => {
@@ -442,7 +456,7 @@ const BlogPost: React.FC = () => {
     if (!post) return;
 
     const url = window.location.href;
-    const title = post.title;
+    const title = getMultilingualText(post.title, i18n.language as 'en' | 'ar' | 'fr');
 
     let shareUrl = '';
 
@@ -526,35 +540,49 @@ const BlogPost: React.FC = () => {
     );
   }
 
+  // Get multilingual text for current language
+  const postTitle = getMultilingualText(post.title, i18n.language as 'en' | 'ar' | 'fr');
+  const postExcerpt = getMultilingualText(post.excerpt, i18n.language as 'en' | 'ar' | 'fr');
+  const postContent = getMultilingualText(post.content, i18n.language as 'en' | 'ar' | 'fr');
+  const postCategory = getMultilingualText(post.category, i18n.language as 'en' | 'ar' | 'fr');
+  const seoTitle = post.seo?.metaTitle ? getMultilingualText(post.seo.metaTitle, i18n.language as 'en' | 'ar' | 'fr') : postTitle;
+  const seoDescription = post.seo?.metaDescription ? getMultilingualText(post.seo.metaDescription, i18n.language as 'en' | 'ar' | 'fr') : postExcerpt;
+  const seoKeywords = post.seo?.keywords ? getMultilingualText(post.seo.keywords, i18n.language as 'en' | 'ar' | 'fr') : '';
+  const ogTitle = post.seo?.ogTitle ? getMultilingualText(post.seo.ogTitle, i18n.language as 'en' | 'ar' | 'fr') : postTitle;
+  const ogDescription = post.seo?.ogDescription ? getMultilingualText(post.seo.ogDescription, i18n.language as 'en' | 'ar' | 'fr') : postExcerpt;
+  const tiktokTitle = post.seo?.tiktokTitle ? getMultilingualText(post.seo.tiktokTitle, i18n.language as 'en' | 'ar' | 'fr') : postTitle;
+  const tiktokDescription = post.seo?.tiktokDescription ? getMultilingualText(post.seo.tiktokDescription, i18n.language as 'en' | 'ar' | 'fr') : postExcerpt;
+
   return (
     <>
       {/* SEO Meta Tags */}
       <Helmet>
-        <title>{post.seo.metaTitle || post.title} - N&H Homes Real Estate</title>
-        <meta name="description" content={post.seo.metaDescription || post.excerpt} />
-        <meta name="keywords" content={post.seo.keywords} />
-        {post.seo.canonicalUrl && <link rel="canonical" href={post.seo.canonicalUrl} />}
+        <title>{seoTitle} - N&H Homes Real Estate</title>
+        <meta name="description" content={seoDescription} />
+        <meta name="keywords" content={seoKeywords} />
+        {post.seo?.canonicalUrl && <link rel="canonical" href={post.seo.canonicalUrl} />}
 
         {/* Open Graph Tags */}
-        <meta property="og:title" content={post.seo.ogTitle || post.title} />
-        <meta property="og:description" content={post.seo.ogDescription || post.excerpt} />
-        <meta property="og:image" content={post.seo.ogImage || post.featuredImage} />
+        <meta property="og:title" content={ogTitle} />
+        <meta property="og:description" content={ogDescription} />
+        <meta property="og:image" content={post.seo?.ogImage || post.featuredImage} />
         <meta property="og:url" content={window.location.href} />
         <meta property="og:type" content="article" />
 
         {/* Twitter Card Tags */}
         <meta name="tiktok:card" content="summary_large_image" />
-        <meta name="tiktok:title" content={post.seo.tiktokTitle || post.title} />
-        <meta name="tiktok:description" content={post.seo.tiktokDescription || post.excerpt} />
-        <meta name="tiktok:image" content={post.seo.tiktokImage || post.featuredImage} />
+        <meta name="tiktok:title" content={tiktokTitle} />
+        <meta name="tiktok:description" content={tiktokDescription} />
+        <meta name="tiktok:image" content={post.seo?.tiktokImage || post.featuredImage} />
 
         {/* Article Meta */}
         <meta property="article:published_time" content={post.publishedAt} />
         <meta property="article:author" content={post.author.name} />
-        <meta property="article:section" content={post.category} />
-        {post.tags.map((tag, index) => (
-          <meta key={index} property="article:tag" content={tag} />
-        ))}
+        <meta property="article:section" content={postCategory} />
+        {post.tags.map((tag, index) => {
+          const tagText = typeof tag === 'string' ? tag : getMultilingualText(tag, i18n.language as 'en' | 'ar' | 'fr');
+          return <meta key={index} property="article:tag" content={tagText} />;
+        })}
       </Helmet>
 
       <article className="blog-post">
@@ -564,7 +592,7 @@ const BlogPost: React.FC = () => {
             <div className="hero-overlay"></div>
             <img
               src={post.featuredImage}
-              alt={post.title}
+              alt={getMultilingualText(post.title)}
               className="hero-bg-image"
             />
           </div>
@@ -577,15 +605,15 @@ const BlogPost: React.FC = () => {
                 <span className="separator">›</span>
                 <Link to="/blog">Blog</Link>
                 <span className="separator">›</span>
-                <span className="current">{post.title}</span>
+                <span className="current">{postTitle}</span>
               </nav>
 
               <div className="hero-text">
                 <div className="post-category-hero">
-                  {post.category}
+                  {postCategory}
                 </div>
-                <h1 className="hero-title">{post.title}</h1>
-                <p className="hero-subtitle">{post.excerpt}</p>
+                <h1 className="hero-title">{postTitle}</h1>
+                <p className="hero-subtitle">{postExcerpt}</p>
 
                 <div className="post-meta-hero">
                   <div className="author-info">
@@ -639,7 +667,7 @@ const BlogPost: React.FC = () => {
               <div className="post-body">
                 <div
                   className="content-text"
-                  dangerouslySetInnerHTML={{ __html: post.content }}
+                  dangerouslySetInnerHTML={{ __html: postContent }}
                 />
 
                 {/* Tags */}
@@ -647,11 +675,14 @@ const BlogPost: React.FC = () => {
                   <div className="post-tags">
                     <h4>Tags:</h4>
                     <div className="tags-list">
-                      {post.tags.map((tag, index) => (
-                        <span key={index} className="tag">
-                          #{tag}
-                        </span>
-                      ))}
+                      {post.tags.map((tag, index) => {
+                        const tagText = typeof tag === 'string' ? tag : getMultilingualText(tag, i18n.language as 'en' | 'ar' | 'fr');
+                        return (
+                          <span key={index} className="tag">
+                            #{tagText}
+                          </span>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
@@ -682,7 +713,7 @@ const BlogPost: React.FC = () => {
                     )}
                     <h5>{post.author.name}</h5>
                     {post.author.bio && (
-                      <p>{post.author.bio}</p>
+                      <p>{getMultilingualText(post.author.bio, i18n.language as 'en' | 'ar' | 'fr')}</p>
                     )}
                   </div>
                 </div>

@@ -345,8 +345,8 @@ const HomePageManager: React.FC = () => {
       const featuredPropertiesItem = contentList?.find((it: any) => it.section === 'featured-properties');
       const payload = {
         section: 'featured-properties' as const,
-        title: ensureMultilingual(featuredPropertiesData.title),
-        description: ensureMultilingual(featuredPropertiesData.subtitle),
+        title: ensureMultilingual(featuredPropertiesData.title) as { en: string; ar: string; fr?: string },
+        description: ensureMultilingual(featuredPropertiesData.subtitle) as { en: string; ar: string; fr?: string },
         metadata: {
           badge: ensureMultilingual(featuredPropertiesData.badge),
           fetchFromDatabase: featuredPropertiesData.fetchFromDatabase,

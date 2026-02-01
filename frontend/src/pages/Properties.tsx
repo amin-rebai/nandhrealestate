@@ -579,7 +579,7 @@ const Properties: React.FC = () => {
                         <span>🛏️ {property.bedrooms === 0 ? 'Studio' : `${property.bedrooms} bed`}</span>
                         <span>🚿 {property.bathrooms} bath</span>
                         <span>📐 {property.area} sqm</span>
-                        <span>📅 {property.yearBuilt}</span>
+                        {/* <span>📅 {property.yearBuilt}</span> */}
                       </div>
 
                       <p style={{ color: 'var(--text-light)', marginBottom: '1rem', lineHeight: '1.5', fontSize: '0.95rem' }}>
