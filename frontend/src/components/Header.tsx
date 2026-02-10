@@ -115,7 +115,7 @@ const Header: React.FC = () => {
               </Link>
             </div>
           </li>
-          <li><Link to="/agents" className={isActive('/agents')} onClick={closeMobileMenu}>Agents</Link></li>
+          {/* <li><Link to="/agents" className={isActive('/agents')} onClick={closeMobileMenu}>Agents</Link></li> */}
 
           {/* Services Dropdown */}
           <li

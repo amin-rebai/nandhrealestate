@@ -333,7 +333,7 @@ const PropertyDetail: React.FC = () => {
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M9 6L20 6C20.5523 6 21 6.44772 21 7V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V7C3 6.44772 3.44772 6 4 6L9 6Z" stroke="currentColor" strokeWidth="2"/>
                       </svg>
-                      <span className="detail-value">{property.bathrooms} {t('property.bathroom', 'Bathroom')}${property.bathrooms > 1 ? 's' : ''}</span>
+                      <span className="detail-value">{property.bathrooms} {t('property.bathroom', 'Bathroom')}{property.bathrooms > 1 ? 's' : ''}</span>
                     </div>
                     {(property as any).serviceCharge && (
                       <div className="detail-item">
