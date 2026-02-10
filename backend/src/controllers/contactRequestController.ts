@@ -86,12 +86,12 @@ export const createContactRequest = async (req: Request, res: Response) => {
     };
 
     // Send email notifications (fire and forget)
-    Promise.all([
-      sendAdminNotificationEmail(notificationData),
-      // sendUserConfirmationEmail(notificationData)
-    ]).catch(error => {
-      console.error('Error sending emails:', error);
-    });
+    // Promise.all([
+    //   sendAdminNotificationEmail(notificationData),
+    //   sendUserConfirmationEmail(notificationData)
+    // ]).catch(error => {
+    //   console.error('Error sending emails:', error);
+    // });
 
     // Send WhatsApp notifications (fire and forget)
     // Promise.all([
