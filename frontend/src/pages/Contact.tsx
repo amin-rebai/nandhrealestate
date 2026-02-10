@@ -496,12 +496,12 @@ const Contact: React.FC = () => {
                       onChange={handleChange}
                     >
                       <option value="">Select Budget Range</option>
-                      <option value="under-500k">Under $500K</option>
-                      <option value="500k-1m">$500K - $1M</option>
-                      <option value="1m-2m">$1M - $2M</option>
-                      <option value="2m-5m">$2M - $5M</option>
-                      <option value="5m-10m">$5M - $10M</option>
-                      <option value="over-10m">Over $10M</option>
+                      <option value="under-500k">Under QAR500K</option>
+                      <option value="500k-1m">QAR500K - QAR1M</option>
+                      <option value="1m-2m">QAR1M - QAR2M</option>
+                      <option value="2m-5m">QAR2M - QAR5M</option>
+                      <option value="5m-10m">QAR5M - QAR10M</option>
+                      <option value="over-10m">Over QAR10M</option>
                     </select>
                   </div>
 

@@ -123,8 +123,18 @@ const ContactPageManager: React.FC = () => {
       const response = await axios.get(`${API_URL}/contact-requests`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      if (response.data) setContactRequests(response.data);
-    } catch (error) { console.error('Error fetching contact requests:', error); }
+      // Handle the response structure with data property
+      if (response.data && response.data.data) {
+        setContactRequests(Array.isArray(response.data.data) ? response.data.data : []);
+      } else if (response.data && Array.isArray(response.data)) {
+        setContactRequests(response.data);
+      } else {
+        setContactRequests([]);
+      }
+    } catch (error) {
+      console.error('Error fetching contact requests:', error);
+      setContactRequests([]);
+    }
   };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -166,6 +176,36 @@ const ContactPageManager: React.FC = () => {
       }
       setSocialEditing(false);
     } catch (error) { console.error('Error saving social media:', error); }
+  };
+
+  const handleMarkAsRead = async (requestId: string) => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      await axios.put(
+        `${API_URL}/contact-requests/${requestId}`,
+        { status: 'read' },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      fetchContactRequests();
+      setViewDialogOpen(false);
+    } catch (error) {
+      console.error('Error marking request as read:', error);
+    }
+  };
+
+  const handleDeleteRequest = async () => {
+    if (!requestToDelete) return;
+    try {
+      const token = localStorage.getItem('adminToken');
+      await axios.delete(`${API_URL}/contact-requests/${requestToDelete._id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchContactRequests();
+      setDeleteDialogOpen(false);
+      setRequestToDelete(null);
+    } catch (error) {
+      console.error('Error deleting request:', error);
+    }
   };
 
   // Continue in next section
@@ -307,7 +347,14 @@ const ContactPageManager: React.FC = () => {
         </DialogContent>
         <DialogActions sx={{ p: 2 }}>
           <Button onClick={() => setViewDialogOpen(false)}>Close</Button>
-          <Button variant="contained" startIcon={<MarkEmailRead />} sx={{ backgroundColor: '#4B0E14', '&:hover': { backgroundColor: '#3a0b10' } }}>Mark as Read</Button>
+          <Button
+            variant="contained"
+            startIcon={<MarkEmailRead />}
+            onClick={() => selectedRequest && handleMarkAsRead(selectedRequest._id)}
+            sx={{ backgroundColor: '#4B0E14', '&:hover': { backgroundColor: '#3a0b10' } }}
+          >
+            Mark as Read
+          </Button>
         </DialogActions>
       </Dialog>
 
@@ -317,7 +364,7 @@ const ContactPageManager: React.FC = () => {
         <DialogContent><Typography>Are you sure you want to delete this contact request from "{requestToDelete?.name}"?</Typography></DialogContent>
         <DialogActions>
           <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
-          <Button variant="contained" color="error">Delete</Button>
+          <Button variant="contained" color="error" onClick={handleDeleteRequest}>Delete</Button>
         </DialogActions>
       </Dialog>
     </Box>

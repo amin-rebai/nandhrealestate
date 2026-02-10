@@ -88,18 +88,18 @@ export const createContactRequest = async (req: Request, res: Response) => {
     // Send email notifications (fire and forget)
     Promise.all([
       sendAdminNotificationEmail(notificationData),
-      sendUserConfirmationEmail(notificationData)
+      // sendUserConfirmationEmail(notificationData)
     ]).catch(error => {
       console.error('Error sending emails:', error);
     });
 
     // Send WhatsApp notifications (fire and forget)
-    Promise.all([
-      sendAdminWhatsAppNotification(notificationData),
-      sendUserWhatsAppConfirmation(notificationData)
-    ]).catch(error => {
-      console.error('Error sending WhatsApp messages:', error);
-    });
+    // Promise.all([
+    //   sendAdminWhatsAppNotification(notificationData),
+    //   sendUserWhatsAppConfirmation(notificationData)
+    // ]).catch(error => {
+    //   console.error('Error sending WhatsApp messages:', error);
+    // });
 
     return res.status(201).json({
       success: true,
