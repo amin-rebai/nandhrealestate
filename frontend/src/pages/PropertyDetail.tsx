@@ -490,19 +490,27 @@ const PropertyDetail: React.FC = () => {
                       </svg>
                       {t('common.call', 'Call')}
                     </a>
-                    <a href="https://wa.me/97470704504" target="_blank" rel="noopener noreferrer" className="contact-btn-fg whatsapp">
+                    <a
+                      href={`https://wa.me/97470704504?text=${encodeURIComponent(
+                        `Hi, I'm interested in this property:\n\n${title}\nLocation: ${location}, ${(property as any).country || 'Qatar'}\nPrice: QAR ${property.price?.toLocaleString()}\n\nView property: ${window.location.href}`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="contact-btn-fg whatsapp"
+                    >
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                         <path d="M21 11.5C21.0034 12.8199 20.6951 14.1219 20.1 15.3C19.3944 16.7118 18.3098 17.8992 16.9674 18.7293C15.6251 19.5594 14.0782 19.9994 12.5 20C11.1801 20.0035 9.87812 19.6951 8.7 19.1L3 21L4.9 15.3C4.30493 14.1219 3.99656 12.8199 4 11.5C4.00061 9.92179 4.44061 8.37488 5.27072 7.03258C6.10083 5.69028 7.28825 4.60568 8.7 3.90003C9.87812 3.30496 11.1801 2.99659 12.5 3.00003H13C15.0843 3.11502 17.053 3.99479 18.5291 5.47089C20.0052 6.94699 20.885 8.91568 21 11V11.5Z" stroke="currentColor" strokeWidth="2"/>
                       </svg>
                       {t('common.whatsapp', 'WhatsApp')}
                     </a>
-                    <a href="mailto:info@nandhrealestate.qa" className="contact-btn-fg email">
+                    
+                    {/* <a href="mailto:info@nandhrealestate.qa" className="contact-btn-fg email">
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                         <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" strokeWidth="2"/>
                         <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2"/>
                       </svg>
                       {t('common.email', 'Email')}
-                    </a>
+                    </a> */}
                   </div>
 
                   <div className="inquiry-form-fg">

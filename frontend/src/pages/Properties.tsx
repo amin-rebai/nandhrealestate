@@ -239,7 +239,7 @@ const Properties: React.FC = () => {
                 transition: 'all 0.3s ease'
               }}
             >
-              For Sale ({allProperties.filter(p => p.category === 'sale').length})
+              For Sale ({allProperties.filter(p => p.listingType === 'sale').length})
             </button>
             <button
               className={`tab-button ${activeTab === 'rent' ? 'active' : ''}`}
@@ -256,7 +256,7 @@ const Properties: React.FC = () => {
                 transition: 'all 0.3s ease'
               }}
             >
-              For Rent ({allProperties.filter(p => p.category === 'rent').length})
+              For Rent ({allProperties.filter(p => p.listingType === 'rent').length})
             </button>
             <button
               className={`tab-button ${activeTab === 'off-plan' ? 'active' : ''}`}
@@ -273,7 +273,7 @@ const Properties: React.FC = () => {
                 transition: 'all 0.3s ease'
               }}
             >
-              Off-Plan ({allProperties.filter(p => p.category === 'off-plan').length})
+              Off-Plan ({allProperties.filter(p => p.listingType === 'off-plan').length})
             </button>
           </div>
 
@@ -486,9 +486,9 @@ const Properties: React.FC = () => {
             <h3 style={{ color: 'var(--luxury-burgundy)', margin: 0 }}>
               {filteredProperties.length} Properties {activeTab === 'sale' ? 'for Sale' : activeTab === 'rent' ? 'for Rent' : 'Off-Plan'}
             </h3>
-            <div style={{ fontSize: '0.9rem', color: 'var(--text-light)' }}>
+            {/* <div style={{ fontSize: '0.9rem', color: 'var(--text-light)' }}>
               Showing {filteredProperties.length} of {allProperties.filter(p => p.category === activeTab).length} properties
-            </div>
+            </div> */}
           </div>
 
           {/* Loading State */}
@@ -660,7 +660,16 @@ const Properties: React.FC = () => {
                         >
                           View Details
                         </button>
-                        <button className="btn-secondary-enhanced">
+                        <button
+                          className="btn-secondary-enhanced"
+                          onClick={() => {
+                            // Open WhatsApp with pre-filled message including property link
+                            const propertyUrl = `${window.location.origin}/property/${property._id}`;
+                            const message = `Hi, I'm interested in this property:\n\n${property.title}\nLocation: ${property.location}\nPrice: ${property.priceText}\n\nView property: ${propertyUrl}`;
+                            const whatsappNumber = '+97470704504'; // Your WhatsApp number
+                            window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
+                          }}
+                        >
                           Contact Agent
                         </button>
                       </div>
@@ -814,7 +823,17 @@ const Properties: React.FC = () => {
                           >
                             View Details
                           </button>
-                          <button className="btn btn-secondary" style={{ padding: '0.7rem 1.5rem', fontSize: '0.9rem' }}>
+                          <button
+                            className="btn btn-secondary"
+                            style={{ padding: '0.7rem 1.5rem', fontSize: '0.9rem' }}
+                            onClick={() => {
+                              // Open WhatsApp with pre-filled message including property link
+                              const propertyUrl = `${window.location.origin}/property/${property._id}`;
+                              const message = `Hi, I'm interested in this property:\n\n${property.title}\nLocation: ${property.location}\nPrice: ${property.priceText}\n\nView property: ${propertyUrl}`;
+                              const whatsappNumber = '+97470704504'; // Your WhatsApp number
+                              window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
+                            }}
+                          >
                             Contact
                           </button>
                         </div>

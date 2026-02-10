@@ -216,7 +216,7 @@ const Home: React.FC = () => {
           <div className="featured-properties-grid">
             {featuredProperties && featuredProperties.length > 0 ? (
               featuredProperties.map((property) => (
-                <Link to={`/properties/${property._id}`} key={property._id} className="featured-property-card">
+                <Link to={`/property/${property._id}`} key={property._id} className="featured-property-card" style={{ textDecoration: 'none' }}>
                   <div className="property-image">
                     <img
                       src={property.images?.[0]?.startsWith('http') ? property.images[0] : `${API_URL}${property.images?.[0] || ''}`}
@@ -230,7 +230,7 @@ const Home: React.FC = () => {
                     </div>
                   </div>
                   <div className="property-info">
-                    <h3>{getText(property.title)}</h3>
+                    <h3 style={{ textDecoration: 'none' }}>{getText(property.title)}</h3>
                     <p className="property-location">📍 {getText(property.location)}</p>
                     <p className="property-price">
                       QAR {property.price?.toLocaleString()}{property.type === 'rent' ? '/month' : ''}
