@@ -27,7 +27,7 @@ const createTransporter = () => {
 export const sendAdminNotificationEmail = async (data: ContactEmailData) => {
   try {
     const transporter = createTransporter();
-
+    console.log("first-----------", process.env.ADMIN_EMAIL, process.env.SMTP_EMAIL)
     const adminEmail = process.env.ADMIN_EMAIL || process.env.SMTP_EMAIL;
 
     const htmlContent = `
