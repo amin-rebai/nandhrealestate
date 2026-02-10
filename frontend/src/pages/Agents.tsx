@@ -103,7 +103,7 @@ const Agents: React.FC = () => {
 
     setSendingMessage(true);
     try {
-      const response = await axios.post(`${API_URL}/contact-requests`, {
+      const response = await axios.post(`${API_URL}/contactrequests`, {
         name: contactForm.name,
         email: contactForm.email,
         phone: contactForm.phone,

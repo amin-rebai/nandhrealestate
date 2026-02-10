@@ -8,7 +8,7 @@ interface AuthRequest extends Request {
 }
 
 // @desc    Get all contact requests
-// @route   GET /api/contact-requests
+// @route   GET /api/contactrequests
 // @access  Private (Admin)
 export const getContactRequests = async (req: AuthRequest, res: Response) => {
   try {
@@ -51,7 +51,7 @@ export const getContactRequests = async (req: AuthRequest, res: Response) => {
 };
 
 // @desc    Create contact request
-// @route   POST /api/contact-requests
+// @route   POST /api/contactrequests
 // @access  Public
 export const createContactRequest = async (req: Request, res: Response) => {
   try {
@@ -115,7 +115,7 @@ export const createContactRequest = async (req: Request, res: Response) => {
 };
 
 // @desc    Update contact request status
-// @route   PUT /api/contact-requests/:id
+// @route   PUT /api/contactrequests/:id
 // @access  Private (Admin)
 export const updateContactRequest = async (req: AuthRequest, res: Response) => {
   try {
@@ -147,7 +147,7 @@ export const updateContactRequest = async (req: AuthRequest, res: Response) => {
 };
 
 // @desc    Delete contact request
-// @route   DELETE /api/contact-requests/:id
+// @route   DELETE /api/contactrequests/:id
 // @access  Private (Admin)
 export const deleteContactRequest = async (req: AuthRequest, res: Response) => {
   try {

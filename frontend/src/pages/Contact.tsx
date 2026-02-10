@@ -83,7 +83,7 @@ const Contact: React.FC = () => {
     setSubmitStatus({ type: null, message: '' });
 
     try {
-      const response = await axios.post(`${API_URL}/contact-requests`, {
+      const response = await axios.post(`${API_URL}/contactrequests`, {
         name: formData.name,
         email: formData.email,
         phone: formData.phone,

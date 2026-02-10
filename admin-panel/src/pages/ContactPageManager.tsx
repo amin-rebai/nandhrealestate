@@ -120,7 +120,7 @@ const ContactPageManager: React.FC = () => {
   const fetchContactRequests = async () => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await axios.get(`${API_URL}/contact-requests`, {
+      const response = await axios.get(`${API_URL}/contactrequests`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       // Handle the response structure with data property
@@ -182,7 +182,7 @@ const ContactPageManager: React.FC = () => {
     try {
       const token = localStorage.getItem('adminToken');
       await axios.put(
-        `${API_URL}/contact-requests/${requestId}`,
+        `${API_URL}/contactrequests/${requestId}`,
         { status: 'read' },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -197,7 +197,7 @@ const ContactPageManager: React.FC = () => {
     if (!requestToDelete) return;
     try {
       const token = localStorage.getItem('adminToken');
-      await axios.delete(`${API_URL}/contact-requests/${requestToDelete._id}`, {
+      await axios.delete(`${API_URL}/contactrequests/${requestToDelete._id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchContactRequests();
