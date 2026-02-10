@@ -53,7 +53,7 @@ app.use('/users', userRoutes);
 app.use('/upload', uploadRoutes);
 app.use('/content', contentRoutes);
 app.use('/blog', blogRoutes);
-app.use('/contactrequests', contactRequestRoutes);
+app.use('/contact-requests', contactRequestRoutes);
 
 // Health check endpoint
 app.get('/health', (_req, res) => {

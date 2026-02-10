@@ -85,21 +85,21 @@ export const createContactRequest = async (req: Request, res: Response) => {
       budget
     };
 
-    // Send email notifications (fire and forget)
-    // Promise.all([
-    //   sendAdminNotificationEmail(notificationData),
-    //   sendUserConfirmationEmail(notificationData)
-    // ]).catch(error => {
-    //   console.error('Error sending emails:', error);
-    // });
+    // Send email notifications (fire and forget - don't block response)
+    Promise.all([
+      sendAdminNotificationEmail(notificationData),
+      sendUserConfirmationEmail(notificationData)
+    ]).catch(error => {
+      console.error('Error sending emails:', error);
+    });
 
-    // Send WhatsApp notifications (fire and forget)
-    // Promise.all([
-    //   sendAdminWhatsAppNotification(notificationData),
-    //   sendUserWhatsAppConfirmation(notificationData)
-    // ]).catch(error => {
-    //   console.error('Error sending WhatsApp messages:', error);
-    // });
+    // Send WhatsApp notifications (fire and forget - don't block response)
+    Promise.all([
+      sendAdminWhatsAppNotification(notificationData),
+      sendUserWhatsAppConfirmation(notificationData)
+    ]).catch(error => {
+      console.error('Error sending WhatsApp messages:', error);
+    });
 
     return res.status(201).json({
       success: true,
@@ -107,9 +107,10 @@ export const createContactRequest = async (req: Request, res: Response) => {
       message: 'Contact request received. We will get back to you soon!'
     });
   } catch (error: any) {
+    console.error('Error creating contact request:', error);
     return res.status(400).json({
       success: false,
-      error: error.message
+      error: error.message || 'Failed to send message. Please try again.'
     });
   }
 };

@@ -3,6 +3,7 @@
 ## ✅ Completed Tasks
 
 ### Backend Setup
+
 - [x] Install `nodemailer` package
 - [x] Install `twilio` package
 - [x] Install `@types/nodemailer` TypeScript types
@@ -22,9 +23,10 @@
 - [x] Create `backend/.env.template` with detailed comments
 
 ### Frontend Setup
+
 - [x] Update `frontend/src/pages/Contact.tsx`
   - Add form submission state management
-  - Implement API call to `/contact-requests`
+  - Implement API call to `/contactrequests`
   - Add success/error message display
   - Add loading spinner animation
   - Auto-clear form on success
@@ -34,11 +36,13 @@
 ## 📋 Next Steps - Configuration
 
 ### 1. Email Configuration
+
 - [ ] Get Gmail App Password
 - [ ] Update `backend/.env` with SMTP credentials
 - [ ] Test email sending
 
 ### 2. WhatsApp Configuration
+
 - [ ] Create Twilio account
 - [ ] Get Account SID and Auth Token
 - [ ] Get Twilio WhatsApp number
@@ -46,6 +50,7 @@
 - [ ] Test WhatsApp sending
 
 ### 3. Testing
+
 - [ ] Test form submission
 - [ ] Verify admin receives email
 - [ ] Verify user receives confirmation email
@@ -55,6 +60,7 @@
 - [ ] Test on mobile devices
 
 ### 4. Deployment
+
 - [ ] Update production `.env` file
 - [ ] Test in production environment
 - [ ] Monitor email/WhatsApp delivery
@@ -63,6 +69,7 @@
 ## 📁 Files Modified/Created
 
 ### Created Files
+
 - `backend/src/services/emailService.ts` - Email service
 - `backend/src/services/whatsappService.ts` - WhatsApp service
 - `backend/.env.template` - Environment template
@@ -70,6 +77,7 @@
 - `IMPLEMENTATION_CHECKLIST.md` - This file
 
 ### Modified Files
+
 - `backend/src/controllers/contactRequestController.ts` - Added notifications
 - `backend/.env.example` - Added new variables
 - `frontend/src/pages/Contact.tsx` - Added form submission logic
@@ -90,8 +98,8 @@ ADMIN_WHATSAPP_NUMBER=+974XXXXXXXXX
 ## 📞 Support
 
 For issues or questions:
+
 1. Check `CONTACT_FORM_SETUP.md` for detailed setup instructions
 2. Review backend logs for email/WhatsApp errors
 3. Check browser console for frontend errors
 4. Verify all environment variables are set correctly
-
