@@ -4,6 +4,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 interface MultilingualText {
   en?: string;
   ar?: string;
+  fr?: string;
 }
 
 // SEO metadata interface
@@ -51,7 +52,8 @@ export interface IBlog extends Document {
 // Multilingual text schema - allows single language
 const multilingualTextSchema = new Schema({
   en: { type: String },
-  ar: { type: String }
+  ar: { type: String },
+  fr: { type: String }
 }, { _id: false });
 
 // SEO metadata schema
@@ -59,45 +61,52 @@ const seoMetadataSchema = new Schema({
   metaTitle: {
     type: new Schema({
       en: { type: String },
-      ar: { type: String }
+      ar: { type: String },
+      fr: { type: String }
     }, { _id: false })
   },
   metaDescription: {
     type: new Schema({
       en: { type: String },
-      ar: { type: String }
+      ar: { type: String },
+      fr: { type: String }
     }, { _id: false })
   },
   keywords: {
     type: new Schema({
       en: { type: String },
-      ar: { type: String }
+      ar: { type: String },
+      fr: { type: String }
     }, { _id: false })
   },
   canonicalUrl: { type: String },
   ogTitle: {
     type: new Schema({
       en: { type: String },
-      ar: { type: String }
+      ar: { type: String },
+      fr: { type: String }
     }, { _id: false })
   },
   ogDescription: {
     type: new Schema({
       en: { type: String },
-      ar: { type: String }
+      ar: { type: String },
+      fr: { type: String }
     }, { _id: false })
   },
   ogImage: { type: String },
   tiktokTitle: {
     type: new Schema({
       en: { type: String },
-      ar: { type: String }
+      ar: { type: String },
+      fr: { type: String }
     }, { _id: false })
   },
   tiktokDescription: {
     type: new Schema({
       en: { type: String },
-      ar: { type: String }
+      ar: { type: String },
+      fr: { type: String }
     }, { _id: false })
   },
   tiktokImage: { type: String },
@@ -111,7 +120,8 @@ const authorSchema = new Schema({
   bio: {
     type: new Schema({
       en: { type: String },
-      ar: { type: String }
+      ar: { type: String },
+      fr: { type: String }
     }, { _id: false })
   }
 }, { _id: false });
@@ -133,7 +143,8 @@ const blogSchema = new Schema({
   category: {
     type: new Schema({
       en: { type: String },
-      ar: { type: String }
+      ar: { type: String },
+      fr: { type: String }
     }, { _id: false })
   },
   tags: [{ type: multilingualTextSchema }],
@@ -157,7 +168,7 @@ const blogSchema = new Schema({
 });
 
 // Indexes for better performance
-blogSchema.index({ 'title.en': 'text', 'title.ar': 'text', 'content.en': 'text', 'content.ar': 'text' });
+blogSchema.index({ 'title.en': 'text', 'title.ar': 'text', 'title.fr': 'text', 'content.en': 'text', 'content.ar': 'text', 'content.fr': 'text' });
 blogSchema.index({ publishedAt: -1 });
 blogSchema.index({ category: 1 });
 blogSchema.index({ tags: 1 });
@@ -202,7 +213,8 @@ blogSchema.statics.findByCategory = function (category: string) {
     isActive: true,
     $or: [
       { 'category.en': new RegExp(category, 'i') },
-      { 'category.ar': new RegExp(category, 'i') }
+      { 'category.ar': new RegExp(category, 'i') },
+      { 'category.fr': new RegExp(category, 'i') }
     ]
   });
 };

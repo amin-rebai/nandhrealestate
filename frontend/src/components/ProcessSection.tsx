@@ -14,7 +14,7 @@ interface ProcessItem {
 }
 
 const ProcessSection: React.FC = () => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [processSteps, setProcessSteps] = useState<ProcessItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -109,10 +109,10 @@ const ProcessSection: React.FC = () => {
     }}>
       <div className="container">
         <div className="section-header-modern">
-          <div className="section-badge">Our Process</div>
-          <h2 className="section-title-modern">How We Work</h2>
+          <div className="section-badge">{t('home.ourProcess')}</div>
+          <h2 className="section-title-modern">{t('home.howWeWork')}</h2>
           <p className="section-subtitle-modern">
-            A streamlined approach to delivering exceptional results
+            {t('home.streamlinedApproach')}
           </p>
         </div>
 
@@ -158,8 +158,8 @@ const ProcessSection: React.FC = () => {
           textAlign: 'center',
           marginTop: '3rem'
         }}>
-          <Link 
-            to="/our-process" 
+          <Link
+            to="/our-process"
             className="btn-modern-primary"
             style={{
               display: 'inline-block',
@@ -173,7 +173,7 @@ const ProcessSection: React.FC = () => {
               transition: 'all 0.3s ease'
             }}
           >
-            Learn More About Our Process
+            {t('home.learnMoreProcess')}
           </Link>
         </div>
       </div>

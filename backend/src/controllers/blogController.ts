@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Blog, { IBlog } from '../models/Blog';
 import { getLanguageFromRequest, transformContentForLanguage } from '../utils/languageUtils';
+import { autoTranslateBlogContent } from '../services/translationService';
 
 // Get all blog posts with filtering and pagination
 export const getBlogs = async (req: Request, res: Response) => {
@@ -43,14 +44,16 @@ export const getBlogs = async (req: Request, res: Response) => {
     if (category) {
       filter.$or = [
         { 'category.en': new RegExp(category as string, 'i') },
-        { 'category.ar': new RegExp(category as string, 'i') }
+        { 'category.ar': new RegExp(category as string, 'i') },
+        { 'category.fr': new RegExp(category as string, 'i') }
       ];
     }
 
     if (tag) {
       filter.$or = [
         { 'tags.en': new RegExp(tag as string, 'i') },
-        { 'tags.ar': new RegExp(tag as string, 'i') }
+        { 'tags.ar': new RegExp(tag as string, 'i') },
+        { 'tags.fr': new RegExp(tag as string, 'i') }
       ];
     }
 
@@ -118,11 +121,12 @@ export const getBlogBySlug = async (req: Request, res: Response) => {
     const { slug } = req.params;
     const language = getLanguageFromRequest(req);
 
-    // Find by slug in either language
+    // Find by slug in any language
     const blog = await Blog.findOne({
       $or: [
         { 'slug.en': slug },
-        { 'slug.ar': slug }
+        { 'slug.ar': slug },
+        { 'slug.fr': slug }
       ],
       status: 'published',
       isActive: true
@@ -201,11 +205,11 @@ export const getBlogById = async (req: Request, res: Response) => {
 // Create new blog post
 export const createBlog = async (req: Request, res: Response) => {
   try {
-    const blogData = req.body;
+    let blogData = req.body;
 
     // Validate that at least one language has title and content
-    const hasTitle = (blogData.title?.en && blogData.title.en.trim()) || (blogData.title?.ar && blogData.title.ar.trim());
-    const hasContent = (blogData.content?.en && blogData.content.en.trim()) || (blogData.content?.ar && blogData.content.ar.trim());
+    const hasTitle = (blogData.title?.en && blogData.title.en.trim()) || (blogData.title?.ar && blogData.title.ar.trim()) || (blogData.title?.fr && blogData.title.fr.trim());
+    const hasContent = (blogData.content?.en && blogData.content.en.trim()) || (blogData.content?.ar && blogData.content.ar.trim()) || (blogData.content?.fr && blogData.content.fr.trim());
 
     if (!hasTitle) {
       return res.status(400).json({
@@ -221,10 +225,14 @@ export const createBlog = async (req: Request, res: Response) => {
       });
     }
 
+    // Auto-translate content if English is provided but other languages are missing
+    blogData = await autoTranslateBlogContent(blogData);
+
     // Generate slug if not provided
-    if (!blogData.slug || (!blogData.slug.en && !blogData.slug.ar)) {
+    if (!blogData.slug || (!blogData.slug.en && !blogData.slug.ar && !blogData.slug.fr)) {
       const titleEn = blogData.title?.en || '';
       const titleAr = blogData.title?.ar || '';
+      const titleFr = blogData.title?.fr || '';
       blogData.slug = {};
 
       // Only generate slug for languages that have title
@@ -233,6 +241,9 @@ export const createBlog = async (req: Request, res: Response) => {
       }
       if (titleAr) {
         blogData.slug.ar = titleAr.toLowerCase().replace(/[^ا-ي0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      }
+      if (titleFr) {
+        blogData.slug.fr = titleFr.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
       }
     }
 
@@ -268,7 +279,10 @@ export const createBlog = async (req: Request, res: Response) => {
 export const updateBlog = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const updateData = req.body;
+    let updateData = req.body;
+
+    // Auto-translate content if English is provided but other languages are missing
+    updateData = await autoTranslateBlogContent(updateData);
 
     const blog = await Blog.findByIdAndUpdate(
       id,

@@ -2718,7 +2718,7 @@ main {
 }
 
 [dir="rtl"] .section-subtitle-modern {
-  text-align: right;
+  text-align: center;
 }
 
 [dir="rtl"] .section-cta {
@@ -3125,11 +3125,11 @@ main {
   margin-bottom: 1rem;
 }
 
-.property-location::before {
+/* .property-location::before {
   content: "📍";
   margin-right: 0.5rem;
   font-size: 1rem;
-}
+} */
 
 .property-price {
   color: var(--champagne-taupe);
@@ -3156,6 +3156,19 @@ main {
   font-size: 0.9rem;
   color: var(--gray);
   font-weight: 500;
+}
+
+.property-description {
+  color: var(--text-light);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+  font-size: 0.95rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .property-features {

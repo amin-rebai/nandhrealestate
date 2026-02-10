@@ -1,3 +1,8 @@
+.language-switcher-container {
+  position: relative;
+  display: inline-block;
+}
+
 .language-switcher {
   display: flex;
   align-items: center;
@@ -6,7 +11,7 @@
   background: transparent;
   border: 2px solid #B89C4C;
   border-radius: 25px;
-  color: #000000;
+  color: #ffffff;
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
@@ -40,6 +45,64 @@
   letter-spacing: 0.5px;
 }
 
+.dropdown-arrow {
+  font-size: 0.7rem;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Menu */
+.language-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  background: white;
+  border: 2px solid #B89C4C;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 150px;
+  overflow: hidden;
+}
+
+.language-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: none;
+  color: #000000;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.language-option:hover {
+  background: #F5F0E8;
+}
+
+.language-option.selected {
+  background: #B89C4C;
+  color: white;
+}
+
+.language-flag {
+  font-size: 1.2rem;
+}
+
+.language-name {
+  font-family: inherit;
+}
+
 /* RTL Support */
 [dir="rtl"] .language-switcher {
   flex-direction: row-reverse;
@@ -47,6 +110,16 @@
 
 [dir="rtl"] .language-switcher:hover .language-icon {
   transform: rotate(-180deg);
+}
+
+[dir="rtl"] .language-dropdown {
+  right: auto;
+  left: 0;
+}
+
+[dir="rtl"] .language-option {
+  flex-direction: row-reverse;
+  text-align: right;
 }
 
 /* Mobile responsive */
@@ -64,6 +137,19 @@
   .language-icon {
     font-size: 1.2rem;
   }
+
+  .dropdown-arrow {
+    display: none;
+  }
+
+  .language-dropdown {
+    min-width: 120px;
+  }
+
+  .language-option {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+  }
 }
 
 /* Dark mode support */
@@ -77,12 +163,38 @@
     background: #B89C4C;
     color: #1a1a1a;
   }
+
+  .language-dropdown {
+    background: #2a2a2a;
+    border-color: #B89C4C;
+  }
+
+  .language-option {
+    color: #ffffff;
+  }
+
+  .language-option:hover {
+    background: #3a3a3a;
+  }
+
+  .language-option.selected {
+    background: #B89C4C;
+    color: #1a1a1a;
+  }
 }
 
 /* High contrast mode */
 @media (prefers-contrast: high) {
   .language-switcher {
     border-width: 3px;
+    font-weight: 600;
+  }
+
+  .language-dropdown {
+    border-width: 3px;
+  }
+
+  .language-option {
     font-weight: 600;
   }
 }

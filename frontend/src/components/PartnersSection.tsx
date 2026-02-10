@@ -15,7 +15,7 @@ interface PartnerItem {
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 const PartnersSection: React.FC = () => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [partners, setPartners] = useState<PartnerItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -115,10 +115,10 @@ const PartnersSection: React.FC = () => {
     }}>
       <div className="container">
         <div className="section-header-modern">
-          <div className="section-badge">Our Partners</div>
-          <h2 className="section-title-modern">Strategic Alliances</h2>
+          <div className="section-badge">{t('home.ourPartners')}</div>
+          <h2 className="section-title-modern">{t('home.strategicAlliances')}</h2>
           <p className="section-subtitle-modern">
-            Building success through trusted partnerships across global markets
+            {t('home.buildingSuccessThroughPartnerships')}
           </p>
         </div>
 
@@ -201,8 +201,8 @@ const PartnersSection: React.FC = () => {
           textAlign: 'center',
           marginTop: '3rem'
         }}>
-          <Link 
-            to="/our-partners" 
+          <Link
+            to="/our-partners"
             className="btn-modern-secondary"
             style={{
               display: 'inline-block',
@@ -225,7 +225,7 @@ const PartnersSection: React.FC = () => {
               e.currentTarget.style.color = '#B89C4C';
             }}
           >
-            View All Partners
+            {t('home.viewAllPartners')}
           </Link>
         </div>
       </div>

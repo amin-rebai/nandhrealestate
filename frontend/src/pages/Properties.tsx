@@ -582,7 +582,7 @@ const Properties: React.FC = () => {
                         {/* <span>📅 {property.yearBuilt}</span> */}
                       </div>
 
-                      <p style={{ color: 'var(--text-light)', marginBottom: '1rem', lineHeight: '1.5', fontSize: '0.95rem' }}>
+                      <p className="property-description">
                         {property.description}
                       </p>
 
@@ -632,7 +632,7 @@ const Properties: React.FC = () => {
                         </div>
                       )}
 
-                      <div className="agent-info" style={{
+                      {/* <div className="agent-info" style={{
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
@@ -651,7 +651,7 @@ const Properties: React.FC = () => {
                         <div style={{ fontSize: '0.8rem', color: 'var(--text-light)' }}>
                           Listed: {new Date(property.dateAdded).toLocaleDateString()}
                         </div>
-                      </div>
+                      </div> */}
 
                       <div className="property-actions">
                         <button
@@ -764,7 +764,7 @@ const Properties: React.FC = () => {
                         <span>📅 Built {property.yearBuilt}</span>
                       </div>
 
-                      <p style={{ color: 'var(--text-light)', marginBottom: '1rem', lineHeight: '1.6', flex: 1 }}>
+                      <p className="property-description" style={{ flex: 1 }}>
                         {property.description}
                       </p>
 

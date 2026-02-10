@@ -4,28 +4,52 @@ import './LanguageSwitcher.css';
 
 const LanguageSwitcher: React.FC = () => {
   const { i18n, t } = useTranslation();
+  const [isOpen, setIsOpen] = React.useState(false);
 
-  const toggleLanguage = () => {
-    // Cycle through: en -> ar -> fr -> en
-    const newLanguage = i18n.language === 'en' ? 'ar' : i18n.language === 'ar' ? 'fr' : 'en';
-    i18n.changeLanguage(newLanguage);
+  const handleLanguageChange = (language: string) => {
+    i18n.changeLanguage(language);
+    setIsOpen(false);
   };
 
   const currentLanguage = i18n.language === 'ar' ? 'arabic' : i18n.language === 'fr' ? 'french' : 'english';
-  const targetLanguage = i18n.language === 'ar' ? 'french' : i18n.language === 'fr' ? 'english' : 'arabic';
+
+  const languages = [
+    { code: 'en', name: 'english', flag: '🇺🇸' },
+    { code: 'ar', name: 'arabic', flag: '🇸🇦' },
+    { code: 'fr', name: 'french', flag: '🇫🇷' }
+  ];
 
   return (
-    <button 
-      className="language-switcher"
-      onClick={toggleLanguage}
-      title={t('language.switchTo', { language: t(`language.${targetLanguage}`) })}
-      aria-label={t('language.switchTo', { language: t(`language.${targetLanguage}`) })}
-    >
-      <span className="language-icon">🌐</span>
-      <span className="language-text">
-        {t(`language.${targetLanguage}`)}
-      </span>
-    </button>
+    <div className="language-switcher-container">
+      <button
+        className="language-switcher"
+        onClick={() => setIsOpen(!isOpen)}
+        title={t('navigation.language')}
+        aria-label={t('navigation.language')}
+        aria-expanded={isOpen}
+      >
+        <span className="language-icon">🌐</span>
+        <span className="language-text">
+          {t(`language.${currentLanguage}`)}
+        </span>
+        <span className={`dropdown-arrow ${isOpen ? 'open' : ''}`}>▼</span>
+      </button>
+
+      {isOpen && (
+        <div className="language-dropdown">
+          {languages.map((lang) => (
+            <button
+              key={lang.code}
+              className={`language-option ${i18n.language === lang.code ? 'selected' : ''}`}
+              onClick={() => handleLanguageChange(lang.code)}
+            >
+              <span className="language-flag">{lang.flag}</span>
+              <span className="language-name">{t(`language.${lang.name}`)}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
 

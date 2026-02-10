@@ -18,7 +18,7 @@ interface PortfolioItem {
 }
 
 const PortfolioShowcase: React.FC = () => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -133,8 +133,8 @@ const PortfolioShowcase: React.FC = () => {
       <section className="visual-showcase-section">
         <div className="container">
           <div className="section-header-modern">
-            <div className="section-badge">Our Portfolio</div>
-            <h2 className="section-title-modern">Loading...</h2>
+            <div className="section-badge">{t('home.portfolio')}</div>
+            <h2 className="section-title-modern">{t('common.loading')}</h2>
           </div>
         </div>
       </section>
@@ -146,8 +146,8 @@ const PortfolioShowcase: React.FC = () => {
       <section className="visual-showcase-section">
         <div className="container">
           <div className="section-header-modern">
-            <div className="section-badge">Our Portfolio</div>
-            <h2 className="section-title-modern">No Portfolio Items Available</h2>
+            <div className="section-badge">{t('home.portfolio')}</div>
+            <h2 className="section-title-modern">{t('common.error')}</h2>
           </div>
         </div>
       </section>
@@ -171,10 +171,10 @@ const PortfolioShowcase: React.FC = () => {
     <section className="visual-showcase-section">
       <div className="container">
         <div className="section-header-modern">
-          <div className="section-badge">Our Portfolio</div>
-          <h2 className="section-title-modern">Luxury Living Redefined</h2>
+          <div className="section-badge">{t('home.portfolio')}</div>
+          <h2 className="section-title-modern">{t('home.luxuryLivingRedefined')}</h2>
           <p className="section-subtitle-modern">
-            Experience the finest properties across our global network
+            {t('home.experienceFinestProperties')}
           </p>
         </div>
 
