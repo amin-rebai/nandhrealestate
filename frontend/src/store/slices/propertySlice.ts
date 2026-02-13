@@ -95,7 +95,9 @@ export const fetchProperties = createAsyncThunk(
   async (params: any = {}, { rejectWithValue }) => {
     try {
       const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-      const queryString = new URLSearchParams(params).toString();
+      // Fetch all properties by default (limit=100 to get all properties)
+      const queryParams = { ...params, limit: params.limit || 100 };
+      const queryString = new URLSearchParams(queryParams).toString();
       const response = await axios.get(`${API_URL}/properties?${queryString}`);
       return response.data.data || response.data;
     } catch (error: any) {
