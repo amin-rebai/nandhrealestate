@@ -62,6 +62,8 @@ export interface IProperty extends Document {
   installmentPlan?: string;
   // Additional property fields (FGRealty-style)
   referenceNumber?: string;
+  propertyFinderRefId?: string; // Property Finder listing ID for sync
+  propertyFinderReference?: string; // Property Finder reference number
   serviceCharge?: number;
   transferFee?: string;
   titleDeed?: boolean;
@@ -94,12 +96,12 @@ const PropertySchema: Schema = new Schema({
     en: {
       type: String,
       required: [true, 'English property description is required'],
-      maxlength: [1000, 'Description cannot exceed 1000 characters']
+      maxlength: [5000, 'Description cannot exceed 5000 characters']
     },
     ar: {
       type: String,
       required: [true, 'Arabic property description is required'],
-      maxlength: [1000, 'Description cannot exceed 1000 characters']
+      maxlength: [5000, 'Description cannot exceed 5000 characters']
     }
   },
   price: {
@@ -236,6 +238,16 @@ const PropertySchema: Schema = new Schema({
   },
   // Additional property fields (FGRealty-style)
   referenceNumber: {
+    type: String,
+    trim: true
+  },
+  propertyFinderRefId: {
+    type: String,
+    trim: true,
+    unique: true,
+    sparse: true
+  },
+  propertyFinderReference: {
     type: String,
     trim: true
   },

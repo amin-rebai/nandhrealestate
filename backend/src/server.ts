@@ -10,6 +10,7 @@ import uploadRoutes from './routes/uploadRoutes';
 import contentRoutes from './routes/contentRoutes';
 import blogRoutes from './routes/blogRoutes';
 import contactRequestRoutes from './routes/contactRequestRoutes';
+import propertyFinderRoutes from './routes/propertyFinderRoutes';
 import { errorHandler } from './middleware/errorHandler';
 
 dotenv.config();
@@ -54,6 +55,7 @@ app.use('/upload', uploadRoutes);
 app.use('/content', contentRoutes);
 app.use('/blog', blogRoutes);
 app.use('/contact-requests', contactRequestRoutes);
+app.use('/property-finder', propertyFinderRoutes);
 
 // Health check endpoint
 app.get('/health', (_req, res) => {
