@@ -892,6 +892,16 @@ const blogStyles = `
       justify-content: center;
     }
   }
+
+  @media (max-width: 480px) {
+    .blog-hero .hero-title {
+      font-size: 1.8rem;
+    }
+
+    .blog-hero .hero-subtitle {
+      font-size: 1rem;
+    }
+  }
 `;
 
 // Inject styles

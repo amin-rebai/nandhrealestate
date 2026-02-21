@@ -699,7 +699,7 @@ const contactStyles = `
 
   .contact-item.visual-enhanced {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 20px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
@@ -962,7 +962,7 @@ const contactStyles = `
 
   @media (max-width: 480px) {
     .contact-hero .hero-title {
-      font-size: 2rem;
+      font-size: 1.6rem;
     }
 
     .contact-info.visual-enhanced,

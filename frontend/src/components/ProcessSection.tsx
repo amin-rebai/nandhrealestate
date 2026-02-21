@@ -117,13 +117,27 @@ const ProcessSection: React.FC = () => {
         </div>
 
         <div className="process-timeline" style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: '2rem',
-          marginTop: '3rem'
+          display: 'flex',
+          flexDirection: 'row',
+          gap: '1.5rem',
+          marginTop: '3rem',
+          overflowX: 'auto',
+          overflowY: 'hidden',
+          paddingBottom: '1rem',
+          scrollBehavior: 'smooth',
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#B89C4C #e9ecef'
         }}>
           {displaySteps.map((step, index) => (
-            <div key={step._id} className="process-step-card">
+            <div 
+              key={step._id} 
+              className="process-step-card"
+              style={{
+                minWidth: '320px',
+                maxWidth: '320px',
+                flexShrink: 0
+              }}
+            >
               {/* <div className="step-number">{String(index + 1).padStart(2, '0')}</div> */}
               
               {step.image && (

@@ -5,10 +5,36 @@
 }
 
 .process-section .process-timeline {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
   margin-top: 3rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 1rem;
+  scroll-behavior: smooth;
+  /* Custom scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: #B89C4C #e9ecef;
+}
+
+/* Webkit scrollbar */
+.process-section .process-timeline::-webkit-scrollbar {
+  height: 8px;
+}
+
+.process-section .process-timeline::-webkit-scrollbar-track {
+  background: #e9ecef;
+  border-radius: 4px;
+}
+
+.process-section .process-timeline::-webkit-scrollbar-thumb {
+  background: #B89C4C;
+  border-radius: 4px;
+}
+
+.process-section .process-timeline::-webkit-scrollbar-thumb:hover {
+  background: #a08a3d;
 }
 
 .process-step-card {
@@ -19,6 +45,9 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
   overflow: hidden;
+  min-width: 320px;
+  max-width: 320px;
+  flex-shrink: 0;
 }
 
 .process-step-card:hover {
@@ -79,8 +108,43 @@
   transition: all 0.3s ease;
 }
 
+@media (max-width: 1024px) {
+  .process-step-card {
+    min-width: 290px;
+    max-width: 290px;
+  }
+}
+
 @media (max-width: 720px) {
   .process-step-card img {
     height: 140px;
+  }
+
+  .process-step-card {
+    min-width: 270px;
+    max-width: 270px;
+    padding: 1.5rem;
+  }
+
+  .process-step-card h3 {
+    font-size: 1.2rem;
+  }
+
+  .process-step-card p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .process-step-card .step-icon {
+    font-size: 2rem;
+  }
+
+  .process-step-card .step-number {
+    font-size: 2rem;
+  }
+
+  .process-step-card h3 {
+    font-size: 1.1rem;
   }
 }

@@ -4,7 +4,8 @@ import {
   syncAllProperties,
   syncSingleProperty,
   getWebhookStatus,
-  setupWebhook
+  setupWebhook,
+  debugLocations
 } from '../controllers/propertyFinderController';
 import { protect, authorize } from '../middleware/auth';
 
@@ -20,5 +21,8 @@ router.post('/sync/:identifier', protect, authorize('admin'), syncSingleProperty
 // Webhook management
 router.get('/webhooks', protect, authorize('admin'), getWebhookStatus);
 router.post('/webhooks', protect, authorize('admin'), setupWebhook);
+
+// Debug endpoint - test locations API
+router.get('/debug/locations', protect, authorize('admin'), debugLocations);
 
 export default router;

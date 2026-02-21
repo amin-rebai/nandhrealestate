@@ -1,0 +1,53 @@
+.breadcrumb {
+  padding: 0.75rem 0;
+  margin-bottom: 1rem;
+}
+
+.breadcrumb-list {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.breadcrumb-link {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #666;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.breadcrumb-link:hover {
+  color: #4B0E14;
+}
+
+.breadcrumb-separator {
+  margin: 0 0.5rem;
+  color: #999;
+}
+
+.breadcrumb-current {
+  color: #4B0E14;
+  font-weight: 500;
+}
+
+/* RTL Support */
+[dir="rtl"] .breadcrumb-link svg {
+  order: 1;
+  margin-left: 0.25rem;
+  margin-right: 0;
+}
+
+[dir="rtl"] .breadcrumb-separator {
+  transform: scaleX(-1);
+}

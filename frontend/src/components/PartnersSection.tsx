@@ -123,10 +123,16 @@ const PartnersSection: React.FC = () => {
         </div>
 
         <div className="partners-grid" style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: '2rem',
-          marginTop: '3rem'
+          display: 'flex',
+          flexDirection: 'row',
+          gap: '1.5rem',
+          marginTop: '3rem',
+          overflowX: 'auto',
+          overflowY: 'hidden',
+          paddingBottom: '1rem',
+          scrollBehavior: 'smooth',
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#B89C4C #e9ecef'
         }}>
           {displayPartners.map((partner, index) => (
             <div 
@@ -138,7 +144,10 @@ const PartnersSection: React.FC = () => {
                 borderRadius: '12px',
                 textAlign: 'center',
                 transition: 'all 0.3s ease',
-                border: '2px solid transparent'
+                border: '2px solid transparent',
+                minWidth: '320px',
+                maxWidth: '320px',
+                flexShrink: 0
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = 'white';

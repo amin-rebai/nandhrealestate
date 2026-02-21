@@ -20,6 +20,9 @@ interface TokenResponse {
 interface PropertyFinderLocation {
   id: number;
   name: string;
+  nameArabic?: string;
+  parentId?: number;
+  level?: number;
   coordinates?: {
     lat: number;
     lng: number;
@@ -121,6 +124,7 @@ class PropertyFinderService {
   private axiosInstance: AxiosInstance;
   private accessToken: string | null = null;
   private tokenExpiry: number = 0;
+  private locationCache: Map<number, PropertyFinderLocation> = new Map();
 
   constructor() {
     this.config = {
@@ -256,10 +260,117 @@ class PropertyFinderService {
         params
       );
 
+      // Cache all locations
+      if (response.data) {
+        response.data.forEach(loc => {
+          this.locationCache.set(loc.id, loc);
+        });
+      }
+
       return response.data || [];
     } catch (error: any) {
       console.error('Error fetching locations from Property Finder:', error.message);
       return [];
+    }
+  }
+
+  /**
+   * Get a single location by ID
+   */
+  async getLocationById(locationId: number): Promise<PropertyFinderLocation | null> {
+    // Check cache first
+    if (this.locationCache.has(locationId)) {
+      return this.locationCache.get(locationId)!;
+    }
+
+    try {
+      console.log(`[PF] Trying to fetch location ${locationId} from API using search...`);
+
+      // Use search query to find location by ID
+      const response = await this.authenticatedRequest<{ data: PropertyFinderLocation[] }>(
+        'get',
+        '/v1/locations',
+        undefined,
+        { search: locationId.toString(), perPage: 10 }
+      );
+
+      if (response && response.data && response.data.length > 0) {
+        // Find the exact match
+        const found = response.data.find(loc => loc.id === locationId);
+        if (found) {
+          console.log(`[PF] Found location ${locationId}: ${found.name}`);
+          this.locationCache.set(locationId, found);
+          return found;
+        }
+      }
+
+      console.log(`[PF] Could not find location ${locationId} via search`);
+      return null;
+    } catch (error: any) {
+      console.error(`Error fetching location ${locationId} from Property Finder:`, error.message);
+      return null;
+    }
+  }
+
+  /**
+   * Pre-load locations cache for better performance
+   */
+  async preloadLocations(): Promise<void> {
+    try {
+      console.log('===============================================');
+      console.log('PRE-LOADING LOCATIONS FROM PROPERTY FINDER');
+      console.log('===============================================');
+
+      // Fetch all locations with higher perPage
+      const response = await this.authenticatedRequest<{ data: PropertyFinderLocation[] }>(
+        'get',
+        '/v1/locations',
+        undefined,
+        { perPage: 1000 }
+      );
+
+      console.log('Locations API response type:', typeof response);
+      console.log('Response structure:', response ? Object.keys(response) : 'null');
+
+      const allLocations: PropertyFinderLocation[] = [];
+
+      if (response && response.data && Array.isArray(response.data)) {
+        console.log(`Found ${response.data.length} locations in API response`);
+        response.data.forEach(loc => {
+          this.locationCache.set(loc.id, loc);
+          allLocations.push(loc);
+        });
+      } else if (response && Array.isArray(response)) {
+        console.log('Response is an array with', response.length, 'items');
+        response.forEach((loc: PropertyFinderLocation) => {
+          this.locationCache.set(loc.id, loc);
+          allLocations.push(loc);
+        });
+      }
+
+      console.log(`\n==============================================`);
+      console.log(`PRELOAD COMPLETE: ${allLocations.length} locations loaded`);
+      console.log(`==============================================`);
+
+      // Show some sample locations
+      if (allLocations.length > 0) {
+        console.log('Sample locations loaded:');
+        allLocations.slice(0, 10).forEach(loc => {
+          console.log(`  - ID: ${loc.id}, Name: ${loc.name}`);
+        });
+
+        // Check if our property locations exist
+        const testIds = [422, 1607, 1532, 130, 265, 345, 415, 443, 1507];
+        console.log('\nChecking if property location IDs are in cache:');
+        testIds.forEach(id => {
+          const exists = this.locationCache.has(id);
+          const loc = this.locationCache.get(id);
+          console.log(`  ID ${id}: ${exists ? 'FOUND - ' + loc?.name : 'NOT FOUND'}`);
+        });
+      }
+    } catch (error: any) {
+      console.error('ERROR pre-loading locations:', error.message);
+      console.error(error.stack);
     }
   }
 
@@ -481,9 +592,33 @@ class PropertyFinderService {
         bathrooms = pfListing.bathrooms;
       }
 
-      // Build location string - we only have location ID, so we'll use a placeholder
+      // Build location string - try to get actual location name from cache or API
       const locationId = pfListing.location?.id || 0;
-      const locationEn = `Location ID: ${locationId}`;
+      let locationEn = `Location ID: ${locationId}`;
+      let locationAr = `الموقع: ${locationId}`;
+
+      console.log(`[PF] Listing ${pfListing.reference}: locationId=${locationId}, cacheSize=${this.locationCache.size}, hasInCache=${this.locationCache.has(locationId)}`);
+
+      if (locationId) {
+        // Try to get location from cache first
+        let location = this.locationCache.get(locationId);
+
+        // If not in cache, try to fetch it
+        if (!location) {
+          console.log(`[PF] Fetching location ${locationId} from API...`);
+          const fetchedLocation = await this.getLocationById(locationId);
+          console.log(`[PF] API response for location ${locationId}:`, fetchedLocation);
+          location = fetchedLocation || undefined;
+        }
+
+        if (location) {
+          console.log(`[PF] Using location name: ${location.name}`);
+          locationEn = location.name || locationEn;
+          locationAr = location.nameArabic || locationEn;
+        } else {
+          console.log(`[PF] Location ${locationId} not found`);
+        }
+      }
 
       // Determine property status
       const isLive = pfListing.state?.stage === 'live' || pfListing.state?.type === 'live';

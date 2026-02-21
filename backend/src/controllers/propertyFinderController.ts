@@ -215,6 +215,9 @@ export const syncAllProperties = async (req: Request, res: Response) => {
       });
     }
 
+    console.log('Pre-loading locations from Property Finder...');
+    await propertyFinderService.preloadLocations();
+
     console.log('Fetching all properties from Property Finder...');
 
     // Fetch published listings
@@ -394,6 +397,57 @@ export const setupWebhook = async (req: Request, res: Response) => {
     return res.status(500).json({
       success: false,
       message: 'Error setting up webhook',
+      error: error.message
+    });
+  }
+};
+
+/**
+ * @desc    Debug endpoint - test locations API
+ * @route   GET /api/property-finder/debug/locations
+ * @access  Private/Admin
+ */
+export const debugLocations = async (req: Request, res: Response) => {
+  try {
+    console.log('===============================================');
+    console.log('DEBUG: Testing Locations API');
+    console.log('===============================================');
+
+    // First, try to get all locations
+    const locations = await propertyFinderService.getLocations();
+
+    console.log('GET LOCATIONS RESULT:');
+    console.log('- Type:', typeof locations);
+    console.log('- Is Array:', Array.isArray(locations));
+    console.log('- Length:', locations ? locations.length : 'N/A');
+    if (locations && locations.length > 0) {
+      console.log('- First 3 locations:', JSON.stringify(locations.slice(0, 3)));
+    }
+
+    // Try to get a specific location by ID (e.g., 422 = The Pearl)
+    const testLocationId = 422;
+    const singleLocation = await propertyFinderService.getLocationById(testLocationId);
+
+    console.log('\nGET LOCATION BY ID (422) RESULT:');
+    console.log('- Result:', JSON.stringify(singleLocation));
+
+    return res.status(200).json({
+      success: true,
+      message: 'Debug info check server console for details',
+      data: {
+        locationsCount: locations ? locations.length : 0,
+        locationsSample: locations ? locations.slice(0, 5) : [],
+        testLocationId,
+        testLocationResult: singleLocation,
+        cacheSize: (propertyFinderService as any).locationCache?.size || 'N/A'
+      }
+    });
+
+  } catch (error: any) {
+    console.error('ERROR in debug locations:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Error debugging locations',
       error: error.message
     });
   }

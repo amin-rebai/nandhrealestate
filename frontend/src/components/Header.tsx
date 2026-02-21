@@ -100,14 +100,14 @@ const Header: React.FC = () => {
             </div>
             <div className={`dropdown-menu ${activeDropdown === 'properties' ? 'show' : ''}`}>
               <Link to="/properties" className="dropdown-item" onClick={closeMobileMenu}>
-                <span className="dropdown-icon">🏠</span>
+                {/* <span className="dropdown-icon">🏠</span> */}
                 <div>
                   <div className="dropdown-title">Qatar Properties</div>
                   <div className="dropdown-desc">Browse properties in Qatar</div>
                 </div>
               </Link>
               <Link to="/international-properties" className="dropdown-item" onClick={closeMobileMenu}>
-                <span className="dropdown-icon">🌍</span>
+                {/* <span className="dropdown-icon">🌍</span> */}
                 <div>
                   <div className="dropdown-title">International Properties</div>
                   <div className="dropdown-desc">Explore global real estate markets</div>
@@ -142,21 +142,21 @@ const Header: React.FC = () => {
             </div>
             <div className={`dropdown-menu ${activeDropdown === 'services' ? 'show' : ''}`}>
               <Link to="/our-services" className="dropdown-item" onClick={closeMobileMenu}>
-                <span className="dropdown-icon">🏢</span>
+                {/* <span className="dropdown-icon">🏢</span> */}
                 <div>
                   <div className="dropdown-title">{t('navigation.ourServices')}</div>
                   <div className="dropdown-desc">{t('navigation.ourServicesDesc')}</div>
                 </div>
               </Link>
               <Link to="/our-process" className="dropdown-item" onClick={closeMobileMenu}>
-                <span className="dropdown-icon">⚡</span>
+                {/* <span className="dropdown-icon">⚡</span> */}
                 <div>
                   <div className="dropdown-title">{t('navigation.ourProcess')}</div>
                   <div className="dropdown-desc">{t('navigation.ourProcessDesc')}</div>
                 </div>
               </Link>
               <Link to="/our-partners" className="dropdown-item" onClick={closeMobileMenu}>
-                <span className="dropdown-icon">🤝</span>
+                {/* <span className="dropdown-icon">🤝</span> */}
                 <div>
                   <div className="dropdown-title">{t('navigation.ourPartners')}</div>
                   <div className="dropdown-desc">{t('navigation.ourPartnersDesc')}</div>
@@ -166,6 +166,7 @@ const Header: React.FC = () => {
           </li>
 
           <li><Link to="/blog" className={isActive('/blog')} onClick={closeMobileMenu}>{t('navigation.blog')}</Link></li>
+          <li><Link to="/faq" className={isActive('/faq')} onClick={closeMobileMenu}>{t('navigation.faq', 'FAQ')}</Link></li>
           <li><Link to="/contact" className={isActive('/contact')} onClick={closeMobileMenu}>{t('navigation.contact')}</Link></li>
 
           {/* Language Switcher in Mobile Menu */}

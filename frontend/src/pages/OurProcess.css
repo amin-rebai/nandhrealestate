@@ -126,11 +126,34 @@
     align-items: flex-start;
   }
 
+  .our-process-hero h1 {
+    font-size: 2rem;
+  }
+
   .our-process-hero p.lead {
     text-align: left;
+    font-size: 0.9rem;
   }
 
   .process-card .card-media {
     height: 180px;
+  }
+
+  .process-card h3 {
+    font-size: 1rem;
+  }
+
+  .process-card p {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .our-process-hero h1 {
+    font-size: 1.6rem;
+  }
+
+  .our-process-hero .gold-subtitle {
+    font-size: 0.9rem;
   }
 }
