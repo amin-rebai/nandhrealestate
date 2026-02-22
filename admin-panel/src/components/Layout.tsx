@@ -272,7 +272,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             {menuItems.find(item => item.path === location.pathname)?.text || t('dashboard.title')}
           </Typography>
 
-          <LanguageSwitcher />
+          {/* <LanguageSwitcher /> */}
 
           <IconButton
             size="large"

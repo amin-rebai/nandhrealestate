@@ -7,6 +7,7 @@ Your contact form now automatically sends notifications via **Email** and **What
 ## 📦 What Was Added
 
 ### Backend Services (2 new files)
+
 1. **`backend/src/services/emailService.ts`**
    - Sends professional HTML emails to admin
    - Sends confirmation emails to users
@@ -18,6 +19,7 @@ Your contact form now automatically sends notifications via **Email** and **What
    - Uses Twilio API
 
 ### Frontend Enhancements
+
 - Form submission with loading state
 - Success/error message display
 - Auto-clearing form on success
@@ -25,6 +27,7 @@ Your contact form now automatically sends notifications via **Email** and **What
 - Professional error handling
 
 ### Configuration Files
+
 - `backend/.env.template` - Detailed environment template
 - Updated `backend/.env.example` - New variables documented
 
@@ -45,12 +48,14 @@ User fills form → Submits → Backend receives data
 ## 📧 Email Features
 
 **Admin Email:**
+
 - Receives all form details
 - Professional HTML template
 - Includes: Name, Email, Phone, Subject, Property Type, Budget, Message
 - Branded with company colors
 
 **User Email:**
+
 - Confirmation that inquiry was received
 - Professional greeting
 - Company contact information
@@ -59,11 +64,13 @@ User fills form → Submits → Backend receives data
 ## 💬 WhatsApp Features
 
 **Admin WhatsApp:**
+
 - Formatted message with all details
 - Emoji formatting for readability
 - Quick reference of inquiry
 
 **User WhatsApp:**
+
 - Confirmation message
 - Company phone number
 - Professional tone
@@ -71,13 +78,15 @@ User fills form → Submits → Backend receives data
 ## ⚙️ Required Configuration
 
 ### Email (Gmail)
+
 ```env
 SMTP_EMAIL=your_email@gmail.com
 SMTP_PASSWORD=your_app_password
-ADMIN_EMAIL=admin@nhrealestate.qa
+ADMIN_EMAIL=admin@nandhrealestate.qa
 ```
 
 ### WhatsApp (Twilio)
+
 ```env
 TWILIO_ACCOUNT_SID=your_account_sid
 TWILIO_AUTH_TOKEN=your_auth_token
@@ -120,7 +129,7 @@ ADMIN_WHATSAPP_NUMBER=+974XXXXXXXXX
 ✅ Form validation  
 ✅ Loading states and feedback  
 ✅ Mobile responsive  
-✅ Multi-language support (existing i18n)  
+✅ Multi-language support (existing i18n)
 
 ## 🔒 Security
 
@@ -133,4 +142,3 @@ ADMIN_WHATSAPP_NUMBER=+974XXXXXXXXX
 ## 📞 Support
 
 See `CONTACT_FORM_SETUP.md` for troubleshooting and detailed instructions.
-

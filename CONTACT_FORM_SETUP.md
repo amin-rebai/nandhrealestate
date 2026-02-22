@@ -28,7 +28,7 @@ SMTP_PORT=587
 SMTP_SECURE=false
 SMTP_EMAIL=your_email@gmail.com
 SMTP_PASSWORD=your_app_password
-ADMIN_EMAIL=admin@nhrealestate.qa
+ADMIN_EMAIL=admin@nandhrealestate.qa
 ```
 
 **Steps to get Gmail App Password:**

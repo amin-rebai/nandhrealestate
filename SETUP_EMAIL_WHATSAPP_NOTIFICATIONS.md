@@ -48,14 +48,14 @@ SMTP_PORT=587
 SMTP_SECURE=false
 SMTP_EMAIL=your_email@gmail.com
 SMTP_PASSWORD=abcdefghijklmnop
-ADMIN_EMAIL=info@nhrealestate.qa
+ADMIN_EMAIL=info@nandhrealestate.qa
 ```
 
 **Replace:**
 
 - `your_email@gmail.com` → Your Gmail address
 - `abcdefghijklmnop` → The 16-character app password (remove spaces)
-- `info@nhrealestate.qa` → Email where you want to receive notifications
+- `info@nandhrealestate.qa` → Email where you want to receive notifications
 
 ---
 
@@ -228,7 +228,7 @@ SMTP_PORT=587
 SMTP_SECURE=false
 SMTP_EMAIL=your_email@gmail.com
 SMTP_PASSWORD=your_16_char_app_password
-ADMIN_EMAIL=info@nhrealestate.qa
+ADMIN_EMAIL=info@nandhrealestate.qa
 
 # WhatsApp Configuration (Twilio)
 TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -368,7 +368,7 @@ SMTP_PORT=587
 SMTP_SECURE=false
 SMTP_EMAIL=your_production_email@gmail.com
 SMTP_PASSWORD=your_app_password
-ADMIN_EMAIL=info@nhrealestate.qa
+ADMIN_EMAIL=info@nandhrealestate.qa
 
 # WhatsApp (Upgrade to paid Twilio account for production)
 TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

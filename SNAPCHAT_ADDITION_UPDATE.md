@@ -6,26 +6,30 @@ Snapchat has been added to the social media icons in the footer, bringing the to
 
 ## 🎨 Updated Platforms
 
-| Icon | Platform | Brand Color | Hover Color |
-|------|----------|-------------|-------------|
-| 🔵 | Facebook | #1877f2 | Blue fill |
-| 📷 | Instagram | #e4405f | Pink fill |
-| 🎵 | TikTok | #000000 | Black fill |
-| 💼 | LinkedIn | #0a66c2 | Dark blue fill |
-| 📺 | YouTube | #ff0000 | Red fill |
-| 👻 | **Snapchat** | **#fffc00** | **Yellow fill** |
+| Icon | Platform     | Brand Color | Hover Color     |
+| ---- | ------------ | ----------- | --------------- |
+| 🔵   | Facebook     | #1877f2     | Blue fill       |
+| 📷   | Instagram    | #e4405f     | Pink fill       |
+| 🎵   | TikTok       | #000000     | Black fill      |
+| 💼   | LinkedIn     | #0a66c2     | Dark blue fill  |
+| 📺   | YouTube      | #ff0000     | Red fill        |
+| 👻   | **Snapchat** | **#fffc00** | **Yellow fill** |
 
 ## 📝 Files Modified
 
 ### 1. `frontend/src/components/Footer.tsx`
+
 **Changes:**
+
 - Added `snapchat: string` to `ContactInfo` interface
 - Added `snapchat: ''` to initial state
 - Added Snapchat SVG icon with conditional rendering
 - Maintains same styling pattern as other icons
 
 ### 2. `frontend/src/App.css`
+
 **Changes:**
+
 - Fixed TikTok color from Twitter blue (#1da1f2) to TikTok black (#000000)
 - Added `.social-icon.snapchat:hover` styling
 - Added `.social-icon.snapchat:hover::before` styling
@@ -41,12 +45,12 @@ Update backend contact section:
 {
   "metadata": {
     "socialMedia": {
-      "facebook": "https://facebook.com/nhrealestate",
-      "instagram": "https://instagram.com/nhrealestate",
-      "tiktok": "https://tiktok.com/nhrealestate",
-      "linkedin": "https://linkedin.com/nhrealestate",
-      "youtube": "https://youtube.com/nhrealestate",
-      "snapchat": "https://snapchat.com/add/nhrealestate"
+      "facebook": "https://facebook.com/nandhrealestate",
+      "instagram": "https://instagram.com/nandhrealestate",
+      "tiktok": "https://tiktok.com/nandhrealestate",
+      "linkedin": "https://linkedin.com/nandhrealestate",
+      "youtube": "https://youtube.com/nandhrealestate",
+      "snapchat": "https://snapchat.com/add/nandhrealestate"
     }
   }
 }
@@ -60,16 +64,18 @@ Update backend contact section:
 ✅ Consistent with other icons  
 ✅ Conditional rendering (only shows if URL provided)  
 ✅ Accessible with aria-label  
-✅ Mobile responsive  
+✅ Mobile responsive
 
 ## 🎯 Hover Effect
 
 **Default State:**
+
 - Circular icon with border
 - Semi-transparent background
 - Champagne color text
 
 **Hover State:**
+
 - Background fills with yellow (#fffc00)
 - Icon scales up slightly
 - Shadow appears
@@ -80,14 +86,14 @@ Update backend contact section:
 
 ✅ Touch-friendly sizing (45px)  
 ✅ Proper spacing on small screens  
-✅ Works on all mobile browsers  
+✅ Works on all mobile browsers
 
 ## 🔍 Browser Support
 
 ✅ Chrome/Edge (latest)  
 ✅ Firefox (latest)  
 ✅ Safari (latest)  
-✅ Mobile browsers  
+✅ Mobile browsers
 
 ## 🚀 Next Steps
 
@@ -101,4 +107,3 @@ Update backend contact section:
 **Status:** ✅ Snapchat successfully added!
 
 Your footer now has 6 social media platforms with professional icons and smooth animations!
-

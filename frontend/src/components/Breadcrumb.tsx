@@ -19,7 +19,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
       '@type': 'ListItem',
       position: index + 1,
       name: item.name,
-      ...(item.url && { item: `https://nhrealestate.qa${item.url}` })
+      ...(item.url && { item: `https://nandhrealestate.qa${item.url}` })
     }))
   };
 

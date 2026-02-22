@@ -23,7 +23,7 @@ All code is ready. You just need to configure credentials.
 ```env
 SMTP_EMAIL=your_email@gmail.com
 SMTP_PASSWORD=abcdefghijklmnop
-ADMIN_EMAIL=info@nhrealestate.qa
+ADMIN_EMAIL=info@nandhrealestate.qa
 ```
 
 ---

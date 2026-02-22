@@ -16,7 +16,7 @@ import {
  */
 export const generateSitemap = async (req: Request, res: Response) => {
   try {
-    const baseUrl = process.env.SITE_URL || 'https://nhrealestate.qa';
+    const baseUrl = process.env.SITE_URL || 'https://nandhrealestate.qa';
 
     // Fetch all published properties
     const properties = await Property.find({ status: 'available' })
@@ -118,10 +118,10 @@ export const generateSitemap = async (req: Request, res: Response) => {
  * Generate robots.txt content
  */
 export const getRobotsTxt = async (req: Request, res: Response) => {
-  const baseUrl = process.env.SITE_URL || 'https://nhrealestate.qa';
+  const baseUrl = process.env.SITE_URL || 'https://nandhrealestate.qa';
 
   const robotsTxt = `# Robots.txt for N&H Homes Real Estate
-# https://nhrealestate.qa
+# https://nandhrealestate.qa
 
 User-agent: *
 Allow: /
@@ -160,7 +160,7 @@ Crawl-delay: 1
 export const getPropertySeo = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const baseUrl = process.env.SITE_URL || 'https://nhrealestate.qa';
+    const baseUrl = process.env.SITE_URL || 'https://nandhrealestate.qa';
 
     const property = await Property.findById(id);
 
@@ -187,13 +187,13 @@ export const getPropertySeo = async (req: Request, res: Response): Promise<void>
       canonical: `${baseUrl}/property/${property._id}`,
       ogTitle: title,
       ogDescription: description.substring(0, 200),
-      ogImage: property.images?.[0] || `${baseUrl}/og-image.jpg`,
+      ogImage: property.images?.[0] || `${baseUrl}/logo.png`,
       ogUrl: `${baseUrl}/property/${property._id}`,
       ogType: 'website',
       twitterCard: 'summary_large_image',
       twitterTitle: title,
       twitterDescription: description.substring(0, 200),
-      twitterImage: property.images?.[0] || `${baseUrl}/og-image.jpg`,
+      twitterImage: property.images?.[0] || `${baseUrl}/logo.png`,
     };
 
     // Generate schema - convert to plain object
@@ -221,7 +221,7 @@ export const getPropertySeo = async (req: Request, res: Response): Promise<void>
 export const getBlogSeo = async (req: Request, res: Response): Promise<void> => {
   try {
     const { slug } = req.params;
-    const baseUrl = process.env.SITE_URL || 'https://nhrealestate.qa';
+    const baseUrl = process.env.SITE_URL || 'https://nandhrealestate.qa';
 
     const blog = await Blog.findOne({ slug });
 
@@ -247,13 +247,13 @@ export const getBlogSeo = async (req: Request, res: Response): Promise<void> => 
       canonical: `${baseUrl}/blog/${slug}`,
       ogTitle: title,
       ogDescription: excerpt.substring(0, 200),
-      ogImage: (blog as any).featuredImage || `${baseUrl}/og-image.jpg`,
+      ogImage: (blog as any).featuredImage || `${baseUrl}/logo.png`,
       ogUrl: `${baseUrl}/blog/${slug}`,
       ogType: 'article',
       twitterCard: 'summary_large_image',
       twitterTitle: title,
       twitterDescription: excerpt.substring(0, 200),
-      twitterImage: (blog as any).featuredImage || `${baseUrl}/og-image.jpg`,
+      twitterImage: (blog as any).featuredImage || `${baseUrl}/logo.png`,
       articlePublishedTime: blog.createdAt,
       articleAuthor: blog.author?.name || 'N&H Homes Real Estate',
     };
@@ -279,7 +279,7 @@ export const getBlogSeo = async (req: Request, res: Response): Promise<void> => 
  */
 export const getFaqSeo = async (req: Request, res: Response): Promise<void> => {
   try {
-    const baseUrl = process.env.SITE_URL || 'https://nhrealestate.qa';
+    const baseUrl = process.env.SITE_URL || 'https://nandhrealestate.qa';
 
     // Common real estate FAQs
     const faqs = [
@@ -323,7 +323,7 @@ export const getFaqSeo = async (req: Request, res: Response): Promise<void> => {
       canonical: `${baseUrl}/faq`,
       ogTitle: 'Frequently Asked Questions | N&H Homes Real Estate',
       ogDescription: 'Find answers to common questions about buying, selling, and renting property in Qatar.',
-      ogImage: `${baseUrl}/og-image.jpg`,
+      ogImage: `${baseUrl}/logo.png`,
       ogUrl: `${baseUrl}/faq`,
       ogType: 'website',
       twitterCard: 'summary_large_image',
@@ -348,7 +348,7 @@ export const getFaqSeo = async (req: Request, res: Response): Promise<void> => {
  */
 export const getGlobalSeo = async (req: Request, res: Response): Promise<void> => {
   try {
-    const baseUrl = process.env.SITE_URL || 'https://nhrealestate.qa';
+    const baseUrl = process.env.SITE_URL || 'https://nandhrealestate.qa';
 
     const meta = {
       title: 'N&H Homes Real Estate - Your Global Gateway to Premium Properties',
@@ -356,7 +356,7 @@ export const getGlobalSeo = async (req: Request, res: Response): Promise<void> =
       canonical: baseUrl,
       ogTitle: 'N&H Homes Real Estate - Your Global Gateway to Premium Properties',
       ogDescription: 'Comprehensive real estate solutions across Qatar, Gulf, MENA, and Europe.',
-      ogImage: `${baseUrl}/og-image.jpg`,
+      ogImage: `${baseUrl}/logo.png`,
       ogUrl: baseUrl,
       ogType: 'website',
       twitterCard: 'summary_large_image',

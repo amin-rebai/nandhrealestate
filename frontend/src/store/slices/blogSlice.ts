@@ -102,6 +102,9 @@ export const fetchBlogs = createAsyncThunk(
       }
     });
 
+    // Add admin=true to get full multilingual data for language switching
+    queryParams.append('admin', 'true');
+
     const response = await fetch(`${API_URL}/blog?${queryParams}`);
     if (!response.ok) {
       throw new Error('Failed to fetch blog posts');

@@ -88,7 +88,7 @@
 ```
 SMTP_EMAIL=your_email@gmail.com
 SMTP_PASSWORD=your_app_password
-ADMIN_EMAIL=admin@nhrealestate.qa
+ADMIN_EMAIL=admin@nandhrealestate.qa
 TWILIO_ACCOUNT_SID=your_account_sid
 TWILIO_AUTH_TOKEN=your_auth_token
 TWILIO_WHATSAPP_NUMBER=+1234567890

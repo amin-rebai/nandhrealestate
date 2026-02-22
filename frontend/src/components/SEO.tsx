@@ -24,7 +24,7 @@ const SEO: React.FC<SEOProps> = ({
   breadcrumbs
 }) => {
   const location = useLocation();
-  const baseUrl = 'https://nhrealestate.qa';
+  const baseUrl = 'https://nandhrealestate.qa';
 
   useEffect(() => {
     const updateSEO = async () => {
@@ -33,7 +33,7 @@ const SEO: React.FC<SEOProps> = ({
           meta: {
             title: title || 'N&H Homes Real Estate - Your Global Gateway to Premium Properties',
             description: description || 'Comprehensive real estate solutions across Qatar, Gulf, MENA, and Europe. Luxury properties, investment opportunities, and professional property management.',
-            image: image || `${baseUrl}/og-image.jpg`,
+            image: image || `${baseUrl}/logo.png`,
           },
           schema: null
         };
@@ -65,7 +65,7 @@ const SEO: React.FC<SEOProps> = ({
         // Update Open Graph tags
         updateMetaTag('og:title', seoData.meta?.ogTitle || title || '');
         updateMetaTag('og:description', seoData.meta?.ogDescription || description || '');
-        updateMetaTag('og:image', seoData.meta?.ogImage || image || `${baseUrl}/og-image.jpg`);
+        updateMetaTag('og:image', seoData.meta?.ogImage || image || `${baseUrl}/images/logo.png`);
         updateMetaTag('og:url', seoData.meta?.ogUrl || canonicalUrl);
         updateMetaTag('og:type', seoData.meta?.ogType || type);
 
@@ -73,7 +73,7 @@ const SEO: React.FC<SEOProps> = ({
         updateMetaTag('twitter:card', 'summary_large_image');
         updateMetaTag('twitter:title', seoData.meta?.twitterTitle || title || '');
         updateMetaTag('twitter:description', seoData.meta?.twitterDescription || description || '');
-        updateMetaTag('twitter:image', seoData.meta?.twitterImage || image || `${baseUrl}/og-image.jpg`);
+        updateMetaTag('twitter:image', seoData.meta?.twitterImage || image || `${baseUrl}/logo.png`);
 
         // Update hreflang links
         updateHreflangLinks(canonicalUrl);

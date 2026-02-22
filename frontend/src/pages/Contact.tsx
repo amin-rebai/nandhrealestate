@@ -15,7 +15,7 @@ interface ContactInfo {
 }
 
 const Contact: React.FC = () => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -30,7 +30,7 @@ const Contact: React.FC = () => {
     title: { en: 'Contact N&H Homes Real Estate', ar: 'اتصل بـ N&H العقارية', fr: 'Contactez N&H Immobilier' },
     description: { en: 'Get in touch with our expert team', ar: 'تواصل مع فريقنا المتخصص', fr: "Contactez notre équipe d'experts" },
     phone: '+974 7070 4504',
-    email: 'info@nhrealestate.qa',
+    email: 'info@nandhrealestate.qa',
     address: { en: 'Doha, Qatar', ar: 'الدوحة، قطر' },
     businessHours: { en: 'Sun - Thu: 8:00 AM - 6:00 PM', ar: 'الأحد - الخميس: 8:00 صباحاً - 6:00 مساءً' }
   });
@@ -51,7 +51,7 @@ const Contact: React.FC = () => {
             title: data.title || { en: 'Contact N&H Homes Real Estate', ar: 'اتصل بـ N&H العقارية' },
             description: data.description || { en: 'Get in touch with our expert team', ar: 'تواصل مع فريقنا المتخصص' },
             phone: data.metadata?.phone || '+974 7070 4504',
-            email: data.metadata?.email || 'info@nhrealestate.qa',
+            email: data.metadata?.email || 'info@nandhrealestate.qa',
             address: data.metadata?.address || { en: 'Doha, Qatar', ar: 'الدوحة، قطر' },
             businessHours: data.metadata?.businessHours || { en: 'Sun - Thu: 8:00 AM - 6:00 PM', ar: 'الأحد - الخميس: 8:00 صباحاً - 6:00 مساءً' }
           });
@@ -488,45 +488,45 @@ const Contact: React.FC = () => {
 
                 <div className="form-row">
                   <div className="form-group">
-                    <label htmlFor="budget">Budget Range</label>
+                    <label htmlFor="budget">{t('contact.budgetRange')}</label>
                     <select
                       id="budget"
                       name="budget"
                       value={formData.budget}
                       onChange={handleChange}
                     >
-                      <option value="">Select Budget Range</option>
-                      <option value="under-500k">Under QAR500K</option>
-                      <option value="500k-1m">QAR500K - QAR1M</option>
-                      <option value="1m-2m">QAR1M - QAR2M</option>
-                      <option value="2m-5m">QAR2M - QAR5M</option>
-                      <option value="5m-10m">QAR5M - QAR10M</option>
-                      <option value="over-10m">Over QAR10M</option>
+                      <option value="">{t('contact.selectBudgetRange')}</option>
+                      <option value="under-500k">{t('contact.under500k')}</option>
+                      <option value="500k-1m">{t('contact.500k1m')}</option>
+                      <option value="1m-2m">{t('contact.1m2m')}</option>
+                      <option value="2m-5m">{t('contact.2m5m')}</option>
+                      <option value="5m-10m">{t('contact.5m10m')}</option>
+                      <option value="over-10m">{t('contact.over10m')}</option>
                     </select>
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="subject">Subject</label>
+                    <label htmlFor="subject">{t('contact.subject')}</label>
                     <input
                       type="text"
                       id="subject"
                       name="subject"
                       value={formData.subject}
                       onChange={handleChange}
-                      placeholder="Brief subject of your inquiry"
+                      placeholder={t('contact.briefSubject')}
                     />
                   </div>
                 </div>
 
                 <div className="form-group full-width">
-                  <label htmlFor="message">Message *</label>
+                  <label htmlFor="message">{t('contact.message')} *</label>
                   <textarea
                     id="message"
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
                     required
-                    placeholder="Please provide details about your real estate needs, preferred locations, timeline, and any specific requirements..."
+                    placeholder={t('contact.messageDetails')}
                     rows={6}
                   ></textarea>
                 </div>
@@ -535,7 +535,7 @@ const Contact: React.FC = () => {
                   {isSubmitting ? (
                     <>
                       <span className="spinner"></span>
-                      Sending...
+                      {t('contact.sending')}
                     </>
                   ) : (
                     <>
@@ -543,7 +543,7 @@ const Contact: React.FC = () => {
                         <path d="M22 2L11 13" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         <path d="M22 2L15 22L11 13L2 9L22 2Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
-                      Send Message
+                      {t('contact.send')}
                     </>
                   )}
                 </button>

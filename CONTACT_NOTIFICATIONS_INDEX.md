@@ -87,7 +87,7 @@ Your contact form is **fully implemented** with email and WhatsApp notifications
 ```env
 SMTP_EMAIL=your_email@gmail.com
 SMTP_PASSWORD=your_16_char_app_password
-ADMIN_EMAIL=info@nhrealestate.qa
+ADMIN_EMAIL=info@nandhrealestate.qa
 ```
 
 **Get Gmail App Password:**

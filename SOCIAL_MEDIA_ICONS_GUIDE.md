@@ -97,7 +97,6 @@ Icons only display if URLs are provided in the backend. Empty URLs are skipped.
 ### To Add/Update Social Media Links
 
 1. **Via Admin Panel** (if available):
-
    - Go to Content Management
    - Edit Contact Section
    - Update Social Media URLs
@@ -109,8 +108,8 @@ Icons only display if URLs are provided in the backend. Empty URLs are skipped.
    {
      "metadata": {
        "socialMedia": {
-         "facebook": "https://facebook.com/nhrealestate",
-         "instagram": "https://instagram.com/nhrealestate",
+         "facebook": "https://facebook.com/nandhrealestate",
+         "instagram": "https://instagram.com/nandhrealestate",
          ...
        }
      }

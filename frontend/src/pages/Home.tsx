@@ -55,7 +55,6 @@ interface Property {
 
 const Home: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const currentLang = i18n.language as 'en' | 'ar' | 'fr';
 
   const [aboutHomeData, setAboutHomeData] = useState<AboutHomeData | null>(null);
   const [featuredPropertiesConfig, setFeaturedPropertiesConfig] = useState<FeaturedPropertiesConfig | null>(null);
@@ -64,10 +63,14 @@ const Home: React.FC = () => {
   useEffect(() => {
     const fetchAboutHome = async () => {
       try {
+        // Fetch without admin=true to get data as stored in database
         const response = await axios.get(`${API_URL}/content/section/about-home`);
         const data = response.data?.data || response.data;
         if (data && data.length > 0) {
           const item = data[0];
+          console.log('About Home Data from API:', item);
+          console.log('Title type:', typeof item.title, 'Title value:', item.title);
+          console.log('Description type:', typeof item.description, 'Description value:', item.description);
           setAboutHomeData({
             badge: item.metadata?.badge || { en: 'About N&H Homes Real Estate', ar: 'عن N&H العقارية', fr: 'À propos de N&H Immobilier' },
             title: item.title || { en: 'Your Trusted Real Estate Partner', ar: 'شريكك العقاري الموثوق', fr: 'Votre partenaire immobilier de confiance' },
@@ -183,7 +186,10 @@ const Home: React.FC = () => {
   const getText = (text: MultilingualText | string | undefined): string => {
     if (!text) return '';
     if (typeof text === 'string') return text;
-    return text[currentLang] || text.en || '';
+    const lang = i18n.language as 'en' | 'ar' | 'fr';
+    const result = (text as any)[lang] || text.en || text.ar || text.fr || '';
+    console.log('getText called with:', text, 'lang:', lang, 'result:', result);
+    return result;
   };
 
   return (
@@ -251,8 +257,8 @@ const Home: React.FC = () => {
                     <div className="property-badge">{t('home.forSale')}</div>
                   </div>
                   <div className="property-info">
-                    <h3>Luxury Marina Villa</h3>
-                    <p className="property-location">📍 The Pearl, Qatar</p>
+                    <h3>{t('home.luxuryMarinaVilla', 'Luxury Marina Villa')}</h3>
+                    <p className="property-location">📍 {t('home.thePearl', 'The Pearl, Qatar')}</p>
                     <p className="property-price">QAR 8,500,000</p>
                     <div className="property-features">
                       <span>4 {t('home.beds')}</span>
@@ -268,8 +274,8 @@ const Home: React.FC = () => {
                     <div className="property-badge">{t('home.forRent')}</div>
                   </div>
                   <div className="property-info">
-                    <h3>Modern Downtown Apartment</h3>
-                    <p className="property-location">📍 West Bay, Doha</p>
+                    <h3>{t('home.modernDowntownApartment', 'Modern Downtown Apartment')}</h3>
+                    <p className="property-location">📍 {t('home.westBay', 'West Bay, Doha')}</p>
                     <p className="property-price">QAR 15,000/month</p>
                     <div className="property-features">
                       <span>3 {t('home.beds')}</span>
@@ -285,8 +291,8 @@ const Home: React.FC = () => {
                     <div className="property-badge">{t('home.forSale')}</div>
                   </div>
                   <div className="property-info">
-                    <h3>Executive Penthouse</h3>
-                    <p className="property-location">📍 Lusail City, Qatar</p>
+                    <h3>{t('home.executivePenthouse', 'Executive Penthouse')}</h3>
+                    <p className="property-location">📍 {t('home.lusailCity', 'Lusail City, Qatar')}</p>
                     <p className="property-price">QAR 12,000,000</p>
                     <div className="property-features">
                       <span>5 {t('home.beds')}</span>
@@ -326,13 +332,25 @@ const Home: React.FC = () => {
           <div className="container">
             <div className="about-content-centered">
               <div className="section-badge">
-                {aboutHomeData ? getText(aboutHomeData.badge) : 'About N&H Homes Real Estate'}
+                {aboutHomeData ? getText(aboutHomeData.badge) : getText({
+                  en: 'ABOUT N&H HOMES REAL ESTATE',
+                  ar: 'عن N&H العقارية',
+                  fr: 'À PROPOS DE N&H IMMOBILIER'
+                })}
               </div>
               <h2 className="section-title-modern">
-                {aboutHomeData ? getText(aboutHomeData.title) : 'Your Trusted Real Estate Partner'}
+                {aboutHomeData ? getText(aboutHomeData.title) : getText({
+                  en: 'Your Trusted Real Estate Partner',
+                  ar: 'شريكك العقاري الموثوق',
+                  fr: 'Votre partenaire immobilier de confiance'
+                })}
               </h2>
               <p className="about-description">
-                {aboutHomeData ? getText(aboutHomeData.description) : 'We provide a comprehensive portfolio of services designed for individuals, families, developers, corporate tenants, and institutional investors. By combining local expertise with international standards, every transaction is managed with professionalism and integrity.'}
+                {aboutHomeData ? getText(aboutHomeData.description) : getText({
+                  en: 'We provide a comprehensive portfolio of services designed for individuals, families, developers, corporate tenants, and institutional investors. By combining local expertise with international standards, every transaction is managed with professionalism and integrity.',
+                  ar: 'نحن نقدم محفظة شاملة من الخدمات مصممة للأفراد والعائلات والمطورين والمستأجرين الشركات والمستثمرين المؤسسيين. من خلال الجمع بين الخبرة المحلية والمعايير الدولية، يتم إدارة كل معاملة بمهنية وسلامة.',
+                  fr: 'Nous fournissons un portefeuille complet de services conçus pour les particuliers, les familles, les promoteurs, les locataires d\'entreprises et les investisseurs institutionnels. En combinant l\'expertise locale et les normes internationales, chaque transaction est gérée avec professionnalisme et intégrité.'
+                })}
               </p>
               {aboutHomeData?.description2 && getText(aboutHomeData.description2) && (
                 <p className="about-description">
@@ -356,7 +374,11 @@ const Home: React.FC = () => {
 
               <div className="about-stat-badge">
                 <span className="stat-number">{aboutHomeData?.statNumber || '1000+'}</span>
-                <span className="stat-label">{aboutHomeData ? getText(aboutHomeData.statLabel) : 'Happy Clients'}</span>
+                <span className="stat-label">{aboutHomeData ? getText(aboutHomeData.statLabel) : getText({
+                  en: 'Happy Clients',
+                  ar: 'عملاء سعداء',
+                  fr: 'Clients satisfaits'
+                })}</span>
               </div>
 
               <Link to="/about" className="btn-modern-light">
@@ -382,19 +404,19 @@ const Home: React.FC = () => {
           <div className="stats-grid-modern">
             <div className="stat-card-modern">
               <div className="stat-number-modern">6+</div>
-              <div className="stat-label-modern">Years Experience</div>
+              <div className="stat-label-modern">{t('home.yearsExperience', 'Years Experience')}</div>
             </div>
             <div className="stat-card-modern">
               <div className="stat-number-modern">8</div>
-              <div className="stat-label-modern">Countries</div>
+              <div className="stat-label-modern">{t('home.countries', 'Countries')}</div>
             </div>
             <div className="stat-card-modern">
               <div className="stat-number-modern">1000+</div>
-              <div className="stat-label-modern">Properties Sold</div>
+              <div className="stat-label-modern">{t('home.propertiesSold', 'Properties Sold')}</div>
             </div>
             <div className="stat-card-modern">
               <div className="stat-number-modern">2000+</div>
-              <div className="stat-label-modern">Happy Clients</div>
+              <div className="stat-label-modern">{t('home.happyClients', 'Happy Clients')}</div>
             </div>
           </div>
         </div>
@@ -404,14 +426,14 @@ const Home: React.FC = () => {
       <section className="cta-section-modern">
         <div className="container">
           <div className="cta-content">
-            <h2>Ready to Find Your Dream Property?</h2>
-            <p>Let our expert team guide you through your real estate journey</p>
+            <h2>{t('home.readyToFind', 'Ready to Find Your Dream Property?')}</h2>
+            <p>{t('home.letOurTeamGuide', 'Let our expert team guide you through your real estate journey')}</p>
             <div className="cta-buttons">
               <Link to="/properties" className="btn-modern-primary">
-                Browse Properties
+                {t('home.browseProperties', 'Browse Properties')}
               </Link>
               <Link to="/contact" className="btn-modern-secondary">
-                Contact Us
+                {t('home.contactUs', 'Contact Us')}
               </Link>
             </div>
           </div>

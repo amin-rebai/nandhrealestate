@@ -1856,7 +1856,7 @@ const Content: React.FC = () => {
                     label="Email Address"
                     value={contactData.email}
                     onChange={(e) => setContactData({ ...contactData, email: e.target.value })}
-                    placeholder="info@nhrealestate.qa"
+                    placeholder="info@nandhrealestate.qa"
                     sx={{ mb: 2 }}
                   />
 
@@ -1914,7 +1914,7 @@ const Content: React.FC = () => {
                         ...contactData,
                         socialMedia: { ...contactData.socialMedia, facebook: e.target.value }
                       })}
-                      placeholder="https://facebook.com/nhrealestate"
+                      placeholder="https://facebook.com/nandhrealestate"
                     />
                   </Box>
 
@@ -1928,7 +1928,7 @@ const Content: React.FC = () => {
                         ...contactData,
                         socialMedia: { ...contactData.socialMedia, instagram: e.target.value }
                       })}
-                      placeholder="https://instagram.com/nhrealestate"
+                      placeholder="https://instagram.com/nandhrealestate"
                     />
                   </Box>
 
@@ -1942,7 +1942,7 @@ const Content: React.FC = () => {
                         ...contactData,
                         socialMedia: { ...contactData.socialMedia, tiktok: e.target.value }
                       })}
-                      placeholder="https://tiktok.com/nhrealestate"
+                      placeholder="https://tiktok.com/nandhrealestate"
                     />
                   </Box>
 
@@ -1956,7 +1956,7 @@ const Content: React.FC = () => {
                         ...contactData,
                         socialMedia: { ...contactData.socialMedia, linkedin: e.target.value }
                       })}
-                      placeholder="https://linkedin.com/company/nhrealestate"
+                      placeholder="https://linkedin.com/company/nandhrealestate"
                     />
                   </Box>
 
@@ -1970,7 +1970,7 @@ const Content: React.FC = () => {
                         ...contactData,
                         socialMedia: { ...contactData.socialMedia, youtube: e.target.value }
                       })}
-                      placeholder="https://youtube.com/@nhrealestate"
+                      placeholder="https://youtube.com/@nandhrealestate"
                     />
                   </Box>
                 </Paper>

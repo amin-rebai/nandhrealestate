@@ -124,13 +124,13 @@ const ContactPageManager: React.FC = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       // Handle the response structure with data property
+      let requests: ContactRequest[] = [];
       if (response.data && response.data.data) {
-        setContactRequests(Array.isArray(response.data.data) ? response.data.data : []);
+        requests = Array.isArray(response.data.data) ? response.data.data : [];
       } else if (response.data && Array.isArray(response.data)) {
-        setContactRequests(response.data);
-      } else {
-        setContactRequests([]);
+        requests = response.data;
       }
+      setContactRequests(requests);
     } catch (error) {
       console.error('Error fetching contact requests:', error);
       setContactRequests([]);

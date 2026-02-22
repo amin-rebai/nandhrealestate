@@ -142,6 +142,15 @@ export const getBlogBySlug = async (req: Request, res: Response) => {
     // Increment views (async, don't wait)
     Blog.findByIdAndUpdate(blog._id, { $inc: { views: 1 } }).exec();
 
+    // For admin or frontend language switching, return full multilingual content
+    if (req.query.admin === 'true') {
+      return res.json({
+        success: true,
+        data: blog,
+        language
+      });
+    }
+
     // Transform content for requested language
     const transformedBlog = transformContentForLanguage(blog, language);
 

@@ -38,11 +38,11 @@ Update backend contact section:
 {
   "metadata": {
     "socialMedia": {
-      "facebook": "https://facebook.com/nhrealestate",
-      "instagram": "https://instagram.com/nhrealestate",
-      "tiktok": "https://tiktok.com/nhrealestate",
-      "linkedin": "https://linkedin.com/nhrealestate",
-      "youtube": "https://youtube.com/nhrealestate"
+      "facebook": "https://facebook.com/nandhrealestate",
+      "instagram": "https://instagram.com/nandhrealestate",
+      "tiktok": "https://tiktok.com/nandhrealestate",
+      "linkedin": "https://linkedin.com/nandhrealestate",
+      "youtube": "https://youtube.com/nandhrealestate"
     }
   }
 }

@@ -39,7 +39,7 @@ SMTP_PORT=587
 SMTP_SECURE=false
 SMTP_EMAIL=your_production_email@gmail.com
 SMTP_PASSWORD=your_16_char_app_password
-ADMIN_EMAIL=info@nhrealestate.qa
+ADMIN_EMAIL=info@nandhrealestate.qa
 
 # WhatsApp Configuration (REQUIRED for notifications)
 TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -55,7 +55,7 @@ ADMIN_WHATSAPP_NUMBER=+97470704504
 ### Option 1: Gmail (Recommended for Small Scale)
 
 1. **Create a dedicated Gmail account** for your business
-   - Example: `notifications@nhrealestate.qa` (use Gmail)
+   - Example: `notifications@nandhrealestate.qa` (use Gmail)
 
 2. **Enable 2-Factor Authentication**
    - Go to: https://myaccount.google.com/security
@@ -74,7 +74,7 @@ ADMIN_WHATSAPP_NUMBER=+97470704504
    SMTP_SECURE=false
    SMTP_EMAIL=notifications@gmail.com
    SMTP_PASSWORD=abcdefghijklmnop
-   ADMIN_EMAIL=info@nhrealestate.qa
+   ADMIN_EMAIL=info@nandhrealestate.qa
    ```
 
 ### Option 2: SendGrid (Recommended for Production)
@@ -108,9 +108,9 @@ ADMIN_WHATSAPP_NUMBER=+97470704504
    ```env
    SMTP_HOST=smtp.sendgrid.net
    SMTP_PORT=587
-   SMTP_EMAIL=noreply@nhrealestate.qa
+   SMTP_EMAIL=noreply@nandhrealestate.qa
    SENDGRID_API_KEY=SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-   ADMIN_EMAIL=info@nhrealestate.qa
+   ADMIN_EMAIL=info@nandhrealestate.qa
    ```
 
 ### Option 3: AWS SES (Recommended for Large Scale)
@@ -129,9 +129,9 @@ ADMIN_WHATSAPP_NUMBER=+97470704504
    ```env
    SMTP_HOST=email-smtp.us-east-1.amazonaws.com
    SMTP_PORT=587
-   SMTP_EMAIL=noreply@nhrealestate.qa
+   SMTP_EMAIL=noreply@nandhrealestate.qa
    SMTP_PASSWORD=your_ses_smtp_password
-   ADMIN_EMAIL=info@nhrealestate.qa
+   ADMIN_EMAIL=info@nandhrealestate.qa
    ```
 
 ---
@@ -210,7 +210,7 @@ If you want to launch without WhatsApp:
    ```bash
    heroku config:set SMTP_EMAIL=your_email@gmail.com
    heroku config:set SMTP_PASSWORD=your_app_password
-   heroku config:set ADMIN_EMAIL=info@nhrealestate.qa
+   heroku config:set ADMIN_EMAIL=info@nandhrealestate.qa
    heroku config:set TWILIO_ACCOUNT_SID=ACxxxxxxxx
    heroku config:set TWILIO_AUTH_TOKEN=your_token
    heroku config:set TWILIO_WHATSAPP_NUMBER=+14155238886
@@ -235,7 +235,7 @@ If you want to launch without WhatsApp:
    ```env
    SMTP_EMAIL=your_email@gmail.com
    SMTP_PASSWORD=your_app_password
-   ADMIN_EMAIL=info@nhrealestate.qa
+   ADMIN_EMAIL=info@nandhrealestate.qa
    TWILIO_ACCOUNT_SID=ACxxxxxxxx
    TWILIO_AUTH_TOKEN=your_token
    TWILIO_WHATSAPP_NUMBER=+14155238886

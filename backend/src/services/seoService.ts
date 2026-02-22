@@ -47,7 +47,7 @@ export const generateProductSchema = (property: Property, baseUrl: string): obje
     '@type': 'Product',
     name: title,
     description: description.substring(0, 5000),
-    image: property.images?.[0] || `${baseUrl}/images/og-image.jpg`,
+    image: property.images?.[0] || `${baseUrl}/images/logo.png`,
     offers: {
       '@type': 'Offer',
       price: property.price,
@@ -141,7 +141,7 @@ export const generateBlogPostSchema = (post: BlogPost, baseUrl: string): object 
     '@type': 'BlogPosting',
     headline: title,
     description: description.substring(0, 5000),
-    image: post.image || `${baseUrl}/images/og-image.jpg`,
+    image: post.image || `${baseUrl}/images/logo.png`,
     author: {
       '@type': 'Person',
       name: post.author || 'N&H Homes Real Estate'
@@ -175,7 +175,7 @@ export const generateRealEstateAgentSchema = (baseUrl: string): object => {
     url: baseUrl,
     logo: `${baseUrl}/logo.png`,
     telephone: '+974 7070 4504',
-    email: 'info@nhrealestate.qa',
+    email: 'info@nandhrealestate.qa',
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Doha',
@@ -218,7 +218,7 @@ export const generateOrganizationSchema = (baseUrl: string): object => {
     logo: `${baseUrl}/logo.png`,
     description: 'Your Global Gateway to Premium Properties. Comprehensive real estate solutions across Qatar, Gulf, MENA, and Europe.',
     telephone: '+974 7070 4504',
-    email: 'info@nhrealestate.qa',
+    email: 'info@nandhrealestate.qa',
     address: {
       '@type': 'PostalAddress',
       streetAddress: 'Doha',

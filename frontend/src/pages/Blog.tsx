@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchBlogs } from '../store/slices/blogSlice';
 import { AppDispatch, RootState } from '../store/store';
+import { getUploadUrl } from '../utils/api';
 
 interface BlogPostData {
   _id: string;
@@ -163,7 +164,7 @@ const getMultilingualText = (value: any, language: string): string => {
 };
 
 const Blog: React.FC = () => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const { posts: reduxPosts, loading } = useSelector((state: RootState) => state.blog);
 
@@ -173,11 +174,12 @@ const Blog: React.FC = () => {
   const [posts, setPosts] = useState<BlogPostData[]>([]);
   const postsPerPage = 6;
 
-  // Fetch blogs on component mount
+  const language = i18n.language as 'en' | 'ar' | 'fr';
+
+  // Fetch blogs on component mount and when language changes
   useEffect(() => {
-    const language = i18n.language as 'en' | 'ar' | 'fr';
     dispatch(fetchBlogs({ status: 'published', language }));
-  }, [dispatch, i18n.language]);
+  }, [dispatch, language]);
 
   // Update local posts when Redux posts change
   useEffect(() => {
@@ -188,8 +190,6 @@ const Blog: React.FC = () => {
       setPosts(mockBlogPosts);
     }
   }, [reduxPosts, loading]);
-
-  const language = i18n.language as 'en' | 'ar' | 'fr';
 
   // Filter posts based on search and category
   const filteredPosts = posts.filter(post => {
@@ -227,6 +227,7 @@ const Blog: React.FC = () => {
   // Pagination
   const startIndex = (currentPage - 1) * postsPerPage;
   const paginatedPosts = regularPosts.slice(startIndex, startIndex + postsPerPage);
+  console.log("first",paginatedPosts)
   const totalPages = Math.ceil(regularPosts.length / postsPerPage);
 
   return (
@@ -252,11 +253,10 @@ const Blog: React.FC = () => {
             <div className="container">
               <div className="hero-text">
                 <h1 className="hero-title">
-                  Real Estate <span className="hero-title-accent">Insights</span>
+                  {t('blog.realEstateInsights')}
                 </h1>
                 <p className="hero-subtitle">
-                  Stay informed with the latest trends, market analysis, and expert insights
-                  from Qatar's dynamic real estate landscape.
+                  {t('blog.heroSubtitle')}
                 </p>
               </div>
             </div>
@@ -264,7 +264,7 @@ const Blog: React.FC = () => {
         </section>
 
         {/* Search and Filter Section */}
-        <section className="blog-filters">
+        {/* <section className="blog-filters">
           <div className="container">
             <div className="filters-wrapper">
               <form onSubmit={handleSearch} className="search-form">
@@ -299,15 +299,15 @@ const Blog: React.FC = () => {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* Featured Posts */}
         {featuredPosts.length > 0 && (
           <section className="featured-posts">
             <div className="container">
               <div className="section-header">
-                <h2 className="section-title">Featured Articles</h2>
-                <p className="section-subtitle">Discover our most popular and insightful content</p>
+                <h2 className="section-title">{t('blog.featuredArticles')}</h2>
+                <p className="section-subtitle">{t('blog.discoverPopular')}</p>
               </div>
               <div className="featured-grid">
                 {featuredPosts.map((post) => {
@@ -319,7 +319,7 @@ const Blog: React.FC = () => {
                     <article key={post._id} className="featured-post-card visual-enhanced">
                     <Link to={`/blog/${postSlug}`} className="post-link">
                       <div className="post-image">
-                        <img src={post.featuredImage} alt={postTitle} />
+                        <img src={getUploadUrl(post.featuredImage)} alt={postTitle} />
                         <div className="post-category">
                           {postCategory}
                         </div>
@@ -337,7 +337,7 @@ const Blog: React.FC = () => {
                         <div className="post-meta">
                           <div className="author">
                             {post.author.avatar && (
-                              <img src={post.author.avatar} alt={post.author.name} className="author-avatar" />
+                              <img src={getUploadUrl(post.author.avatar)} alt={post.author.name} className="author-avatar" />
                             )}
                             <span>{post.author.name}</span>
                           </div>
@@ -363,8 +363,8 @@ const Blog: React.FC = () => {
         <section className="blog-posts">
           <div className="container">
             <div className="section-header">
-              <h2 className="section-title">Latest Articles</h2>
-              <p className="section-subtitle">Stay updated with our latest insights and market analysis</p>
+              <h2 className="section-title">{t('blog.latestArticles')}</h2>
+              <p className="section-subtitle">{t('blog.stayUpdated')}</p>
             </div>
 
             <div className="posts-grid">
@@ -377,7 +377,7 @@ const Blog: React.FC = () => {
                 <article key={post._id} className="post-card visual-enhanced">
                   <Link to={`/blog/${postSlug}`} className="post-link">
                     <div className="post-image">
-                      <img src={post.featuredImage} alt={postTitle} />
+                      <img src={getUploadUrl(post.featuredImage)} alt={postTitle} />
                       <div className="post-overlay">
                         <div className="read-more">
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -395,7 +395,7 @@ const Blog: React.FC = () => {
                       <div className="post-meta">
                         <div className="author">
                           {post.author.avatar && (
-                            <img src={post.author.avatar} alt={post.author.name} className="author-avatar" />
+                            <img src={getUploadUrl(post.author.avatar)} alt={post.author.name} className="author-avatar" />
                           )}
                           <span>{post.author.name}</span>
                         </div>

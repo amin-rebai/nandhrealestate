@@ -242,7 +242,7 @@ SMTP_PORT=587
 SMTP_SECURE=false
 SMTP_EMAIL=your_email@gmail.com
 SMTP_PASSWORD=your_app_password
-ADMIN_EMAIL=info@nhrealestate.qa
+ADMIN_EMAIL=info@nandhrealestate.qa
 
 # WhatsApp Configuration
 TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

@@ -23,7 +23,7 @@ const Footer: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [contactInfo, setContactInfo] = useState<ContactInfo>({
     phone: '+974 7070 4504',
-    email: 'info@nhrealestate.qa',
+    email: 'info@nandhrealestate.qa',
     address: { en: 'Doha, Qatar', ar: 'الدوحة، قطر' },
     socialMedia: {
       facebook: '',
@@ -43,7 +43,7 @@ const Footer: React.FC = () => {
           const data = response.data[0];
           setContactInfo({
             phone: data.metadata?.phone || '+974 7070 4504',
-            email: data.metadata?.email || 'info@nhrealestate.qa',
+            email: data.metadata?.email || 'info@nandhrealestate.qa',
             address: data.metadata?.address || { en: 'Doha, Qatar', ar: 'الدوحة، قطر' },
             socialMedia: data.metadata?.socialMedia || {
               facebook: '',
@@ -114,27 +114,27 @@ const Footer: React.FC = () => {
           <div className="footer-section">
             <h3>{t('footer.services')}</h3>
             <ul>
-              <li><a href="#sales">{t('services.salesLeasing')}</a></li>
-              <li><a href="#management">{t('services.propertyManagement')}</a></li>
-              <li><a href="#development">{t('services.developmentManagement')}</a></li>
-              <li><a href="#investment">{t('services.investmentConsulting')}</a></li>
-              <li><a href="#valuation">{t('services.marketAnalysis')}</a></li>
+              <li><a href="#sales">{t('services.salesLeasing', 'Sales & Leasing')}</a></li>
+              <li><a href="#management">{t('services.propertyManagement', 'Property Management')}</a></li>
+              <li><a href="#development">{t('services.developmentManagement', 'Development Management')}</a></li>
+              <li><a href="#investment">{t('services.investmentConsulting', 'Investment Consulting')}</a></li>
+              <li><a href="#valuation">{t('services.marketAnalysis', 'Market Analysis')}</a></li>
             </ul>
           </div>
 
           {/* Global Presence */}
           <div className="footer-section">
-            <h3>Global Presence</h3>
+            <h3>{t('footer.globalPresence')}</h3>
             <ul>
-              <li>🇶🇦 Qatar - Doha</li>
-              <li>🇦🇪 UAE - Dubai, Abu Dhabi</li>
-              <li>🇸🇦 Saudi Arabia - Riyadh</li>
-              <li>🇪🇬 Egypt - Cairo</li>
-              <li>🇫🇷 France - Paris</li>
-              <li>🇲🇦 Morocco - Casablanca</li>
-              <li>🇴🇲 Oman - Muscat</li>
-              <li>🇹🇷 Turkey - Istanbul</li>
-              <li>LN London - Englands</li>
+              <li>🇶🇦 {t('locations.qatar')} - {t('locations.doha')}</li>
+              <li>🇦🇪 {t('locations.uae')} - {t('locations.dubai')}, {t('locations.abuDhabi')}</li>
+              <li>🇸🇦 {t('locations.saudiArabia')} - {t('locations.riyadh')}</li>
+              <li>🇪🇬 {t('locations.egypt')} - {t('locations.cairo')}</li>
+              <li>🇫🇷 {t('locations.france')} - {t('locations.paris')}</li>
+              <li>🇲🇦 {t('locations.morocco')} - {t('locations.casablanca')}</li>
+              <li>🇴🇲 {t('locations.oman')} - {t('locations.muscat')}</li>
+              <li>🇹🇷 {t('locations.turkey')} - {t('locations.istanbul')}</li>
+              <li>🇬🇧 {t('locations.unitedKingdom')} - {t('locations.london')}</li>
             </ul>
           </div>
         </div>
