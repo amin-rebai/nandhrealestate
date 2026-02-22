@@ -166,7 +166,7 @@ const Header: React.FC = () => {
           </li>
 
           <li><Link to="/blog" className={isActive('/blog')} onClick={closeMobileMenu}>{t('navigation.blog')}</Link></li>
-          <li><Link to="/faq" className={isActive('/faq')} onClick={closeMobileMenu}>{t('navigation.faq', 'FAQ')}</Link></li>
+          {/* <li><Link to="/faq" className={isActive('/faq')} onClick={closeMobileMenu}>{t('navigation.faq', 'FAQ')}</Link></li> */}
           <li><Link to="/contact" className={isActive('/contact')} onClick={closeMobileMenu}>{t('navigation.contact')}</Link></li>
 
           {/* Language Switcher in Mobile Menu */}
