@@ -50,7 +50,10 @@ import {
   Star,
   StarBorder,
   Collections,
-  CollectionsBookmark
+  CollectionsBookmark,
+  Sync as SyncIcon,
+  CheckCircle,
+  Error as ErrorIcon
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { RootState, AppDispatch } from '../store/store';
@@ -93,6 +96,15 @@ const Properties: React.FC = () => {
   const [filterType, setFilterType] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [uploading, setUploading] = useState(false);
+  const [syncDialogOpen, setSyncDialogOpen] = useState(false);
+  const [syncResultDialogOpen, setSyncResultDialogOpen] = useState(false);
+  const [syncing, setSyncing] = useState(false);
+  const [syncResult, setSyncResult] = useState<{
+    total: number;
+    created: number;
+    updated: number;
+    errors: number;
+  } | null>(null);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -542,6 +554,41 @@ const Properties: React.FC = () => {
     }
   };
 
+  const handleSyncProperties = async () => {
+    setSyncing(true);
+    try {
+      const token = localStorage.getItem('adminToken');
+      const response = await axios.post(
+        `${API_URL}/property-finder/sync`,
+        {},
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+
+      if (response.data.success) {
+        setSyncResult(response.data.stats);
+        setSyncResultDialogOpen(true);
+        // Refresh properties list
+        await dispatch(fetchProperties({ page: currentPage, limit: 10 }));
+      }
+    } catch (error: any) {
+      console.error('Error syncing properties:', error);
+      setSyncResult({
+        total: 0,
+        created: 0,
+        updated: 0,
+        errors: 1
+      });
+      setSyncResultDialogOpen(true);
+    } finally {
+      setSyncing(false);
+      setSyncDialogOpen(false);
+    }
+  };
+
   return (
     <Box sx={{ p: 3 }}>
       {/* Header */}
@@ -562,6 +609,24 @@ const Properties: React.FC = () => {
             Manage all properties in your real estate portfolio
           </Typography>
         </Box>
+        <Button
+          variant="contained"
+          startIcon={<SyncIcon />}
+          onClick={() => setSyncDialogOpen(true)}
+          disabled={syncing}
+          sx={{
+            backgroundColor: '#C5A059',
+            color: 'white',
+            '&:hover': {
+              backgroundColor: '#b8934d'
+            },
+            '&:disabled': {
+              backgroundColor: '#ccc'
+            }
+          }}
+        >
+          {syncing ? 'Syncing...' : 'Sync from Property Finder'}
+        </Button>
       </Box>
 
       {/* Filters and Search */}
@@ -1502,6 +1567,91 @@ const Properties: React.FC = () => {
             disabled={loading}
           >
             Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Sync Confirmation Dialog */}
+      <Dialog open={syncDialogOpen} onClose={() => setSyncDialogOpen(false)}>
+        <DialogTitle>Sync Properties from Property Finder</DialogTitle>
+        <DialogContent>
+          <Typography>
+            This will sync all active properties from Property Finder. Existing properties will be updated and new ones will be created.
+          </Typography>
+          <Typography variant="body2" sx={{ color: '#666', mt: 2 }}>
+            This process may take a few minutes depending on the number of properties.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setSyncDialogOpen(false)} disabled={syncing}>Cancel</Button>
+          <Button
+            onClick={handleSyncProperties}
+            variant="contained"
+            disabled={syncing}
+            sx={{
+              backgroundColor: '#C5A059',
+              '&:hover': {
+                backgroundColor: '#b8934d'
+              }
+            }}
+          >
+            {syncing ? 'Syncing...' : 'Start Sync'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Sync Result Dialog */}
+      <Dialog open={syncResultDialogOpen} onClose={() => setSyncResultDialogOpen(false)}>
+        <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          {syncResult && syncResult.errors === 0 ? (
+            <>
+              <CheckCircle sx={{ color: '#4CAF50' }} />
+              Sync Completed Successfully
+            </>
+          ) : (
+            <>
+              <ErrorIcon sx={{ color: '#F44336' }} />
+              Sync Completed with Issues
+            </>
+          )}
+        </DialogTitle>
+        <DialogContent>
+          {syncResult && (
+            <Box sx={{ mt: 2 }}>
+              <Box sx={{ mb: 2, p: 2, backgroundColor: '#f5f5f5', borderRadius: 1 }}>
+                <Typography variant="body2" sx={{ mb: 1 }}>
+                  <strong>Total Properties Found:</strong> {syncResult.total}
+                </Typography>
+                <Typography variant="body2" sx={{ mb: 1, color: '#4CAF50' }}>
+                  <strong>✓ Created:</strong> {syncResult.created}
+                </Typography>
+                <Typography variant="body2" sx={{ mb: 1, color: '#FF9800' }}>
+                  <strong>⟳ Updated:</strong> {syncResult.updated}
+                </Typography>
+                {syncResult.errors > 0 && (
+                  <Typography variant="body2" sx={{ color: '#F44336' }}>
+                    <strong>✗ Errors:</strong> {syncResult.errors}
+                  </Typography>
+                )}
+              </Box>
+              <Typography variant="body2" sx={{ color: '#666' }}>
+                The properties list has been refreshed with the latest data from Property Finder.
+              </Typography>
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setSyncResultDialogOpen(false)}
+            variant="contained"
+            sx={{
+              backgroundColor: '#4B0E14',
+              '&:hover': {
+                backgroundColor: '#3a0b10'
+              }
+            }}
+          >
+            Close
           </Button>
         </DialogActions>
       </Dialog>
