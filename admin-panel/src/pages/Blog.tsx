@@ -91,7 +91,7 @@ const Blog: React.FC = () => {
 
   const handleDeleteClick = () => {
     setDeleteDialogOpen(true);
-    handleMenuClose();
+    setAnchorEl(null); // Close menu but keep selectedPost
   };
 
   const handleDeleteConfirm = () => {

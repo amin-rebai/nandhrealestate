@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 // Multilingual text interface - allows single language
 interface MultilingualText {
@@ -166,14 +167,14 @@ export const updateBlog = createAsyncThunk(
 
 export const deleteBlog = createAsyncThunk(
   'blog/deleteBlog',
-  async (id: string) => {
-    const response = await fetch(`${API_URL}/blog/${id}`, {
-      method: 'DELETE',
-    });
-    if (!response.ok) {
-      throw new Error('Failed to delete blog post');
+  async (id: string, { rejectWithValue }) => {
+    try {
+      await axios.delete(`${API_URL}/blog/${id}`);
+      return id;
+    } catch (error: any) {
+      const message = error.response?.data?.message || error.message || 'Failed to delete blog post';
+      return rejectWithValue(message);
     }
-    return { id };
   }
 );
 
@@ -304,15 +305,15 @@ const blogSlice = createSlice({
       })
       .addCase(deleteBlog.fulfilled, (state, action) => {
         state.loading = false;
-        state.posts = state.posts.filter(post => post._id !== action.payload.id);
+        state.posts = state.posts.filter(post => post._id !== action.payload);
         state.total -= 1;
-        if (state.currentPost && state.currentPost._id === action.payload.id) {
+        if (state.currentPost && state.currentPost._id === action.payload) {
           state.currentPost = null;
         }
       })
       .addCase(deleteBlog.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Failed to delete blog post';
+        state.error = action.payload as string || 'Failed to delete blog post';
       })
 
       // Toggle blog status
