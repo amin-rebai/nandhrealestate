@@ -44,7 +44,8 @@ const Dashboard: React.FC = () => {
   );
 
   useEffect(() => {
-    dispatch(fetchProperties({ limit: 5 }));
+    // Fetch all properties for stats (no limit) and recent properties
+    dispatch(fetchProperties({ limit: 1000 }));
     dispatch(fetchUsers({ limit: 5 }));
   }, [dispatch]);
 
