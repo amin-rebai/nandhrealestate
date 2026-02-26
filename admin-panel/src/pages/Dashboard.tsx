@@ -67,7 +67,7 @@ const Dashboard: React.FC = () => {
     {
       title: t('dashboard.stats.propertiesForSale'),
       value: properties.filter(p => p.type === 'sale').length,
-      icon: <AttachMoney sx={{ fontSize: 40, color: '#2C2C2C' }} />,
+      icon: <LocationOn sx={{ fontSize: 40, color: '#4B0E14' }} />,
       color: '#2C2C2C',
       bgColor: '#f5f5f5'
     },
